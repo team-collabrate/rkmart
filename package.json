@@ -15,10 +15,14 @@
     "lint": "npm run lint -w apps/web",
     "typecheck": "npm run typecheck -w apps/web",
     "test": "npm run test -w apps/web",
+    "test:db": "vitest run --config supabase/tests/vitest.config.mts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "prettier": "^3.6.2"
+    "@electric-sql/pglite": "^0.5.16",
+    "@supabase/supabase-js": "^2.119.0",
+    "prettier": "^3.6.2",
+    "vitest": "^5.1.0"
   }
 }

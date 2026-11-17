@@ -23,7 +23,8 @@ Requires Node 22 or newer.
 ```bash
 npm install
 npm run dev          # web app at http://localhost:5173
-npm run test         # unit tests
+npm run test         # web unit tests
+npm run test:db      # database access-rule tests (no Docker needed)
 npm run lint
 npm run typecheck
 npm run build        # production build (no spike pages)
@@ -46,4 +47,4 @@ cd android && ./gradlew assembleDebug
 
 ## Status
 
-See `docs/stage-0-report.md`. The development plan has 12 stages (0 to 11).
+Stage 0 (foundations) and Stage 1 (database, login, roles) are built. See `docs/stage-0-report.md` and `docs/stage-1-database.md`. The development plan has 12 stages (0 to 11).
