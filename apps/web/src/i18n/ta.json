@@ -1,0 +1,22 @@
+{
+  "app": {
+    "name": "RK Grocery",
+    "tagline": "மளிகை ஆர்டர் மற்றும் பில்லிங்"
+  },
+  "common": {
+    "language": "மொழி",
+    "english": "English",
+    "tamil": "தமிழ்"
+  },
+  "roles": {
+    "shop": "கடைக்காரர்",
+    "admin": "அட்மின்",
+    "distributor": "டெலிவரி ஆள்"
+  },
+  "stage0": {
+    "title": "நிலை 0: அடித்தளம் மற்றும் சோதனைகள்",
+    "pdf": "தமிழ் PDF சோதனை",
+    "pwa": "PWA நிலை",
+    "native": "ஆண்ட்ராய்டு (Capacitor) நிலை"
+  }
+}

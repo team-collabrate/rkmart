@@ -1,0 +1,22 @@
+{
+  "app": {
+    "name": "RK Grocery",
+    "tagline": "Grocery orders and billing"
+  },
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "tamil": "தமிழ்"
+  },
+  "roles": {
+    "shop": "Shop owner",
+    "admin": "Admin",
+    "distributor": "Distributor"
+  },
+  "stage0": {
+    "title": "Stage 0: foundations and spikes",
+    "pdf": "Tamil PDF spike",
+    "pwa": "PWA status",
+    "native": "Android (Capacitor) status"
+  }
+}

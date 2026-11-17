@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+/* Fonts are bundled (not loaded from a CDN) so the APK and the PWA work offline. */
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
+@import '@fontsource/inter/latin-ext-400.css';
+@import '@fontsource/noto-sans-tamil/tamil-400.css';
+@import '@fontsource/noto-sans-tamil/tamil-500.css';
+@import '@fontsource/noto-sans-tamil/tamil-600.css';
+@import '@fontsource/noto-sans-tamil/tamil-700.css';
+@import '@fontsource/bricolage-grotesque/latin-600.css';
+@import '@fontsource/bricolage-grotesque/latin-700.css';
+
+/*
+ * Design tokens taken from the approved black-and-white print sheets.
+ * Roles are told apart by shape, border style and label, never by colour alone.
+ */
+@theme {
+  --font-sans: 'Inter', 'Noto Sans Tamil', 'Nirmala UI', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Noto Sans Tamil', 'Nirmala UI', system-ui, sans-serif;
+
+  --color-ink: #000000;
+  --color-mute: #4a4a4a;
+  --color-rail: #6e6e6e;
+  --color-hair: #c8c8c8;
+  --color-pale: #efefef;
+  --color-paper: #ffffff;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.5; /* Tamil needs more line height than Latin */
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+}
+
+/* Role badges: shape + border style + label (shop: circle/solid, admin: square/double, distributor: triangle/dashed). */
+@layer components {
+  .role-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.125rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: var(--color-paper);
+  }
+  .role-chip::before {
+    content: '';
+    width: 0.7rem;
+    height: 0.7rem;
+    background: var(--color-ink);
+  }
+  .role-shop {
+    border: 2px solid var(--color-ink);
+  }
+  .role-shop::before {
+    border-radius: 50%;
+  }
+  .role-admin {
+    border: 4px double var(--color-ink);
+  }
+  .role-dist {
+    border: 2px dashed var(--color-ink);
+  }
+  .role-dist::before {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+}

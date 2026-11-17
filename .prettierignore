@@ -1,0 +1,8 @@
+node_modules
+dist
+build
+coverage
+apps/web/android
+apps/web/public/spikes
+docs/approved-sheets
+package-lock.json
