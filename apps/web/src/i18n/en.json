@@ -6,12 +6,78 @@
   "common": {
     "language": "Language",
     "english": "English",
-    "tamil": "தமிழ்"
+    "tamil": "தமிழ்",
+    "loading": "Loading…"
   },
   "roles": {
     "shop": "Shop owner",
     "admin": "Admin",
     "distributor": "Distributor"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Use your mobile number and password.",
+    "phone": "Mobile number",
+    "phoneHint": "10 digits",
+    "password": "Password",
+    "show": "Show",
+    "hide": "Hide",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "demoTitle": "Demo mode",
+    "demoBody": "No server is connected. Sign in with a demo account and the password {{password}}.",
+    "demoAccounts": "Admin 9000000001 · Shop owner 9100000001 · Distributor 9200000001",
+    "errors": {
+      "phone": "Enter a valid 10-digit mobile number.",
+      "password": "Enter your password.",
+      "invalid_credentials": "Wrong mobile number or password.",
+      "inactive": "This login is switched off. Please contact RK.",
+      "network": "No internet connection. Please try again.",
+      "not_configured": "The app is not set up yet.",
+      "unknown": "Something went wrong. Please try again."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "order": "Order",
+    "orders": "Orders",
+    "payments": "Payments",
+    "rates": "Rates",
+    "bills": "Bills",
+    "balances": "Balances",
+    "more": "More",
+    "deliveries": "Deliveries",
+    "history": "History"
+  },
+  "pages": {
+    "shop": {
+      "home": "Home",
+      "order": "Place an order",
+      "orders": "My orders",
+      "payments": "My payments"
+    },
+    "admin": {
+      "home": "Overview",
+      "orders": "Orders",
+      "rates": "Today's rates",
+      "bills": "Today's bills",
+      "balances": "Balances",
+      "more": "Items, shops and settings"
+    },
+    "delivery": {
+      "home": "Deliveries",
+      "history": "Past deliveries"
+    },
+    "comingSoon": "This screen is built in Stage {{stage}}."
+  },
+  "shell": {
+    "signOut": "Sign out",
+    "offline": "You are offline. Changes need an internet connection.",
+    "notFoundTitle": "Page not found",
+    "goHome": "Go to home",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Please reload the app. If it keeps happening, tell RK.",
+    "reload": "Reload"
   },
   "stage0": {
     "title": "Stage 0: foundations and spikes",

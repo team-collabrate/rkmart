@@ -42,7 +42,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - run: npm ci
-      - run: npm run build:spikes -w apps/web
+      - run: npm run build:demo -w apps/web
       - run: npx cap sync android
         working-directory: apps/web
       - run: ./gradlew assembleDebug --console=plain

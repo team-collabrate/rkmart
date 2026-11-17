@@ -1,6 +1,11 @@
-import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react'
+import { lazy, Suspense, type ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
-import { setLanguage, type Language } from './i18n'
+import { Navigate, Route, Routes } from 'react-router'
+import { NotFound } from './app/NotFound'
+import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
+import { AppShell } from './components/AppShell'
+import { ComingSoon } from './components/ComingSoon'
+import { LoginPage } from './features/auth/LoginPage'
 
 // Stage 0 spike pages exist only in dev builds, or when built with VITE_SPIKES=1.
 // In a normal production build this whole branch is removed.
@@ -12,90 +17,66 @@ const StatusSpike: ComponentType | null = spikesEnabled
   ? lazy(() => import('./spikes/StatusSpike'))
   : null
 
-function useHashRoute(): string {
-  const [route, setRoute] = useState(() => location.hash.split('?')[0] || '#/')
-  useEffect(() => {
-    const onChange = () => setRoute(location.hash.split('?')[0] || '#/')
-    window.addEventListener('hashchange', onChange)
-    return () => window.removeEventListener('hashchange', onChange)
-  }, [])
-  return route
+/** A screen that a later stage builds, with its title in the current language. */
+function Soon({ area, page, stage }: { area: string; page: string; stage: number }) {
+  const { t } = useTranslation()
+  return <ComingSoon title={t(`pages.${area}.${page}`)} stage={stage} />
 }
 
 export default function App() {
-  const { t, i18n } = useTranslation()
-  const route = useHashRoute()
-  const current = (i18n.language === 'ta' ? 'ta' : 'en') as Language
-
   return (
-    <div style={{ maxWidth: 960, margin: '0 auto' }}>
-      <header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          padding: '12px 16px',
-          borderBottom: '2px solid #000',
-        }}
-      >
-        <a href="#/" style={{ color: 'inherit', textDecoration: 'none' }}>
-          <strong style={{ fontFamily: 'var(--font-display)', fontSize: 20 }}>
-            {t('app.name')}
-          </strong>
-          <div style={{ fontSize: 12, color: '#4a4a4a' }}>{t('app.tagline')}</div>
-        </a>
-        <div role="group" aria-label={t('common.language')} style={{ display: 'flex', gap: 6 }}>
-          {(['en', 'ta'] as const).map((lang) => (
-            <button
-              key={lang}
-              onClick={() => setLanguage(lang)}
-              aria-pressed={current === lang}
-              style={{
-                padding: '4px 12px',
-                border: '2px solid #000',
-                borderRadius: 999,
-                fontWeight: 600,
-                background: current === lang ? '#000' : '#fff',
-                color: current === lang ? '#fff' : '#000',
-              }}
-            >
-              {lang === 'en' ? t('common.english') : t('common.tamil')}
-            </button>
-          ))}
-        </div>
-      </header>
+    <Suspense fallback={<FullPageLoading />}>
+      <Routes>
+        <Route path="/" element={<RootRedirect />} />
+        <Route path="/login" element={<LoginPage />} />
 
-      <main>
-        <Suspense fallback={<p style={{ padding: 16 }}>Loading…</p>}>
-          {route === '#/spikes/pdf' && PdfSpike ? (
-            <PdfSpike />
-          ) : route === '#/spikes/status' && StatusSpike ? (
-            <StatusSpike />
-          ) : (
-            <section style={{ padding: 16 }}>
-              <h1>{t('stage0.title')}</h1>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '12px 0' }}>
-                <span className="role-chip role-shop">{t('roles.shop')}</span>
-                <span className="role-chip role-admin">{t('roles.admin')}</span>
-                <span className="role-chip role-dist">{t('roles.distributor')}</span>
-              </div>
-              {spikesEnabled && (
-                <ul style={{ lineHeight: 2 }}>
-                  <li>
-                    <a href="#/spikes/pdf">{t('stage0.pdf')}</a>
-                  </li>
-                  <li>
-                    <a href="#/spikes/status">
-                      {t('stage0.pwa')} / {t('stage0.native')}
-                    </a>
-                  </li>
-                </ul>
-              )}
-            </section>
-          )}
-        </Suspense>
-      </main>
-    </div>
+        <Route
+          path="/shop"
+          element={
+            <RequireRole role="shop">
+              <AppShell />
+            </RequireRole>
+          }
+        >
+          <Route index element={<Soon area="shop" page="home" stage={4} />} />
+          <Route path="order" element={<Soon area="shop" page="order" stage={4} />} />
+          <Route path="orders" element={<Soon area="shop" page="orders" stage={4} />} />
+          <Route path="payments" element={<Soon area="shop" page="payments" stage={7} />} />
+        </Route>
+
+        <Route
+          path="/admin"
+          element={
+            <RequireRole role="admin">
+              <AppShell />
+            </RequireRole>
+          }
+        >
+          <Route index element={<Navigate to="orders" replace />} />
+          <Route path="orders" element={<Soon area="admin" page="orders" stage={5} />} />
+          <Route path="rates" element={<Soon area="admin" page="rates" stage={3} />} />
+          <Route path="bills" element={<Soon area="admin" page="bills" stage={6} />} />
+          <Route path="balances" element={<Soon area="admin" page="balances" stage={7} />} />
+          <Route path="more" element={<Soon area="admin" page="more" stage={3} />} />
+        </Route>
+
+        <Route
+          path="/delivery"
+          element={
+            <RequireRole role="distributor">
+              <AppShell />
+            </RequireRole>
+          }
+        >
+          <Route index element={<Soon area="delivery" page="home" stage={7} />} />
+          <Route path="history" element={<Soon area="delivery" page="history" stage={7} />} />
+        </Route>
+
+        {PdfSpike && <Route path="/spikes/pdf" element={<PdfSpike />} />}
+        {StatusSpike && <Route path="/spikes/status" element={<StatusSpike />} />}
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   )
 }

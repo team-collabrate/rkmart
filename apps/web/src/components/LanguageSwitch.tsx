@@ -1,0 +1,33 @@
+import { useTranslation } from 'react-i18next'
+import { useAuth } from '../features/auth/AuthProvider'
+import type { Language } from '../features/auth/types'
+
+const OPTIONS: Language[] = ['en', 'ta']
+
+export function LanguageSwitch() {
+  const { t, i18n } = useTranslation()
+  const { changeLanguage } = useAuth()
+  const current: Language = i18n.language === 'ta' ? 'ta' : 'en'
+
+  return (
+    <div role="group" aria-label={t('common.language')} className="flex gap-1.5">
+      {OPTIONS.map((lang) => {
+        const active = current === lang
+        return (
+          <button
+            key={lang}
+            type="button"
+            onClick={() => changeLanguage(lang)}
+            aria-pressed={active}
+            className={
+              'min-h-9 rounded-full border-2 border-ink px-3 text-sm font-semibold ' +
+              (active ? 'bg-ink text-paper' : 'bg-paper text-ink')
+            }
+          >
+            {lang === 'en' ? t('common.english') : t('common.tamil')}
+          </button>
+        )
+      })}
+    </div>
+  )
+}

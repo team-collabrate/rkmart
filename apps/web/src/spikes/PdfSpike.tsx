@@ -41,7 +41,7 @@ export default function PdfSpike() {
       if (target) target.replaceChildren()
       for (let n = 1; n <= pdf.numPages; n++) {
         const page = await pdf.getPage(n)
-        const scale = Number(new URLSearchParams(location.hash.split('?')[1]).get('scale')) || 1.4
+        const scale = Number(new URLSearchParams(location.search).get('scale')) || 1.4
         const viewport = page.getViewport({ scale })
         const canvas = document.createElement('canvas')
         canvas.width = viewport.width
@@ -67,7 +67,7 @@ export default function PdfSpike() {
   }
 
   useEffect(() => {
-    if (new URLSearchParams(location.hash.split('?')[1]).get('auto') === '1') void run()
+    if (new URLSearchParams(location.search).get('auto') === '1') void run()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

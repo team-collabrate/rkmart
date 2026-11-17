@@ -1,0 +1,49 @@
+/* Shared building blocks. Black and white, big touch targets (44px and up), 16px text in inputs
+   so phones do not zoom in when a field is focused. */
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 0.75rem;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-outline {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .field {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 0.75rem;
+    background: var(--color-paper);
+    font-size: 1rem;
+  }
+  .field[aria-invalid='true'] {
+    border-style: dashed;
+  }
+}
+
+@layer base {
+  a {
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}

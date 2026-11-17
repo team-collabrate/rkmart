@@ -28,7 +28,7 @@ npm run test:db      # database access-rule tests (no Docker needed)
 npm run lint
 npm run typecheck
 npm run build        # production build (no spike pages)
-npm run build:spikes -w apps/web   # build that includes the Stage 0 spike pages
+npm run build:demo -w apps/web     # demo build: demo login and Stage 0 spike pages (for phone tests)
 ```
 
 Copy `apps/web/.env.example` to `apps/web/.env.local` and fill in the Supabase values once the
@@ -40,11 +40,11 @@ keystore or `google-services.json` in the repository.
 Building the APK needs JDK 21 and the Android SDK.
 
 ```bash
-npm run build:spikes -w apps/web
+npm run build:demo -w apps/web
 cd apps/web && npx cap sync android
 cd android && ./gradlew assembleDebug
 ```
 
 ## Status
 
-Stage 0 (foundations) and Stage 1 (database, login, roles) are built. See `docs/stage-0-report.md` and `docs/stage-1-database.md`. The development plan has 12 stages (0 to 11).
+Stages 0 (foundations), 1 (database, roles) and 2 (app shell) are built. See the notes in `docs/`. The development plan has 12 stages (0 to 11).
