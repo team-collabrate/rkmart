@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router'
-import { NAV, startPath, type NavItem } from '../app/roles'
+import { HOME_PATH, NAV, startPath, type NavItem } from '../app/roles'
 import { useAuth } from '../features/auth/AuthProvider'
 import { LanguageSwitch } from './LanguageSwitch'
 import { OfflineBanner } from './OfflineBanner'
@@ -93,7 +93,7 @@ export function AppShell() {
             <NavLink
               key={item.to}
               to={item.to}
-              end
+              end={item.to === HOME_PATH[profile.role]}
               className={({ isActive }) =>
                 'flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-xs font-semibold no-underline md:min-h-11 md:flex-none md:flex-row md:justify-start md:gap-3 md:rounded-xl md:px-3 md:text-base ' +
                 (isActive ? 'bg-ink text-paper' : 'text-ink')

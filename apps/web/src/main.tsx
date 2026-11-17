@@ -7,6 +7,7 @@ import './index.css'
 import './components.css'
 import App from './App.tsx'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { ApiProvider } from './data/ApiProvider'
 import { AuthProvider } from './features/auth/AuthProvider'
 import { initNative } from './native'
 
@@ -19,7 +20,9 @@ createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <ApiProvider>
+            <App />
+          </ApiProvider>
         </AuthProvider>
       </BrowserRouter>
     </ErrorBoundary>

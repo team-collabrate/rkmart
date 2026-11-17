@@ -5,6 +5,12 @@ import { NotFound } from './app/NotFound'
 import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
 import { AppShell } from './components/AppShell'
 import { ComingSoon } from './components/ComingSoon'
+import { ItemForm, ItemsList } from './features/admin/ItemsPages'
+import { MorePage } from './features/admin/MorePage'
+import { RatesPage } from './features/admin/RatesPage'
+import { SettingsPage } from './features/admin/SettingsPage'
+import { ShopForm, ShopsList } from './features/admin/ShopsPages'
+import { NewUserForm, UserDetail, UsersList } from './features/admin/UsersPages'
 import { LoginPage } from './features/auth/LoginPage'
 
 // Stage 0 spike pages exist only in dev builds, or when built with VITE_SPIKES=1.
@@ -54,10 +60,20 @@ export default function App() {
         >
           <Route index element={<Navigate to="orders" replace />} />
           <Route path="orders" element={<Soon area="admin" page="orders" stage={5} />} />
-          <Route path="rates" element={<Soon area="admin" page="rates" stage={3} />} />
+          <Route path="rates" element={<RatesPage />} />
           <Route path="bills" element={<Soon area="admin" page="bills" stage={6} />} />
           <Route path="balances" element={<Soon area="admin" page="balances" stage={7} />} />
-          <Route path="more" element={<Soon area="admin" page="more" stage={3} />} />
+          <Route path="more" element={<MorePage />} />
+          <Route path="more/items" element={<ItemsList />} />
+          <Route path="more/items/new" element={<ItemForm />} />
+          <Route path="more/items/:id" element={<ItemForm />} />
+          <Route path="more/shops" element={<ShopsList />} />
+          <Route path="more/shops/new" element={<ShopForm />} />
+          <Route path="more/shops/:id" element={<ShopForm />} />
+          <Route path="more/users" element={<UsersList />} />
+          <Route path="more/users/new" element={<NewUserForm />} />
+          <Route path="more/users/:id" element={<UserDetail />} />
+          <Route path="more/settings" element={<SettingsPage />} />
         </Route>
 
         <Route

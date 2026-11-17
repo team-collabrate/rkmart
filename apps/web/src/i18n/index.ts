@@ -1,5 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import adminEn from './admin.en.json'
+import adminTa from './admin.ta.json'
 import en from './en.json'
 import ta from './ta.json'
 
@@ -29,7 +31,10 @@ const initial = readStoredLanguage()
 document.documentElement.lang = initial
 
 void i18n.use(initReactI18next).init({
-  resources: { en: { translation: en }, ta: { translation: ta } },
+  resources: {
+    en: { translation: { ...en, admin: adminEn } },
+    ta: { translation: { ...ta, admin: adminTa } },
+  },
   lng: initial,
   fallbackLng: 'en',
   interpolation: { escapeValue: false },

@@ -1,0 +1,49 @@
+import { useQuery } from '@tanstack/react-query'
+import type { TFunction } from 'i18next'
+import { ApiError } from '../../data/adminApi'
+import { useAdminApi } from '../../data/apiContext'
+
+export const keys = {
+  products: ['products'] as const,
+  shops: ['shops'] as const,
+  users: ['users'] as const,
+  settings: ['settings'] as const,
+  rates: (date: string) => ['rates', date] as const,
+  previousRates: (date: string) => ['rates-previous', date] as const,
+}
+
+export function useProducts() {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.products, queryFn: () => api.listProducts() })
+}
+
+export function useShops() {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.shops, queryFn: () => api.listShops() })
+}
+
+export function useUsers() {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.users, queryFn: () => api.listUsers() })
+}
+
+export function useSettings() {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.settings, queryFn: () => api.getSettings() })
+}
+
+export function useRates(date: string) {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.rates(date), queryFn: () => api.getRates(date) })
+}
+
+export function usePreviousRates(date: string) {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.previousRates(date), queryFn: () => api.getPreviousRates(date) })
+}
+
+/** A failed request in plain words, in the current language. */
+export function errorText(t: TFunction, error: unknown): string {
+  const code = error instanceof ApiError ? error.code : 'unknown'
+  return t(`admin.apiErrors.${code}`)
+}
