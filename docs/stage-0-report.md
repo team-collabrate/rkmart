@@ -28,11 +28,12 @@ Date: 17 Nov 2026
 - The Claude app's built-in browser blocks service workers, so test PWA behaviour in a normal browser.
 - Still to confirm: "Add to home screen" on a real Android phone. That needs an HTTPS address, so it is checked after the first Cloudflare Pages deploy.
 
-## Spike 3: Android APK (blocked, needs JDK 21)
+## Spike 3: Android APK (build passed, phone test pending)
 
 - Capacitor 8 Android project was created and synced (minSdk 24, target API 36).
-- The first Gradle build failed: the only Java on this PC is version 25 (inside Android Studio), and Gradle 8.14 for this project needs Java 21 or older.
-- Fix: install JDK 21 (Temurin), then run `./gradlew assembleDebug`.
+- Gradle needs Java 21 or older. The first build failed on Java 25 (inside Android Studio), so Temurin JDK 21 was installed.
+- `./gradlew assembleDebug` now succeeds in 44 seconds and makes a 5.7 MB debug APK. Set `JAVA_HOME` to JDK 21 before building.
+- Still to confirm: install the APK on a real phone and check Tamil text and the status page.
 - Push alerts need a Firebase project and a real phone. Those wait for the Firebase account step.
 
 ## Decisions to confirm
@@ -43,10 +44,10 @@ Date: 17 Nov 2026
 
 ## Needs from the owner
 
-1. OK to install JDK 21 (about 200 MB, via winget) to finish the APK build.
-2. A Supabase account login for the dev and production projects (Stage 1).
-3. A Google login for the Firebase project (push alerts).
-4. Decide whether the GitHub repo should be made private.
+1. A Supabase account login for the dev and production projects (Stage 1).
+2. A Google login for the Firebase project (push alerts).
+3. Decide whether the GitHub repo should be made private.
+4. Install the debug APK on a real Android phone and report what you see.
 
 ## Notes
 
