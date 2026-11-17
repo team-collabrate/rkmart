@@ -47,4 +47,4 @@ cd android && ./gradlew assembleDebug
 
 ## Status
 
-Stages 0 (foundations), 1 (database, roles), 2 (app shell) and 3 (admin setup) are built. See the notes in `docs/`. The development plan has 12 stages (0 to 11).
+Stages 0 (foundations), 1 (database, roles), 2 (app shell), 3 (admin setup) and 4 (shop ordering) are built. See the notes in `docs/`. The development plan has 12 stages (0 to 11).

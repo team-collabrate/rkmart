@@ -131,6 +131,11 @@
     "forbidden": "You are not allowed to do this.",
     "network": "No internet connection. Please try again.",
     "not_configured": "The app is not set up yet.",
-    "unknown": "Something went wrong. Please try again."
+    "unknown": "Something went wrong. Please try again.",
+    "shop_inactive": "Your shop is switched off. Please contact RK.",
+    "empty_order": "Your cart is empty.",
+    "bad_quantity": "Quantities must be more than 0, with at most 3 decimals.",
+    "inactive_item": "An item is no longer sold. Please check your cart.",
+    "no_rate": "An item has no rate today. Please check your cart."
   }
 }

@@ -19,3 +19,8 @@ export function formatINRWhole(value: number): string {
 export function roundPaise(value: number): number {
   return Math.round((value + Number.EPSILON) * 100) / 100
 }
+
+/** 1350 -> "1,350", 46.5 -> "46.50": whole rupees stay short, rupees with paise show both decimals. */
+export function formatRupees(value: number): string {
+  return Number.isInteger(value) ? formatINRWhole(value) : formatINR(value)
+}

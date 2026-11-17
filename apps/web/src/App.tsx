@@ -12,6 +12,10 @@ import { SettingsPage } from './features/admin/SettingsPage'
 import { ShopForm, ShopsList } from './features/admin/ShopsPages'
 import { NewUserForm, UserDetail, UsersList } from './features/admin/UsersPages'
 import { LoginPage } from './features/auth/LoginPage'
+import { OrderPage } from './features/shop/OrderPage'
+import { OrderDetailPage, OrdersList } from './features/shop/OrdersPages'
+import { ReviewPage } from './features/shop/ReviewPage'
+import { ShopHome } from './features/shop/ShopHome'
 
 // Stage 0 spike pages exist only in dev builds, or when built with VITE_SPIKES=1.
 // In a normal production build this whole branch is removed.
@@ -44,9 +48,11 @@ export default function App() {
             </RequireRole>
           }
         >
-          <Route index element={<Soon area="shop" page="home" stage={4} />} />
-          <Route path="order" element={<Soon area="shop" page="order" stage={4} />} />
-          <Route path="orders" element={<Soon area="shop" page="orders" stage={4} />} />
+          <Route index element={<ShopHome />} />
+          <Route path="order" element={<OrderPage />} />
+          <Route path="order/review" element={<ReviewPage />} />
+          <Route path="orders" element={<OrdersList />} />
+          <Route path="orders/:id" element={<OrderDetailPage />} />
           <Route path="payments" element={<Soon area="shop" page="payments" stage={7} />} />
         </Route>
 

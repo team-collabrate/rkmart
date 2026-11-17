@@ -16,6 +16,11 @@ export type ApiErrorCode =
   | 'forbidden'
   | 'network'
   | 'not_configured'
+  | 'shop_inactive'
+  | 'empty_order'
+  | 'bad_quantity'
+  | 'inactive_item'
+  | 'no_rate'
   | 'unknown'
 
 /** A failure the screens can show in plain words. `code` picks the translated message. */

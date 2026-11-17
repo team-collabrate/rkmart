@@ -2,6 +2,8 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import adminEn from './admin.en.json'
 import adminTa from './admin.ta.json'
+import shopEn from './shop.en.json'
+import shopTa from './shop.ta.json'
 import en from './en.json'
 import ta from './ta.json'
 
@@ -32,8 +34,8 @@ document.documentElement.lang = initial
 
 void i18n.use(initReactI18next).init({
   resources: {
-    en: { translation: { ...en, admin: adminEn } },
-    ta: { translation: { ...ta, admin: adminTa } },
+    en: { translation: { ...en, admin: adminEn, shop: shopEn } },
+    ta: { translation: { ...ta, admin: adminTa, shop: shopTa } },
   },
   lng: initial,
   fallbackLng: 'en',

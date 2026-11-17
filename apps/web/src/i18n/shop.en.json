@@ -1,0 +1,65 @@
+{
+  "home": {
+    "greeting": "Hello, {{name}}",
+    "ratesReady_one": "Today's rates are ready: {{count}} item.",
+    "ratesReady_other": "Today's rates are ready: {{count}} items.",
+    "ratesMissing": "RK has not set today's rates yet. Please check again later.",
+    "orderNow": "Order now",
+    "lastOrder": "Your last order",
+    "repeat": "Repeat last order",
+    "recent": "Recent orders",
+    "noOrders": "You have not placed an order yet.",
+    "viewAll": "All orders"
+  },
+  "order": {
+    "title": "Place an order",
+    "search": "Search items",
+    "noRates": "Today's rates are not ready yet. Please check again later.",
+    "noMatch": "No item matches your search.",
+    "add": "Add",
+    "increase": "One more {{name}}",
+    "decrease": "One less {{name}}",
+    "quantity": "Quantity of {{name}}",
+    "perUnit": "per {{unit}}",
+    "cartItems_one": "{{count}} item",
+    "cartItems_other": "{{count}} items",
+    "review": "Review order"
+  },
+  "review": {
+    "title": "Review your order",
+    "empty": "Your cart is empty.",
+    "addItems": "Add items",
+    "note": "Note for RK (optional)",
+    "noteHint": "For example: please deliver before 8 am.",
+    "total": "Total at today's rates",
+    "totalNote": "The final amount is on your bill.",
+    "place": "Place order",
+    "placing": "Placing order…",
+    "unavailableTitle": "Not available today",
+    "unavailableBody": "These items have no rate today and will not be ordered:",
+    "remove": "Remove {{name}}",
+    "skipped_one": "{{count}} item from your earlier order is not available today and was left out.",
+    "skipped_other": "{{count}} items from your earlier order are not available today and were left out."
+  },
+  "orders": {
+    "title": "My orders",
+    "empty": "You have not placed an order yet.",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "placed": "Your order is placed. RK will pack it and send your bill.",
+    "detailTitle": "Order of {{date}}",
+    "repeatThis": "Repeat this order",
+    "note": "Your note",
+    "total": "Total at the rates of that day",
+    "line": "{{qty}} {{unit}} × ₹{{rate}}"
+  },
+  "status": {
+    "placed": "Placed",
+    "billed": "Bill ready",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  },
+  "errors": {
+    "qty": "Enter a quantity like 2 or 2.5."
+  }
+}

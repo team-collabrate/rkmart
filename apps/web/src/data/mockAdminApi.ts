@@ -1,38 +1,18 @@
 import { ApiError, type AdminApi } from './adminApi'
-import {
-  SAMPLE_PREVIOUS_RATES,
-  sampleProducts,
-  SAMPLE_SETTINGS,
-  sampleShops,
-  SAMPLE_USERS,
-} from './sampleData'
-import type { AppUser, CompanySettings, Product, RateMap, Shop } from './types'
+import { createMockState, type MockState } from './mockState'
+import type { Product, RateMap, Shop, AppUser } from './types'
 
 // In-memory demo version of the admin API, used when no Supabase project is configured
 // (development, tests, and demo builds only). Not part of a real release.
+// Pass a shared `state` so the shop demo API sees what the admin changes.
 
-interface State {
-  products: Product[]
-  shops: Shop[]
-  users: AppUser[]
-  /** date -> rates */
-  rates: Record<string, RateMap>
-  settings: CompanySettings
-  nextId: number
-}
-
-export function createMockAdminApi(options: { delayMs?: number; today?: string } = {}): AdminApi {
+export function createMockAdminApi(
+  options: { delayMs?: number; state?: MockState } = {},
+): AdminApi {
   const { delayMs = 0 } = options
   const wait = () => (delayMs ? new Promise((r) => setTimeout(r, delayMs)) : Promise.resolve())
 
-  const state: State = {
-    products: sampleProducts(),
-    shops: sampleShops(),
-    users: structuredClone(SAMPLE_USERS),
-    rates: { '1970-01-01': structuredClone(SAMPLE_PREVIOUS_RATES) },
-    settings: structuredClone(SAMPLE_SETTINGS),
-    nextId: 100,
-  }
+  const state = options.state ?? createMockState()
   const newId = (prefix: string) => `${prefix}${state.nextId++}`
 
   return {

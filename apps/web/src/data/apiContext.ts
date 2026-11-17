@@ -3,9 +3,14 @@ import { createContext, useContext } from 'react'
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase'
 import { ApiError, type AdminApi } from './adminApi'
 import { createMockAdminApi } from './mockAdminApi'
+import { createMockShopApi } from './mockShopApi'
+import { createMockState } from './mockState'
+import type { ShopApi } from './shopApi'
 import { createSupabaseAdminApi } from './supabaseAdminApi'
+import { createSupabaseShopApi } from './supabaseShopApi'
 
 export const ApiContext = createContext<AdminApi | null>(null)
+export const ShopApiContext = createContext<ShopApi | null>(null)
 
 export function useAdminApi(): AdminApi {
   const value = useContext(ApiContext)
@@ -13,21 +18,46 @@ export function useAdminApi(): AdminApi {
   return value
 }
 
+export function useShopApi(): ShopApi {
+  const value = useContext(ShopApiContext)
+  if (!value) throw new Error('useShopApi must be used inside <ApiProvider>')
+  return value
+}
+
 /** A release with no server configured can read and write nothing. */
-function notConfiguredApi(): AdminApi {
+function notConfigured<T extends object>(): T {
   const fail = async (): Promise<never> => {
     throw new ApiError('not_configured')
   }
-  return new Proxy({} as AdminApi, { get: () => fail })
+  return new Proxy({} as T, { get: () => fail })
 }
 
-export function createAdminApi(): AdminApi {
-  if (isSupabaseConfigured()) return createSupabaseAdminApi(getSupabase())
+// Which shop is signed in. The demo backend reads this on every call; the real server uses the login token.
+let signedInShopId: string | null = null
+export function setSignedInShopId(id: string | null) {
+  signedInShopId = id
+}
+
+export interface Apis {
+  admin: AdminApi
+  shop: ShopApi
+}
+
+/** Picks the real server, the demo backend, or nothing, depending on how the app was built. */
+export function createApis(getShopId: () => string | null = () => signedInShopId): Apis {
+  if (isSupabaseConfigured()) {
+    const client = getSupabase()
+    return { admin: createSupabaseAdminApi(client), shop: createSupabaseShopApi(client) }
+  }
   // Written inline (not via a shared constant) so a real release drops the demo data completely.
   if (import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') {
-    return createMockAdminApi({ delayMs: 150 })
+    const state = createMockState({ seedDemo: true })
+    return {
+      admin: createMockAdminApi({ delayMs: 150, state }),
+      shop: createMockShopApi(state, getShopId, { delayMs: 150 }),
+    }
   }
-  return notConfiguredApi()
+  return { admin: notConfigured<AdminApi>(), shop: notConfigured<ShopApi>() }
 }
 
 export function makeQueryClient(): QueryClient {

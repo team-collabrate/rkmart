@@ -25,7 +25,7 @@ export const DEMO_USERS: Record<string, Profile> = {
   '9100000001': {
     id: 'demo-shop',
     role: 'shop',
-    shopId: 'demo-shop-1',
+    shopId: 's1',
     fullName: 'Murugan (demo)',
     phone: '9100000001',
     language: 'en',
