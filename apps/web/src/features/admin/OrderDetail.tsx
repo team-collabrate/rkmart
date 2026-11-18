@@ -68,6 +68,7 @@ function OrderEditor({
   const refresh = async () => {
     await queryClient.invalidateQueries({ queryKey: ['admin-orders'] })
     await queryClient.invalidateQueries({ queryKey: ['admin-order'] })
+    await queryClient.invalidateQueries({ queryKey: ['admin-day-invoices'] })
   }
 
   const save = useMutation({

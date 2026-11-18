@@ -1,5 +1,5 @@
 import { todayISO } from '../lib/dates'
-import type { Invoice } from './adminOrders'
+import type { DayPdf, Invoice } from './adminOrders'
 import { issueInvoice } from './mockBilling'
 import {
   SAMPLE_PREVIOUS_RATES,
@@ -43,6 +43,8 @@ export interface MockState {
   /** financial year code -> last invoice number used */
   invoiceCounters: Record<string, number>
   payments: MockPayment[]
+  /** Saved day PDFs (the demo keeps the file in memory). */
+  dayPdfs: { meta: DayPdf; blob: Blob }[]
   nextId: number
   /** Called whenever orders change, like the live updates from the real server. */
   listeners: Set<() => void>
@@ -73,6 +75,7 @@ export function createMockState(options: { seedDemo?: boolean } = {}): MockState
     invoices: [],
     invoiceCounters: {},
     payments: [],
+    dayPdfs: [],
     nextId: 100,
     listeners: new Set(),
   }

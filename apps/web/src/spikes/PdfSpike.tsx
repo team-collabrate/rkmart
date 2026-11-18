@@ -4,7 +4,7 @@ import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import pdfMake from 'pdfmake/build/pdfmake'
 import { buildDailyBillsDoc } from '../lib/pdf/dailyBillsDoc'
 import { ensurePdfFonts } from '../lib/pdf/fonts'
-import { sampleBills, sampleCompany } from './sampleBills'
+import { sampleBillsLong, sampleCompany } from './sampleBills'
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl
 
@@ -31,7 +31,7 @@ export default function PdfSpike() {
     try {
       await ensurePdfFonts()
       const started = performance.now()
-      const doc = buildDailyBillsDoc(sampleCompany, sampleBills)
+      const doc = buildDailyBillsDoc(sampleCompany, sampleBillsLong)
       const blob: Blob = await pdfMake.createPdf(doc).getBlob()
       const ms = Math.round(performance.now() - started)
 
@@ -74,7 +74,7 @@ export default function PdfSpike() {
   return (
     <section style={{ padding: 16 }}>
       <h2>Tamil PDF spike</h2>
-      <p>5 sample GST bills, 2 per A4 page, English and Tamil.</p>
+      <p>8 sample GST bills, 2 per A4 page (long bills get their own page), English and Tamil.</p>
       <button
         onClick={() => void run()}
         disabled={busy}

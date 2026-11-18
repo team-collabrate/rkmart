@@ -1,4 +1,4 @@
-import type { AdminOrderDetail, AdminOrderSummary } from './adminOrders'
+import type { AdminOrderDetail, AdminOrderSummary, DayPdf, Invoice } from './adminOrders'
 import type { CartLine } from './shopApi'
 import type {
   AppUser,
@@ -72,6 +72,15 @@ export interface AdminApi {
   cancelBill(invoiceId: string, reason: string): Promise<void>
   /** Calls back when orders change. Returns a function that stops listening. */
   onOrdersChanged(callback: () => void): () => void
+
+  /** The issued bills of one day, in invoice-number order (cancelled bills are left out). */
+  listDayInvoices(date: string): Promise<Invoice[]>
+  /** Saved PDFs of one day, oldest first. */
+  listDayPdfs(date: string): Promise<DayPdf[]>
+  /** Saves a PDF holding these bills and gives it the next version number for the day. */
+  saveDayPdf(date: string, pdf: Blob, invoiceIds: string[]): Promise<DayPdf>
+  /** Gets a saved PDF back, to download or print again. */
+  getDayPdf(id: string): Promise<Blob>
 
   getSettings(): Promise<CompanySettings>
   saveSettings(input: CompanySettings): Promise<CompanySettings>

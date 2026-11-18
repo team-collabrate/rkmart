@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { ChevronLeft, ChevronRight, FilePlus2 } from 'lucide-react'
+import { FilePlus2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
@@ -7,11 +7,12 @@ import { Banner, Empty, Loading, PageHeader } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
 import type { AdminOrderSummary } from '../../data/adminOrders'
 import type { OrderStatus } from '../../data/shopApi'
-import { addDays, formatDay, formatTime, todayISO } from '../../lib/dates'
+import { formatTime, todayISO } from '../../lib/dates'
 import { formatINR } from '../../lib/money'
 import { displayNames } from '../../lib/names'
 import type { Language } from '../auth/types'
 import { OrderStatusPill } from '../shop/OrderStatusPill'
+import { DayNav } from './DayNav'
 import { errorText, useOrders } from './queries'
 
 type Filter = 'all' | OrderStatus
@@ -66,6 +67,7 @@ export function OrdersInbox() {
     }
     await queryClient.invalidateQueries({ queryKey: ['admin-orders'] })
     await queryClient.invalidateQueries({ queryKey: ['admin-order'] })
+    await queryClient.invalidateQueries({ queryKey: ['admin-day-invoices'] })
     setWorking(false)
     setNotice(
       failed === 0
@@ -78,29 +80,7 @@ export function OrdersInbox() {
     <section>
       <PageHeader title={t('admin.orders.title')} />
 
-      <div className="mb-3 flex items-center gap-2">
-        <button
-          type="button"
-          className="btn btn-outline"
-          onClick={() => go(addDays(date, -1))}
-          aria-label={t('admin.orders.previousDay')}
-        >
-          <ChevronLeft size={18} aria-hidden="true" />
-        </button>
-        <div className="min-w-0 flex-1 text-center">
-          <p className="font-display text-lg font-bold">{formatDay(date, language)}</p>
-          {date === today && <p className="text-sm text-mute">{t('admin.orders.today')}</p>}
-        </div>
-        <button
-          type="button"
-          className="btn btn-outline"
-          onClick={() => go(addDays(date, 1))}
-          disabled={date >= today}
-          aria-label={t('admin.orders.nextDay')}
-        >
-          <ChevronRight size={18} aria-hidden="true" />
-        </button>
-      </div>
+      <DayNav date={date} onChange={go} />
 
       <div role="group" aria-label={t('admin.orders.title')} className="mb-3 flex flex-wrap gap-2">
         {FILTERS.map((f) => (

@@ -1,6 +1,6 @@
 import { FunctionsHttpError, type SupabaseClient } from '@supabase/supabase-js'
 import { ApiError, type AdminApi, type ApiErrorCode } from './adminApi'
-import type { AdminOrderDetail, AdminOrderSummary, Invoice } from './adminOrders'
+import type { AdminOrderDetail, AdminOrderSummary, DayPdf, Invoice } from './adminOrders'
 import type {
   AppUser,
   CompanySettings,
@@ -225,6 +225,27 @@ function toInvoice(row: InvoiceRow): Invoice {
         igst: Number(l.igst),
         amount: Number(l.amount),
       })),
+  }
+}
+
+interface DayPdfRow {
+  id: string
+  bill_date: string
+  version: number
+  bill_count: number
+  invoice_ids: string[]
+  created_at: string
+  file_path: string
+}
+
+function toDayPdf(row: DayPdfRow): DayPdf {
+  return {
+    id: row.id,
+    billDate: row.bill_date,
+    version: row.version,
+    billCount: row.bill_count,
+    invoiceIds: row.invoice_ids,
+    createdAt: row.created_at,
   }
 }
 
@@ -496,6 +517,62 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
       return () => {
         void client.removeChannel(channel)
       }
+    },
+
+    async listDayInvoices(date) {
+      const { data, error } = await client
+        .from('invoices')
+        .select('*, invoice_items(*)')
+        .eq('issue_date', date)
+        .eq('status', 'issued')
+        .order('invoice_no', { ascending: true })
+      if (error) fail(error)
+      return (data as unknown as InvoiceRow[]).map(toInvoice)
+    },
+
+    async listDayPdfs(date) {
+      const { data, error } = await client
+        .from('daily_bill_pdfs')
+        .select('id, bill_date, version, bill_count, invoice_ids, created_at, file_path')
+        .eq('bill_date', date)
+        .order('version', { ascending: true })
+      if (error) fail(error)
+      return (data as unknown as DayPdfRow[]).map(toDayPdf)
+    },
+
+    async saveDayPdf(date, pdf, invoiceIds) {
+      // The file goes to the private bucket first; the database then records it and numbers it.
+      const path = `${date}/${crypto.randomUUID()}.pdf`
+      const upload = await client.storage
+        .from('daily-bills')
+        .upload(path, pdf, { contentType: 'application/pdf' })
+      if (upload.error) throw new ApiError('network')
+      const { error } = await client.rpc('record_daily_pdf', {
+        p_date: date,
+        p_path: path,
+        p_invoice_ids: invoiceIds,
+      })
+      if (error) throw billingError(error)
+      const { data, error: readError } = await client
+        .from('daily_bill_pdfs')
+        .select('id, bill_date, version, bill_count, invoice_ids, created_at, file_path')
+        .eq('file_path', path)
+        .single()
+      if (readError) fail(readError)
+      return toDayPdf(data as unknown as DayPdfRow)
+    },
+
+    async getDayPdf(id) {
+      const { data: row, error } = await client
+        .from('daily_bill_pdfs')
+        .select('file_path')
+        .eq('id', id)
+        .maybeSingle()
+      if (error) fail(error)
+      if (!row) throw new ApiError('not_found')
+      const download = await client.storage.from('daily-bills').download(row.file_path as string)
+      if (download.error || !download.data) throw new ApiError('network')
+      return download.data
     },
 
     async getSettings() {

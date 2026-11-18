@@ -229,5 +229,29 @@
     "keep": "Keep the bill",
     "cancelled": "Bill cancelled. The order is back in the new list.",
     "deliveredLocked": "Delivered orders cannot have their bill cancelled."
+  },
+  "bills": {
+    "title": "Bills",
+    "empty": "No bills on this day yet. Generate bills from the Orders screen.",
+    "summary": "{{count}} bills · ₹{{total}}",
+    "makeAll": "Make PDF of all bills ({{count}})",
+    "makeNew": "Make PDF of only the {{count}} new bills",
+    "makeAgain": "Make PDF of all {{count}} bills again",
+    "making": "Making the PDF…",
+    "allInPdf": "Every bill is already in a saved PDF.",
+    "newAfterPdf": "{{count}} bills were made after the last PDF.",
+    "made": "PDF version {{version}} is ready and saved ({{count}} bills).",
+    "print": "Print",
+    "download": "Download",
+    "printHint": "Two bills per A4 page. Print it, cut along the dashed line, and hand each bill to the delivery person.",
+    "billsHeading": "Bills",
+    "savedHeading": "Saved PDFs",
+    "pdfRow": "Version {{version}} · {{count}} bills · {{time}}",
+    "printVersion": "Print version {{version}}",
+    "downloadVersion": "Download version {{version}}",
+    "inPdf": "In PDF {{versions}}",
+    "notInPdf": "Not in a PDF yet",
+    "pdfFailed": "The PDF could not be made. Please try again.",
+    "fileTitle": "RK bills {{date}} (version {{version}})"
   }
 }

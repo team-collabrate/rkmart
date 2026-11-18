@@ -1,6 +1,6 @@
 // SAMPLE DATA for the Stage 0 PDF spike only. Tax rates here are illustrative, not tax advice.
 // Real GST maths is built and tested in Stage 5.
-import type { Bill, BillLine, Company } from '../lib/pdf/dailyBillsDoc'
+import type { Bill, BillLine, Company } from '../lib/pdf/types'
 import { roundPaise } from '../lib/money'
 import { amountInWords } from '../lib/words'
 
@@ -100,4 +100,54 @@ export const sampleBills: Bill[] = [
     tea(),
     sugar(),
   ]),
+]
+
+// Stage 6 additions: a bill that just fits half a page, a long bill that needs its own page,
+// and a bill for a shop in another state (IGST).
+const idli = () => line('Idli rice', 'இட்லி அரிசி', '1006', 3, 'bag', 1250, 5)
+const wheat = () => line('Wheat flour', 'கோதுமை மாவு', '1101', 25, 'kg', 38, 0)
+const urad = () => line('Urad dal', 'உளுந்தம் பருப்பு', '0713', 10, 'kg', 120, 0)
+const tamarind = () => line('Tamarind', 'புளி', '0813', 5, 'kg', 210, 0)
+const chilli = () => line('Red chilli', 'மிளகாய் வற்றல்', '0904', 4, 'kg', 260, 0)
+
+const interState = bill('RK/2627/0048', 'Chennai Foods', 'சென்னை ஃபுட்ஸ், Mount Road', 0, [
+  rice(),
+  oil(),
+  sugar(),
+])
+const igstBill: Bill = {
+  ...interState,
+  cgst: 0,
+  sgst: 0,
+  igst: roundPaise(interState.cgst + interState.sgst),
+}
+
+export const sampleBillsLong: Bill[] = [
+  ...sampleBills,
+  bill('RK/2627/0046', 'Big Kitchen Catering', 'பிக் கிச்சன், Market Road', 0, [
+    rice(),
+    idli(),
+    dal(),
+    urad(),
+    sugar(),
+    oil(),
+    tea(),
+    rava(),
+    salt(),
+  ]),
+  bill('RK/2627/0047', 'Annapoorna Mess', 'அன்னபூர்ணா மெஸ், Lake View', 3200, [
+    rice(),
+    idli(),
+    dal(),
+    urad(),
+    sugar(),
+    oil(),
+    tea(),
+    rava(),
+    salt(),
+    wheat(),
+    tamarind(),
+    chilli(),
+  ]),
+  igstBill,
 ]

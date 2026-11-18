@@ -80,3 +80,14 @@ export interface AdminOrderDetail extends AdminOrderSummary {
   /** The bill that is in force for this order, if any (a cancelled bill is not returned here). */
   invoice: Invoice | null
 }
+
+/** One saved export of a day's bills. A later export of the same day gets the next version. */
+export interface DayPdf {
+  id: string
+  billDate: string
+  version: number
+  billCount: number
+  /** The bills this PDF holds. */
+  invoiceIds: string[]
+  createdAt: string
+}

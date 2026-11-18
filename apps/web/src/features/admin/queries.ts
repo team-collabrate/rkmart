@@ -13,6 +13,8 @@ export const keys = {
   previousRates: (date: string) => ['rates-previous', date] as const,
   orders: (date: string) => ['admin-orders', date] as const,
   order: (id: string) => ['admin-order', id] as const,
+  dayInvoices: (date: string) => ['admin-day-invoices', date] as const,
+  dayPdfs: (date: string) => ['admin-day-pdfs', date] as const,
 }
 
 export function useProducts() {
@@ -62,6 +64,29 @@ export function useOrders(date: string) {
     queryFn: () => api.listOrders(date),
     refetchInterval: 30_000,
   })
+}
+
+/** The day's issued bills. Refreshes like the orders list, because a bill can be made at any time. */
+export function useDayInvoices(date: string) {
+  const api = useAdminApi()
+  const queryClient = useQueryClient()
+  useEffect(
+    () =>
+      api.onOrdersChanged(() => {
+        void queryClient.invalidateQueries({ queryKey: ['admin-day-invoices'] })
+      }),
+    [api, queryClient],
+  )
+  return useQuery({
+    queryKey: keys.dayInvoices(date),
+    queryFn: () => api.listDayInvoices(date),
+    refetchInterval: 30_000,
+  })
+}
+
+export function useDayPdfs(date: string) {
+  const api = useAdminApi()
+  return useQuery({ queryKey: keys.dayPdfs(date), queryFn: () => api.listDayPdfs(date) })
 }
 
 export function useOrderDetail(id: string | undefined) {

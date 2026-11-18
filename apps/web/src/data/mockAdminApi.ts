@@ -1,5 +1,5 @@
 import { ApiError, type AdminApi } from './adminApi'
-import type { AdminOrderSummary } from './adminOrders'
+import type { AdminOrderSummary, DayPdf } from './adminOrders'
 import { cancelInvoice, issueInvoice } from './mockBilling'
 import { createMockState, notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
 import { roundPaise } from '../lib/money'
@@ -228,6 +228,51 @@ export function createMockAdminApi(
       return () => {
         state.listeners.delete(callback)
       }
+    },
+
+    async listDayInvoices(date) {
+      await wait()
+      return state.invoices
+        .filter((i) => i.status === 'issued' && i.issueDate === date)
+        .sort((a, b) => a.invoiceNo.localeCompare(b.invoiceNo))
+        .map((i) => structuredClone(i))
+    },
+
+    async listDayPdfs(date) {
+      await wait()
+      return state.dayPdfs
+        .filter((p) => p.meta.billDate === date)
+        .map((p) => ({ ...p.meta, invoiceIds: [...p.meta.invoiceIds] }))
+        .sort((a, b) => a.version - b.version)
+    },
+
+    async saveDayPdf(date, pdf, invoiceIds) {
+      await wait()
+      if (invoiceIds.length === 0) throw new ApiError('invalid')
+      const known = new Set(state.invoices.filter((i) => i.status === 'issued').map((i) => i.id))
+      if (invoiceIds.some((id) => !known.has(id))) throw new ApiError('not_found')
+      const version =
+        Math.max(
+          0,
+          ...state.dayPdfs.filter((p) => p.meta.billDate === date).map((p) => p.meta.version),
+        ) + 1
+      const meta: DayPdf = {
+        id: newId('pdf'),
+        billDate: date,
+        version,
+        billCount: invoiceIds.length,
+        invoiceIds: [...invoiceIds],
+        createdAt: new Date().toISOString(),
+      }
+      state.dayPdfs.push({ meta, blob: pdf })
+      return { ...meta }
+    },
+
+    async getDayPdf(id) {
+      await wait()
+      const found = state.dayPdfs.find((p) => p.meta.id === id)
+      if (!found) throw new ApiError('not_found')
+      return found.blob
     },
 
     async getSettings() {

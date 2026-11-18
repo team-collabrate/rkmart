@@ -6,6 +6,7 @@ import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
 import { AppShell } from './components/AppShell'
 import { ComingSoon } from './components/ComingSoon'
 import { BillPage } from './features/admin/BillPage'
+import { BillsPage } from './features/admin/BillsPage'
 import { ItemForm, ItemsList } from './features/admin/ItemsPages'
 import { MorePage } from './features/admin/MorePage'
 import { OrderDetailPage as AdminOrderDetailPage } from './features/admin/OrderDetail'
@@ -72,7 +73,7 @@ export default function App() {
           <Route path="orders/:id" element={<AdminOrderDetailPage />} />
           <Route path="orders/:id/bill" element={<BillPage />} />
           <Route path="rates" element={<RatesPage />} />
-          <Route path="bills" element={<Soon area="admin" page="bills" stage={6} />} />
+          <Route path="bills" element={<BillsPage />} />
           <Route path="balances" element={<Soon area="admin" page="balances" stage={7} />} />
           <Route path="more" element={<MorePage />} />
           <Route path="more/items" element={<ItemsList />} />

@@ -79,6 +79,7 @@ function BillView({
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['admin-orders'] })
       await queryClient.invalidateQueries({ queryKey: ['admin-order'] })
+      await queryClient.invalidateQueries({ queryKey: ['admin-day-invoices'] })
       void navigate(`/admin/orders/${orderId}`, { state: { cancelled: true } })
     },
     onError: (e) => setError(errorText(t, e)),
@@ -194,7 +195,7 @@ function BillView({
 
         <p className="mb-3 text-sm">
           <span className="font-semibold">{t('admin.bill.inWords')}: </span>
-          {amountInWords(invoice.totalDue)}
+          {amountInWords(invoice.grandTotal)}
         </p>
         {company.bankDetails && (
           <p className="whitespace-pre-line text-sm">
