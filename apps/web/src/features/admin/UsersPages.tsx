@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus } from 'lucide-react'
+import { Lock, Plus, TriangleAlert } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
@@ -63,7 +63,7 @@ export function UsersList() {
                     {[u.phone, u.shopName].filter(Boolean).join(' · ')}
                   </p>
                 </div>
-                <RoleChip role={u.role} />
+                <RoleChip role={u.role} always />
                 <StatusPill active={u.isActive} />
               </Link>
             </li>
@@ -250,10 +250,12 @@ function UserDetailBody({ userId }: { userId: string }) {
   return (
     <section className="max-w-xl">
       <PageHeader title={user.fullName} backTo={BASE} />
-      <div className="mb-6 flex flex-wrap items-center gap-2">
-        <RoleChip role={user.role} />
+      <div className="mb-4 flex h-8 items-center gap-2">
+        <RoleChip role={user.role} always />
         <StatusPill active={user.isActive} />
-        <span className="text-mute">{[user.phone, user.shopName].filter(Boolean).join(' · ')}</span>
+        <span className="min-w-0 flex-1 truncate text-mute">
+          {[user.phone, user.shopName].filter(Boolean).join(' · ')}
+        </span>
       </div>
 
       {notice && (
@@ -265,7 +267,7 @@ function UserDetailBody({ userId }: { userId: string }) {
       <form
         onSubmit={onReset}
         noValidate
-        className="mb-8 flex flex-col gap-4 rounded-2xl border border-line p-4"
+        className="mb-4 flex flex-col gap-4 rounded-[1.75rem] border border-line bg-paper p-4"
       >
         <h2 className="text-lg">{t('admin.users.resetTitle')}</h2>
         <TextField
@@ -284,12 +286,18 @@ function UserDetailBody({ userId }: { userId: string }) {
         </div>
       </form>
 
-      <div className="rounded-2xl border-2 border-dashed border-ink p-4">
+      <div className="rounded-[1.75rem] border border-line bg-paper p-4">
         {isSelf ? (
-          <p className="text-mute">{t('admin.users.cannotSelf')}</p>
+          <p className="flex h-6 items-center gap-2 text-mute">
+            <Lock size={18} aria-hidden="true" className="shrink-0" />
+            <span className="truncate">{t('admin.users.cannotSelf')}</span>
+          </p>
         ) : (
           <>
-            <p className="mb-3 text-mute">{t('admin.users.switchWarn')}</p>
+            <p className="mb-3 flex h-6 items-center gap-2 text-mute">
+              <TriangleAlert size={18} aria-hidden="true" className="shrink-0" />
+              <span className="truncate">{t('admin.users.switchWarn')}</span>
+            </p>
             <button
               type="button"
               className="btn btn-outline h-12 w-full rounded-full"

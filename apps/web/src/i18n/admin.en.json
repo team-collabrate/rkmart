@@ -66,8 +66,7 @@
     "new": "New shop",
     "edit": "Edit shop",
     "empty": "No shops yet.",
-    "nameEn": "Shop name in English",
-    "nameTa": "Shop name in Tamil",
+    "nameEn": "Shop name",
     "owner": "Owner",
     "phone": "Phone",
     "address": "Address",
@@ -95,10 +94,10 @@
     "newPassword": "New password",
     "reset": "Reset password",
     "resetDone": "Password changed.",
-    "switchWarn": "A switched-off login cannot sign in and sees nothing.",
+    "switchWarn": "Switched-off logins cannot sign in.",
     "switchedOff": "Login switched off.",
     "switchedOn": "Login switched on.",
-    "cannotSelf": "You cannot switch off your own login."
+    "cannotSelf": "You cannot switch off yourself."
   },
   "settings": {
     "title": "Company settings",

@@ -77,11 +77,11 @@ const s = (
 })
 
 export const sampleShops = (): Shop[] => [
-  s(1, 'Sri Murugan Cafe', 'ஸ்ரீ முருகன் கஃபே', 'Murugan', 'Town Hall'),
-  s(2, 'Lakshmi Stores', 'லட்சுமி ஸ்டோர்ஸ்', 'Lakshmi', 'Gandhi Road'),
-  s(3, 'Annam Hotel', 'அன்னம் ஹோட்டல்', 'Annam', 'Market Street'),
-  s(4, 'Kavi Tiffin Centre', 'கவி டிபன் சென்டர்', 'Kavi', 'Bus Stand'),
-  s(5, 'Green Leaf', 'கிரீன் லீஃப்', 'Gopal', 'Station Road'),
+  s(1, 'Sri Murugan Cafe', '', 'Murugan', 'Town Hall'),
+  s(2, 'Lakshmi Stores', '', 'Lakshmi', 'Gandhi Road'),
+  s(3, 'Annam Hotel', '', 'Annam', 'Market Street'),
+  s(4, 'Kavi Tiffin Centre', '', 'Kavi', 'Bus Stand'),
+  s(5, 'Green Leaf', '', 'Gopal', 'Station Road'),
 ]
 
 export const SAMPLE_USERS: AppUser[] = [

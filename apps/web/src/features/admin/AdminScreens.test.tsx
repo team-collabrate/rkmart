@@ -182,7 +182,7 @@ describe('logins', () => {
 
   it('protects the admin’s own login', async () => {
     renderAt('/admin/more/users/demo-admin')
-    expect(await screen.findByText('You cannot switch off your own login.')).toBeInTheDocument()
+    expect(await screen.findByText('You cannot switch off yourself.')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Switch off' })).not.toBeInTheDocument()
   })
 })

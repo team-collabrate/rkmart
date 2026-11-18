@@ -16,13 +16,13 @@ set company_name = 'RK Agency',
     rates_include_gst = false;
 
 insert into public.shops (name_en, name_ta, owner_name, phone, address, state_code) values
-  ('Sri Murugan Cafe',   'ஸ்ரீ முருகன் கஃபே',  'Murugan',  '9100000001', 'Town Hall',      '33'),
-  ('Lakshmi Stores',     'லட்சுமி ஸ்டோர்ஸ்',   'Lakshmi',  '9100000002', 'Gandhi Road',    '33'),
-  ('Annam Hotel',        'அன்னம் ஹோட்டல்',     'Annam',    '9100000003', 'Market Street',  '33'),
-  ('Kavi Tiffin Centre', 'கவி டிபன் சென்டர்',  'Kavi',     '9100000004', 'Bus Stand',      '33'),
-  ('Green Leaf',         'கிரீன் லீஃப்',        'Gopal',    '9100000005', 'Station Road',   '33'),
-  ('Saravana Bhavan',    'சரவணா பவன்',         'Saravanan','9100000006', 'Temple Street',  '33'),
-  ('Fresh Bites',        'ஃப்ரெஷ் பைட்ஸ்',     'Priya',    '9100000007', 'College Road',   '33');
+  ('Sri Murugan Cafe',   '',  'Murugan',  '9100000001', 'Town Hall',      '33'),
+  ('Lakshmi Stores',     '',   'Lakshmi',  '9100000002', 'Gandhi Road',    '33'),
+  ('Annam Hotel',        '',     'Annam',    '9100000003', 'Market Street',  '33'),
+  ('Kavi Tiffin Centre', '',  'Kavi',     '9100000004', 'Bus Stand',      '33'),
+  ('Green Leaf',         '',        'Gopal',    '9100000005', 'Station Road',   '33'),
+  ('Saravana Bhavan',    '',         'Saravanan','9100000006', 'Temple Street',  '33'),
+  ('Fresh Bites',        '',     'Priya',    '9100000007', 'College Road',   '33');
 
 insert into public.products (name_en, name_ta, category, unit, hsn_code, gst_rate, sort_order) values
   ('Ponni rice',      'பொன்னி அரிசி',          'Rice and flour', 'bag', '1006', 5, 10),

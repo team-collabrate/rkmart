@@ -89,7 +89,7 @@ function ShopFormBody({ existing }: { existing?: Shop }) {
   const navigate = useNavigate()
   const form = useForm({
     nameEn: existing?.nameEn ?? '',
-    nameTa: existing?.nameTa ?? '',
+    nameTa: '',
     ownerName: existing?.ownerName ?? '',
     phone: existing?.phone ?? '',
     address: existing?.address ?? '',
@@ -135,13 +135,6 @@ function ShopFormBody({ existing }: { existing?: Shop }) {
           value={values.nameEn}
           onChange={(x) => set('nameEn', x)}
           error={errors.nameEn}
-        />
-        <TextField
-          id="nameTa"
-          label={t('admin.shops.nameTa')}
-          value={values.nameTa}
-          onChange={(x) => set('nameTa', x)}
-          lang="ta"
         />
         <TextField
           id="ownerName"
