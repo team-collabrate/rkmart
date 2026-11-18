@@ -74,7 +74,7 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
           <p className="mt-3 font-semibold">{t('alerts.on')}</p>
           <button
             type="button"
-            className="btn btn-outline mt-3"
+            className="btn btn-outline mt-3 h-12 w-full whitespace-nowrap"
             disabled={busy}
             onClick={() => turnOff.mutate()}
           >
@@ -83,7 +83,12 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
           </button>
         </>
       ) : state === 'off' ? (
-        <button type="button" className="btn mt-3" disabled={busy} onClick={() => turnOn.mutate()}>
+        <button
+          type="button"
+          className="btn mt-3 h-12 w-full whitespace-nowrap"
+          disabled={busy}
+          onClick={() => turnOn.mutate()}
+        >
           <Bell size={18} aria-hidden="true" />
           {busy ? t('alerts.working') : t('alerts.turnOn')}
         </button>
