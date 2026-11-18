@@ -1,10 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ChevronRight, Plus, Trash2 } from 'lucide-react'
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Banknote,
+  CalendarCheck,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  CircleCheck,
+  Ellipsis,
+  Landmark,
+  MessageSquareText,
+  Plus,
+  Receipt,
+  Smartphone,
+  Trash2,
+  Wallet,
+  X,
+  type LucideIcon,
+} from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { Avatar } from '../../components/Avatar'
-import { Banner, Empty, Loading, PageHeader, SelectField, TextField } from '../../components/ui'
+import { Banner, Empty, TextField } from '../../components/ui'
+import { TopBar } from '../../components/TopBar'
 import { useAdminApi } from '../../data/apiContext'
 import {
   PAYMENT_METHODS,
@@ -19,7 +39,52 @@ import type { Language } from '../auth/types'
 import { balanceText, parseMoney } from './balanceText'
 import { errorText } from './queries'
 
+// These screens are built to stay still: fixed heights, one line per element, no animation, grey
+// placeholders in the same shape while loading. Words are kept for what needs them; the rest is icons.
+
 const useLanguage = (): Language => (useTranslation().i18n.language === 'ta' ? 'ta' : 'en')
+
+const METHOD_ICON: Record<PaymentMethod, LucideIcon> = {
+  cash: Banknote,
+  upi: Smartphone,
+  bank: Landmark,
+  other: Ellipsis,
+}
+
+/** A thin bar showing how much of what was billed has been paid. Not animated. */
+function PaidBar({ billed, paid }: { billed: number; paid: number }) {
+  const percent = billed > 0 ? Math.max(0, Math.min(100, Math.round((paid / billed) * 100))) : 0
+  return (
+    <div
+      className="h-2 w-full overflow-hidden rounded-full bg-white/25"
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={percent}
+    >
+      <div className="h-full rounded-full bg-paper" style={{ width: `${percent}%` }} />
+    </div>
+  )
+}
+
+/** "Billed ₹x" and "Paid ₹y", each with a small arrow icon. */
+function Totals({ billed, paid, light }: { billed: number; paid: number; light?: boolean }) {
+  const { t } = useTranslation()
+  const tone = light ? 'text-white/85' : 'text-mute'
+  const strong = light ? 'font-semibold text-paper' : 'font-semibold text-ink'
+  return (
+    <div className="flex h-5 items-center justify-between text-sm">
+      <span className={`flex min-w-0 items-center gap-1.5 whitespace-nowrap ${tone}`}>
+        <ArrowUpRight size={16} aria-hidden="true" />
+        {t('admin.pay.billed')} <span className={strong}>₹{formatINR(billed)}</span>
+      </span>
+      <span className={`flex min-w-0 items-center gap-1.5 whitespace-nowrap ${tone}`}>
+        <ArrowDownLeft size={16} aria-hidden="true" />
+        {t('admin.pay.paid')} <span className={strong}>₹{formatINR(paid)}</span>
+      </span>
+    </div>
+  )
+}
 
 /** What each shop owes, biggest first. Tap a shop for its statement and to record a payment. */
 export function BalancesPage() {
@@ -28,39 +93,70 @@ export function BalancesPage() {
   const api = useAdminApi()
   const list = useQuery({ queryKey: ['balances'], queryFn: () => api.listBalances() })
 
-  const owed = roundPaise(
-    (list.data ?? []).reduce((sum, s) => sum + (s.balance > 0 ? s.balance : 0), 0),
-  )
-
-  const owing = (list.data ?? []).filter((x) => x.balance > 0).length
-  const clear = (list.data ?? []).length - owing
+  const data = list.data ?? []
+  const owed = roundPaise(data.reduce((sum, s) => sum + (s.balance > 0 ? s.balance : 0), 0))
+  const billed = roundPaise(data.reduce((sum, s) => sum + s.invoiced, 0))
+  const paid = roundPaise(data.reduce((sum, s) => sum + s.paid, 0))
+  const loading = list.isPending
 
   return (
-    <section>
-      <PageHeader title={t('admin.pay.title')} />
-      {list.isPending ? (
-        <Loading />
-      ) : list.isError ? (
-        <Banner kind="error">{errorText(t, list.error)}</Banner>
-      ) : list.data.length === 0 ? (
-        <Empty>{t('admin.pay.empty')}</Empty>
-      ) : (
-        <>
-          <div className="mb-5 rounded-3xl bg-brand p-5 text-paper">
-            <p className="text-sm text-white/85">{t('admin.pay.toCollect')}</p>
-            <p className="font-display text-4xl font-bold">₹{formatINR(owed)}</p>
-            <p className="mt-1 text-sm text-white/85">
-              {t('admin.pay.owingClear', { owing, clear })}
-            </p>
-            <span className="sr-only">{t('admin.pay.totalOwed', { amount: formatINR(owed) })}</span>
-          </div>
-          <ul className="flex flex-col gap-2.5">
-            {list.data.map((s) => (
-              <BalanceRow key={s.shopId} balance={s} language={language} />
-            ))}
-          </ul>
-        </>
-      )}
+    <section className="-mx-4 -mb-28 -mt-2 min-h-[calc(100dvh-4rem)] bg-page pb-28">
+      <div className="rounded-b-[2rem] bg-paper px-5 pb-5 pt-5">
+        <TopBar />
+        <h1 className="h-10 truncate text-[2rem] leading-10">{t('admin.pay.title')}</h1>
+      </div>
+
+      <div className="px-4 pt-4">
+        {list.isError ? (
+          <Banner kind="error">{errorText(t, list.error)}</Banner>
+        ) : !loading && data.length === 0 ? (
+          <Empty>{t('admin.pay.empty')}</Empty>
+        ) : (
+          <>
+            <div className="mb-4 rounded-[1.75rem] bg-brand p-5 text-paper">
+              <div className="mb-3 flex h-14 items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="h-5 truncate text-sm leading-5 text-white/85">
+                    {t('admin.pay.toCollect')}
+                  </p>
+                  <p className="h-9 truncate font-display text-[2rem] font-bold leading-9">
+                    {loading ? '–' : `₹${formatINR(owed)}`}
+                  </p>
+                  {!loading && (
+                    <span className="sr-only">
+                      {t('admin.pay.totalOwed', { amount: formatINR(owed) })}
+                    </span>
+                  )}
+                </div>
+                <span
+                  aria-hidden="true"
+                  className="grid size-14 shrink-0 place-items-center rounded-3xl bg-white/20"
+                >
+                  <Wallet size={28} />
+                </span>
+              </div>
+              <PaidBar billed={billed} paid={paid} />
+              <div className="mt-3">
+                <Totals billed={billed} paid={paid} light />
+              </div>
+            </div>
+
+            {loading ? (
+              <ul className="flex flex-col gap-2.5" aria-hidden="true">
+                {[0, 1, 2, 3].map((i) => (
+                  <li key={i} className="h-[4.5rem] rounded-3xl border border-line bg-paper" />
+                ))}
+              </ul>
+            ) : (
+              <ul className="flex flex-col gap-2.5">
+                {data.map((s) => (
+                  <BalanceRow key={s.shopId} balance={s} language={language} />
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+      </div>
     </section>
   )
 }
@@ -72,32 +168,46 @@ function BalanceRow({ balance: s, language }: { balance: ShopBalance; language: 
     <li>
       <Link
         to={`/admin/balances/${s.shopId}`}
-        className="flex items-center gap-3 rounded-3xl border border-line bg-paper p-3.5 no-underline"
+        className="flex h-[4.5rem] items-center gap-3 rounded-3xl border border-line bg-paper px-3.5 no-underline active:bg-page"
       >
         <Avatar name={s.nameEn} tone={s.balance > 0 ? 'amber' : 'green'} />
         <div className="min-w-0 flex-1">
-          <p className="truncate font-semibold">{names.primary}</p>
-          <p className="truncate text-sm text-mute">
-            {s.lastPaymentOn
-              ? t('admin.pay.lastPayment', { date: formatDay(s.lastPaymentOn, language) })
-              : t('admin.pay.noPayment')}
+          <p className="h-6 truncate font-semibold leading-6">{names.primary}</p>
+          <p className="flex h-5 items-center gap-1 text-sm leading-5 text-mute">
+            <CalendarCheck size={13} aria-hidden="true" className="shrink-0" />
+            <span className="truncate">
+              {s.lastPaymentOn ? formatDay(s.lastPaymentOn, language) : '—'}
+            </span>
           </p>
         </div>
-        <p
-          className={
-            'text-right ' +
-            (s.balance > 0 ? 'font-display text-lg font-bold' : 'text-sm font-medium text-mute')
-          }
+        {/* The words are for screen readers; sighted people get the amount or a tick. */}
+        <span className="sr-only">{balanceText(t, s.balance)}</span>
+        {s.balance > 0 ? (
+          <span aria-hidden="true" className="shrink-0 font-display text-lg font-bold text-amber">
+            ₹{formatINR(s.balance)}
+          </span>
+        ) : s.balance < 0 ? (
+          <span
+            aria-hidden="true"
+            className="shrink-0 font-display text-lg font-bold text-brand-dark"
+          >
+            ₹{formatINR(-s.balance)}
+          </span>
+        ) : (
+          <CircleCheck size={24} aria-hidden="true" className="shrink-0 text-brand" />
+        )}
+        <span
+          aria-hidden="true"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-page text-mute"
         >
-          {balanceText(t, s.balance)}
-        </p>
-        <ChevronRight size={18} aria-hidden="true" className="text-mute" />
+          <ChevronRight size={18} />
+        </span>
       </Link>
     </li>
   )
 }
 
-/** One shop: what it owes, the form to record a payment, and every bill and payment so far. */
+/** One shop: what it owes, a payment button and form, and every bill and payment so far. */
 export function ShopStatementPage() {
   const { t } = useTranslation()
   const language = useLanguage()
@@ -117,60 +227,91 @@ export function ShopStatementPage() {
     await queryClient.invalidateQueries({ queryKey: ['balances'] })
   }
 
-  if (statement.isPending || shops.isPending) return <Loading />
-  if (statement.isError) return <Banner kind="error">{errorText(t, statement.error)}</Banner>
   const shop = shops.data?.find((s) => s.id === shopId)
+  const names = shop ? displayNames(shop.nameEn, shop.nameTa, language) : null
   const s = statement.data
-  const bills = s.entries.filter((e) => e.kind === 'bill')
+  const loading = statement.isPending || shops.isPending
+  const bills = (s?.entries ?? []).filter((e) => e.kind === 'bill')
 
   return (
-    <section className="max-w-2xl">
-      <PageHeader
-        title={shop ? displayNames(shop.nameEn, shop.nameTa, language).primary : ''}
-        backTo="/admin/balances"
-      />
-
-      <div className="mb-4 rounded-2xl border border-line p-4">
-        <p className="text-sm text-mute">{t('admin.pay.balanceNow')}</p>
-        <p className="font-display text-3xl font-bold">{balanceText(t, s.balance)}</p>
-        <p className="mt-1 text-sm text-mute">
-          {t('admin.pay.billed')} ₹{formatINR(s.invoiced)} · {t('admin.pay.paid')} ₹
-          {formatINR(s.paid)}
-        </p>
+    <section className="-mx-4 -mb-28 -mt-2 min-h-[calc(100dvh-4rem)] bg-page px-4 pb-32 pt-4">
+      <div className="mb-4 flex h-11 items-center justify-between gap-3">
+        <Link
+          to="/admin/balances"
+          aria-label={t('admin.common.back')}
+          className="grid size-11 shrink-0 place-items-center rounded-full bg-paper shadow-[0_1px_2px_rgba(15,26,20,0.08)]"
+        >
+          <ChevronLeft size={22} aria-hidden="true" />
+        </Link>
+        <h1 className="min-w-0 flex-1 truncate text-right text-lg leading-7">
+          {names?.primary ?? ''}
+        </h1>
+        {shop && <Avatar name={shop.nameEn} tone={s && s.balance > 0 ? 'amber' : 'green'} />}
       </div>
 
-      {notice && (
-        <div className="mb-3">
-          <Banner kind={notice.kind}>{notice.text}</Banner>
-        </div>
-      )}
-
-      <RecordPaymentForm
-        shopId={shopId!}
-        bills={bills}
-        onResult={async (result) => {
-          setNotice(result)
-          if (result.kind === 'success') await refresh()
-        }}
-      />
-
-      <h2 className="mb-2 mt-6 text-lg">{t('admin.pay.entries')}</h2>
-      {s.entries.length === 0 ? (
-        <Empty>{t('admin.pay.noEntries')}</Empty>
+      {statement.isError ? (
+        <Banner kind="error">{errorText(t, statement.error)}</Banner>
       ) : (
-        <ul className="divide-y divide-line rounded-2xl border border-line">
-          {s.entries.map((e) => (
-            <EntryRow
-              key={`${e.kind}-${e.id}`}
-              entry={e}
-              language={language}
+        <>
+          <div className="mb-4 rounded-[1.75rem] border border-line bg-paper p-5">
+            <p className="h-5 text-sm leading-5 text-mute">{t('admin.pay.balanceNow')}</p>
+            <p
+              className={
+                'mb-3 h-10 truncate font-display text-4xl font-bold leading-10 ' +
+                (s && s.balance > 0 ? 'text-amber' : 'text-brand-dark')
+              }
+            >
+              {s ? `₹${formatINR(Math.abs(s.balance))}` : '–'}
+            </p>
+            {s && <span className="sr-only">{balanceText(t, s.balance)}</span>}
+            <Totals billed={s?.invoiced ?? 0} paid={s?.paid ?? 0} />
+          </div>
+
+          {notice && (
+            <div className="mb-4">
+              <Banner kind={notice.kind}>{notice.text}</Banner>
+            </div>
+          )}
+
+          {shopId && (
+            <RecordPaymentForm
+              shopId={shopId}
+              bills={bills}
               onResult={async (result) => {
                 setNotice(result)
                 if (result.kind === 'success') await refresh()
               }}
             />
-          ))}
-        </ul>
+          )}
+
+          <h2 className="mb-2 mt-5 h-6 text-base leading-6">{t('admin.pay.entries')}</h2>
+          {loading ? (
+            <ul
+              className="overflow-hidden rounded-[1.75rem] border border-line bg-paper"
+              aria-hidden="true"
+            >
+              {[0, 1, 2].map((i) => (
+                <li key={i} className="h-[4.5rem] border-b border-line last:border-b-0" />
+              ))}
+            </ul>
+          ) : s && s.entries.length === 0 ? (
+            <Empty>{t('admin.pay.noEntries')}</Empty>
+          ) : (
+            <ul className="divide-y divide-line overflow-hidden rounded-[1.75rem] border border-line bg-paper">
+              {s?.entries.map((e) => (
+                <EntryRow
+                  key={`${e.kind}-${e.id}`}
+                  entry={e}
+                  language={language}
+                  onResult={async (result) => {
+                    setNotice(result)
+                    if (result.kind === 'success') await refresh()
+                  }}
+                />
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </section>
   )
@@ -221,16 +362,24 @@ function RecordPaymentForm({
 
   if (!open) {
     return (
-      <button type="button" className="btn" onClick={() => setOpen(true)}>
-        <Plus size={18} aria-hidden="true" />
-        {t('admin.pay.recordTitle')}
+      <button
+        type="button"
+        className="btn h-14 w-full rounded-full text-base"
+        aria-label={t('admin.pay.recordTitle')}
+        onClick={() => setOpen(true)}
+      >
+        <Plus size={22} aria-hidden="true" />
+        {t('admin.pay.recordShort')}
       </button>
     )
   }
 
+  const FIELD =
+    'flex h-12 items-center gap-2 rounded-2xl border border-line bg-paper px-3 focus-within:border-brand'
+
   return (
     <form
-      className="space-y-3 rounded-2xl border border-line p-3"
+      className="rounded-[1.75rem] border border-line bg-paper p-4"
       noValidate
       onSubmit={(e) => {
         e.preventDefault()
@@ -243,57 +392,124 @@ function RecordPaymentForm({
         save.mutate(value)
       }}
     >
-      <h2 className="text-lg">{t('admin.pay.recordTitle')}</h2>
-      <TextField
-        id="pay-amount"
-        label={t('admin.pay.amount')}
-        value={amount}
-        inputMode="decimal"
-        onChange={(v) => {
-          setAmount(v)
-          setInvalid(false)
-        }}
-        error={invalid ? 'admin.pay.badAmount' : undefined}
-      />
-      <SelectField
-        id="pay-method"
-        label={t('admin.pay.method')}
-        value={method}
-        onChange={(v) => setMethod(v as PaymentMethod)}
-        options={PAYMENT_METHODS.map((m) => ({ value: m, label: t(`admin.pay.methods.${m}`) }))}
-      />
-      <TextField
-        id="pay-date"
-        label={t('admin.pay.date')}
-        type="date"
-        max={today}
-        value={paidOn}
-        onChange={setPaidOn}
-      />
-      {bills.length > 0 && (
-        <SelectField
-          id="pay-bill"
-          label={t('admin.pay.forBill')}
-          value={invoiceId}
-          onChange={setInvoiceId}
-          options={[
-            { value: '', label: t('admin.pay.anyBill') },
-            ...bills.map((b) => ({
-              value: b.id,
-              label: `${b.label} · ₹${formatINR(b.amount)}`,
-            })),
-          ]}
-        />
-      )}
-      <TextField id="pay-note" label={t('admin.pay.note')} value={note} onChange={setNote} />
-      <div className="flex flex-wrap gap-2">
-        <button type="submit" className="btn" disabled={save.isPending}>
-          {save.isPending ? t('admin.pay.saving') : t('admin.pay.save')}
-        </button>
-        <button type="button" className="btn btn-outline" onClick={() => setOpen(false)}>
-          {t('admin.common.back')}
+      <div className="mb-3 flex h-10 items-center justify-between">
+        <h2 className="text-base">{t('admin.pay.recordTitle')}</h2>
+        <button
+          type="button"
+          className="grid size-10 place-items-center rounded-full bg-page"
+          aria-label={t('admin.common.back')}
+          onClick={() => setOpen(false)}
+        >
+          <X size={18} aria-hidden="true" />
         </button>
       </div>
+
+      <div className="mb-3">
+        <div className={`${FIELD} h-16`}>
+          <span aria-hidden="true" className="font-display text-2xl font-bold text-mute">
+            ₹
+          </span>
+          <input
+            inputMode="decimal"
+            aria-label={t('admin.pay.amount')}
+            placeholder="0"
+            value={amount}
+            aria-invalid={invalid}
+            onChange={(e) => {
+              setAmount(e.target.value)
+              setInvalid(false)
+            }}
+            className="min-w-0 flex-1 bg-transparent font-display text-2xl font-bold outline-none"
+          />
+        </div>
+        {invalid && (
+          <p role="alert" className="mt-1 text-sm font-semibold">
+            {t('admin.pay.badAmount')}
+          </p>
+        )}
+      </div>
+
+      <div
+        role="radiogroup"
+        aria-label={t('admin.pay.method')}
+        className="mb-3 grid grid-cols-4 gap-2"
+      >
+        {PAYMENT_METHODS.map((m) => {
+          const Icon = METHOD_ICON[m]
+          const on = method === m
+          return (
+            <label
+              key={m}
+              className={
+                'flex h-16 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border text-xs font-semibold ' +
+                (on ? 'border-brand bg-brand-soft text-brand-dark' : 'border-line text-mute')
+              }
+            >
+              <input
+                type="radio"
+                name="pay-method"
+                value={m}
+                checked={on}
+                onChange={() => setMethod(m)}
+                className="sr-only"
+              />
+              <Icon size={20} aria-hidden="true" />
+              <span className="w-full truncate text-center">{t(`admin.pay.methods.${m}`)}</span>
+            </label>
+          )
+        })}
+      </div>
+
+      <div className="mb-3 flex flex-col gap-2">
+        <label className={FIELD}>
+          <CalendarDays size={18} aria-hidden="true" className="shrink-0 text-mute" />
+          <span className="sr-only">{t('admin.pay.date')}</span>
+          <input
+            type="date"
+            max={today}
+            value={paidOn}
+            onChange={(e) => setPaidOn(e.target.value)}
+            className="min-w-0 flex-1 bg-transparent outline-none"
+          />
+        </label>
+        {bills.length > 0 && (
+          <label className={FIELD}>
+            <Receipt size={18} aria-hidden="true" className="shrink-0 text-mute" />
+            <span className="sr-only">{t('admin.pay.forBill')}</span>
+            <select
+              value={invoiceId}
+              onChange={(e) => setInvoiceId(e.target.value)}
+              className="min-w-0 flex-1 bg-transparent outline-none"
+            >
+              <option value="">{t('admin.pay.anyBill')}</option>
+              {bills.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.label} · ₹{formatINR(b.amount)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        <label className={FIELD}>
+          <MessageSquareText size={18} aria-hidden="true" className="shrink-0 text-mute" />
+          <span className="sr-only">{t('admin.pay.note')}</span>
+          <input
+            value={note}
+            maxLength={300}
+            placeholder={t('admin.pay.note')}
+            onChange={(e) => setNote(e.target.value)}
+            className="min-w-0 flex-1 bg-transparent outline-none"
+          />
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        className="btn h-14 w-full rounded-full text-base"
+        disabled={save.isPending}
+      >
+        {save.isPending ? t('admin.pay.saving') : t('admin.pay.save')}
+      </button>
     </form>
   )
 }
@@ -323,43 +539,52 @@ function EntryRow({
   })
 
   const isPayment = e.kind === 'payment'
+  const Icon = isPayment && e.method ? METHOD_ICON[e.method] : Receipt
+  const title = isPayment && e.method ? t(`admin.pay.methods.${e.method}`) : e.label
+  const sub = [formatDay(e.date, language), e.invoiceNo, e.note].filter(Boolean).join(' · ')
+
   return (
-    <li className="px-3 py-3">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="font-semibold">
-            {isPayment
-              ? t('admin.pay.entryPayment', { method: t(`admin.pay.methods.${e.method}`) })
-              : t('admin.pay.entryBill', { no: e.label })}
-          </p>
-          <p className="text-sm text-mute">
-            {formatDay(e.date, language)}
-            {e.invoiceNo && ` · ${t('admin.pay.forInvoice', { no: e.invoiceNo })}`}
-            {e.note && ` · ${e.note}`}
-          </p>
-          <p className="text-sm text-mute">
-            {t('admin.pay.balanceAfter', { amount: formatINR(e.balanceAfter) })}
-          </p>
+    <li className="px-3.5">
+      <div className="flex h-[4.5rem] items-center gap-3">
+        <span
+          aria-hidden="true"
+          className={
+            'grid size-11 shrink-0 place-items-center rounded-full ' +
+            (isPayment ? 'bg-brand-soft text-brand-dark' : 'bg-page text-mute')
+          }
+        >
+          <Icon size={20} />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="h-6 truncate font-semibold leading-6">{title}</p>
+          <p className="h-5 truncate text-sm leading-5 text-mute">{sub}</p>
         </div>
-        <p className="whitespace-nowrap font-bold">
-          {isPayment ? '−' : '+'}₹{formatINR(e.amount)}
-        </p>
+        <div className="shrink-0 text-right">
+          <p
+            className={
+              'h-6 font-display text-base font-bold leading-6 ' +
+              (isPayment ? 'text-brand-dark' : 'text-ink')
+            }
+          >
+            {isPayment ? '−' : '+'}₹{formatINR(e.amount)}
+          </p>
+          <p className="h-5 text-xs leading-5 text-mute">₹{formatINR(e.balanceAfter)}</p>
+        </div>
+        {isPayment && (
+          <button
+            type="button"
+            className="grid size-10 shrink-0 place-items-center rounded-full bg-red-soft text-red"
+            aria-label={`${t('admin.pay.remove')} ₹${formatINR(e.amount)}`}
+            onClick={() => setAsking((v) => !v)}
+          >
+            <Trash2 size={18} aria-hidden="true" />
+          </button>
+        )}
       </div>
 
-      {isPayment && !asking && (
-        <button
-          type="button"
-          className="btn btn-outline mt-2"
-          aria-label={`${t('admin.pay.remove')} ₹${formatINR(e.amount)}`}
-          onClick={() => setAsking(true)}
-        >
-          <Trash2 size={16} aria-hidden="true" />
-          {t('admin.pay.remove')}
-        </button>
-      )}
       {isPayment && asking && (
-        <div className="mt-2 rounded-2xl border-2 border-dashed border-ink p-3">
-          <p className="mb-3 font-medium">
+        <div className="mb-3 rounded-3xl border border-red p-3">
+          <p className="mb-3 text-sm font-medium">
             {t('admin.pay.removeAsk', { amount: formatINR(e.amount) })}
           </p>
           <TextField
@@ -368,16 +593,20 @@ function EntryRow({
             value={reason}
             onChange={setReason}
           />
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex gap-2">
             <button
               type="button"
-              className="btn"
+              className="btn flex-1 !border-red !bg-red"
               disabled={remove.isPending}
               onClick={() => remove.mutate()}
             >
               {t('admin.pay.removeConfirm')}
             </button>
-            <button type="button" className="btn btn-outline" onClick={() => setAsking(false)}>
+            <button
+              type="button"
+              className="btn btn-outline flex-1"
+              onClick={() => setAsking(false)}
+            >
               {t('admin.pay.keep')}
             </button>
           </div>

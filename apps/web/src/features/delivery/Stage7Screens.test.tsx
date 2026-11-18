@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -159,7 +159,7 @@ describe('balances (admin)', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Record a payment' }))
     await userEvent.type(screen.getByLabelText('Amount (₹)'), '2,000')
-    await userEvent.selectOptions(screen.getByLabelText('Paid by'), 'upi')
+    await userEvent.click(screen.getByRole('radio', { name: 'UPI' }))
     await userEvent.click(screen.getByRole('button', { name: 'Record payment' }))
 
     expect(await screen.findByText('Payment of ₹2,000.00 recorded.')).toBeInTheDocument()
@@ -185,7 +185,9 @@ describe('balances (admin)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Record payment' }))
     await screen.findByText('Payment of ₹100.00 recorded.')
     expect(state.payments.at(-1)!.invoiceId).toBe(bill.id)
-    expect(await screen.findByText(new RegExp(`For ${bill.invoiceNo}`))).toBeInTheDocument()
+    expect((await screen.findAllByText(new RegExp(`· ${bill.invoiceNo}`))).length).toBeGreaterThan(
+      0,
+    )
   })
 
   it('removes a wrong payment only with a reason', async () => {
@@ -201,11 +203,12 @@ describe('balances (admin)', () => {
     expect(state.payments).toHaveLength(0)
   })
 
-  it('shows the statement with the balance after each line, in Tamil too', async () => {
+  it('shows the statement with an amount and the balance after each line, in Tamil too', async () => {
     renderAs('admin', '/admin/balances/s1')
     expect(await screen.findByText('Bills and payments')).toBeInTheDocument()
-    expect(screen.getAllByText(/^Balance ₹/).length).toBe(3)
-    await userEvent.click(screen.getByRole('button', { name: 'தமிழ்' }))
+    expect(await screen.findAllByText(/^[+−]₹/)).toHaveLength(3)
+    // The statement has its own header with no language switch, so change the language directly.
+    await act(async () => setLanguage('ta'))
     expect(await screen.findByText('பில்களும் பணமும்')).toBeInTheDocument()
   })
 })

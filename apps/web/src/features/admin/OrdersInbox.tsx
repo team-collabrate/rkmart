@@ -1,11 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { ChevronRight, Clock, FilePlus2, LogOut } from 'lucide-react'
+import { ChevronRight, Clock, FilePlus2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Avatar } from '../../components/Avatar'
-import { BrandLogo } from '../../components/BrandLogo'
-import { LanguageSwitch } from '../../components/LanguageSwitch'
+import { TopBar } from '../../components/TopBar'
 import { Banner, Empty } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
 import type { AdminOrderSummary } from '../../data/adminOrders'
@@ -13,7 +12,6 @@ import type { OrderStatus } from '../../data/shopApi'
 import { formatTime, todayISO } from '../../lib/dates'
 import { formatINR } from '../../lib/money'
 import { displayNames } from '../../lib/names'
-import { useAuth } from '../auth/AuthProvider'
 import type { Language } from '../auth/types'
 import { emojiFor } from '../shop/itemVisual'
 import { OrderStatusPill } from '../shop/OrderStatusPill'
@@ -47,7 +45,6 @@ export function OrdersInbox() {
   const language: Language = i18n.language === 'ta' ? 'ta' : 'en'
   const api = useAdminApi()
   const queryClient = useQueryClient()
-  const { signOut } = useAuth()
   const today = todayISO()
 
   const [date, setDate] = useState(today)
@@ -102,20 +99,7 @@ export function OrdersInbox() {
     // Full width, and grey all the way down to the navigation bar.
     <section className="-mx-4 -mb-28 -mt-2 min-h-[calc(100dvh-4rem)] bg-page pb-28">
       <div className="rounded-b-[2rem] bg-paper px-5 pb-4 pt-5">
-        <div className="mb-4 flex h-11 items-center justify-between gap-3">
-          <BrandLogo size={44} />
-          <div className="flex items-center gap-2">
-            <LanguageSwitch compact />
-            <button
-              type="button"
-              onClick={() => void signOut()}
-              className="grid size-10 place-items-center rounded-full bg-page"
-              aria-label={t('shell.signOut')}
-            >
-              <LogOut size={18} aria-hidden="true" />
-            </button>
-          </div>
-        </div>
+        <TopBar />
         <h1 className="mb-4 h-10 truncate text-[2rem] leading-10">{t('admin.orders.title')}</h1>
         <DayNav date={date} onChange={go} />
       </div>

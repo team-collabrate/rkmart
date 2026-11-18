@@ -278,7 +278,7 @@
     "methods": {
       "cash": "Cash",
       "upi": "UPI",
-      "bank": "Bank transfer",
+      "bank": "Bank",
       "other": "Other"
     },
     "date": "Date paid",
@@ -302,7 +302,7 @@
     "keep": "Keep it",
     "removed": "Payment removed.",
     "statementFor": "Statement",
-    "toCollect": "Total to collect",
-    "owingClear": "{{owing}} shops owe · {{clear}} clear"
+    "toCollect": "To collect",
+    "recordShort": "Payment"
   }
 }
