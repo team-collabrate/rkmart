@@ -19,14 +19,14 @@ const n = async (sql: string) => Number((await db.query<{ n: number }>(sql)).row
 
 describe('seed.sql', () => {
   it('loads onto the real schema', async () => {
-    expect(await n('select count(*)::int as n from public.shops')).toBe(5)
-    expect(await n('select count(*)::int as n from public.products')).toBe(15)
+    expect(await n('select count(*)::int as n from public.shops')).toBe(7)
+    expect(await n('select count(*)::int as n from public.products')).toBe(19)
   })
 
   it('gives every item a rate for today', async () => {
     expect(
       await n('select count(*)::int as n from public.daily_rates where rate_date = current_date'),
-    ).toBe(15)
+    ).toBe(19)
     expect(
       await n(`select count(*)::int as n from public.products p
                where not exists (select 1 from public.daily_rates r where r.product_id = p.id)`),
