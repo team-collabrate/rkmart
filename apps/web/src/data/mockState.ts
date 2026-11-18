@@ -71,7 +71,9 @@ function daysAgo(n: number): string {
  * has two past orders with bills, and three other shops have just placed orders for the admin.
  * Tests leave it off to start from an empty day.
  */
-export function createMockState(options: { seedDemo?: boolean } = {}): MockState {
+export function createMockState(
+  options: { seedDemo?: boolean; seedHistory?: boolean } = {},
+): MockState {
   const state: MockState = {
     products: sampleProducts(),
     shops: sampleShops(),
@@ -177,5 +179,126 @@ export function createMockState(options: { seedDemo?: boolean } = {}): MockState
       },
     )
   }
+  if (options.seedDemo && options.seedHistory) addHistory(state)
   return state
+}
+
+/** A week of past orders for the other shops, billed and mostly delivered, with some payments. */
+function addHistory(state: MockState): void {
+  const plan: [string, number, [string, number][]][] = [
+    [
+      's2',
+      6,
+      [
+        ['p1', 3],
+        ['p7', 12],
+        ['p3', 8],
+      ],
+    ],
+    [
+      's3',
+      5,
+      [
+        ['p10', 5],
+        ['p9', 4],
+        ['p5', 6],
+      ],
+    ],
+    [
+      's4',
+      5,
+      [
+        ['p7', 25],
+        ['p5', 10],
+      ],
+    ],
+    [
+      's5',
+      4,
+      [
+        ['p1', 2],
+        ['p3', 12],
+        ['p10', 3],
+      ],
+    ],
+    [
+      's2',
+      3,
+      [
+        ['p5', 8],
+        ['p9', 3],
+      ],
+    ],
+    [
+      's4',
+      2,
+      [
+        ['p10', 4],
+        ['p3', 6],
+        ['p7', 10],
+      ],
+    ],
+    [
+      's3',
+      2,
+      [
+        ['p1', 3],
+        ['p7', 18],
+      ],
+    ],
+  ]
+  plan.forEach(([shopId, ago, lines], i) => {
+    const id = 'h' + (i + 1)
+    state.orders.push({
+      id,
+      shopId,
+      orderDate: daysAgo(ago),
+      status: 'placed',
+      note: '',
+      createdAt: daysAgo(ago) + 'T04:00:00.000Z',
+      items: lines.map(([productId, qty]) => ({
+        productId,
+        qty,
+        rate: SAMPLE_PREVIOUS_RATES[productId],
+      })),
+    })
+    issueInvoice(state, id, daysAgo(ago))
+    if (ago >= 3) {
+      const order = state.orders.find((o) => o.id === id)!
+      order.status = 'delivered'
+      order.deliveredAt = daysAgo(ago - 1) + 'T07:30:00.000Z'
+    }
+  })
+  state.payments.push(
+    {
+      id: 'pay2',
+      shopId: 's2',
+      amount: 3000,
+      invoiceId: null,
+      method: 'cash',
+      paidOn: daysAgo(4),
+      note: '',
+      createdAt: daysAgo(4) + 'T11:00:00.000Z',
+    },
+    {
+      id: 'pay3',
+      shopId: 's3',
+      amount: 4000,
+      invoiceId: null,
+      method: 'upi',
+      paidOn: daysAgo(3),
+      note: '',
+      createdAt: daysAgo(3) + 'T11:00:00.000Z',
+    },
+    {
+      id: 'pay4',
+      shopId: 's4',
+      amount: 2000,
+      invoiceId: null,
+      method: 'cash',
+      paidOn: daysAgo(1),
+      note: '',
+      createdAt: daysAgo(1) + 'T11:00:00.000Z',
+    },
+  )
 }

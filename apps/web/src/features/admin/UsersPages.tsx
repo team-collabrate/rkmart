@@ -121,7 +121,11 @@ export function NewUserForm() {
   return (
     <section>
       <PageHeader title={t('admin.users.new')} backTo={BASE} />
-      <form onSubmit={onSubmit} noValidate className="flex max-w-xl flex-col gap-4">
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex flex-col gap-4 rounded-[1.75rem] border border-line bg-paper p-4"
+      >
         <TextField
           id="fullName"
           label={t('admin.users.name')}
@@ -180,7 +184,11 @@ export function NewUserForm() {
 
         {failure && <Banner kind="error">{failure}</Banner>}
         <div>
-          <button type="submit" className="btn" disabled={create.isPending}>
+          <button
+            type="submit"
+            className="btn h-12 w-full rounded-full"
+            disabled={create.isPending}
+          >
             {create.isPending ? t('admin.common.saving') : t('admin.users.create')}
           </button>
         </div>
@@ -270,7 +278,7 @@ function UserDetailBody({ userId }: { userId: string }) {
           hint={t('admin.users.passwordHint')}
         />
         <div>
-          <button type="submit" className="btn" disabled={reset.isPending}>
+          <button type="submit" className="btn h-12 w-full rounded-full" disabled={reset.isPending}>
             {t('admin.users.reset')}
           </button>
         </div>
@@ -284,7 +292,7 @@ function UserDetailBody({ userId }: { userId: string }) {
             <p className="mb-3 text-mute">{t('admin.users.switchWarn')}</p>
             <button
               type="button"
-              className="btn btn-outline"
+              className="btn btn-outline h-12 w-full rounded-full"
               onClick={() => toggle.mutate()}
               disabled={toggle.isPending}
             >

@@ -51,7 +51,11 @@ function SettingsForm({ initial }: { initial: CompanySettings }) {
 
   const { values, set, errors } = form
   return (
-    <form onSubmit={onSubmit} noValidate className="flex max-w-xl flex-col gap-4">
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="flex flex-col gap-4 rounded-[1.75rem] border border-line bg-paper p-4"
+    >
       <TextField
         id="companyName"
         label={t('admin.settings.companyName')}
@@ -124,7 +128,7 @@ function SettingsForm({ initial }: { initial: CompanySettings }) {
 
       {notice && <Banner kind={notice.kind}>{notice.text}</Banner>}
       <div>
-        <button type="submit" className="btn" disabled={save.isPending}>
+        <button type="submit" className="btn h-12 w-full rounded-full" disabled={save.isPending}>
           {save.isPending ? t('admin.common.saving') : t('admin.common.save')}
         </button>
       </div>

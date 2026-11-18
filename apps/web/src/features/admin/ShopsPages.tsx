@@ -124,7 +124,11 @@ function ShopFormBody({ existing }: { existing?: Shop }) {
   return (
     <section>
       <PageHeader title={existing ? t('admin.shops.edit') : t('admin.shops.new')} backTo={BASE} />
-      <form onSubmit={onSubmit} noValidate className="flex max-w-xl flex-col gap-4">
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex flex-col gap-4 rounded-[1.75rem] border border-line bg-paper p-4"
+      >
         <TextField
           id="nameEn"
           label={t('admin.shops.nameEn')}
@@ -180,14 +184,14 @@ function ShopFormBody({ existing }: { existing?: Shop }) {
         />
 
         {failure && <Banner kind="error">{failure}</Banner>}
-        <div className="flex flex-wrap gap-3">
-          <button type="submit" className="btn" disabled={save.isPending}>
+        <div className="flex flex-col gap-3">
+          <button type="submit" className="btn h-12 w-full rounded-full" disabled={save.isPending}>
             {save.isPending ? t('admin.common.saving') : t('admin.common.save')}
           </button>
           {existing && (
             <button
               type="button"
-              className="btn btn-outline"
+              className="btn btn-outline h-12 w-full rounded-full"
               onClick={() => toggle.mutate()}
               disabled={toggle.isPending}
             >

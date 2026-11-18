@@ -48,13 +48,20 @@ export function Field({
   const { t } = useTranslation()
   return (
     <div>
-      <label htmlFor={id} className="mb-1 block font-semibold">
+      <label
+        htmlFor={id}
+        className="mb-1.5 block h-6 truncate text-sm font-semibold leading-6 text-mute"
+      >
         {label}
       </label>
       {children}
-      {hint && !error && <p className="mt-1 text-sm text-mute">{hint}</p>}
+      {hint && !error && <p className="mt-1 h-5 truncate text-xs leading-5 text-mute">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1 text-sm font-semibold">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="mt-1 h-5 truncate text-xs font-semibold leading-5"
+        >
           {t(error)}
         </p>
       )}
@@ -148,7 +155,7 @@ export function CheckField({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-1 size-6 accent-black"
+        className="mt-0.5 size-6 accent-brand"
       />
       <label htmlFor={id} className="font-semibold">
         {label}
