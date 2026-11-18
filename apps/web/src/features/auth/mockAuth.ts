@@ -3,7 +3,7 @@ import type { AuthService, Language, Profile } from './types'
 // DEMO MODE for development and tests, used only when no Supabase project is configured.
 // Never included in a real release: see createAuthService().
 
-export const DEMO_PASSWORD = 'demo-password'
+export const DEMO_PIN = '1234'
 
 export const DEMO_USERS: Record<string, Profile> = {
   '9000000001': {
@@ -65,7 +65,7 @@ export function createMockAuth(delayMs = 250): AuthService {
     async signIn(phone, password) {
       await wait()
       const user = DEMO_USERS[phone]
-      if (!user || password !== DEMO_PASSWORD) return { ok: false, error: 'invalid_credentials' }
+      if (!user || password !== DEMO_PIN) return { ok: false, error: 'invalid_credentials' }
       current = { ...user }
       writeSession(current)
       return { ok: true, profile: current }

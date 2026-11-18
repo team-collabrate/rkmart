@@ -1,11 +1,11 @@
 // DEV ONLY. Creates 2 distributors and one owner for each shop loaded by supabase/seed.sql,
-// all with the same password from DEMO_PASSWORD. Never run this against production.
+// all with the same 4-digit PIN from DEMO_PIN. Never run this against production.
 //
-//   SUPABASE_URL=...  SUPABASE_SERVICE_ROLE_KEY=...  DEMO_PASSWORD=...  \
+//   SUPABASE_URL=...  SUPABASE_SERVICE_ROLE_KEY=...  DEMO_PIN=...  \
 //   node scripts/seed-demo-users.mjs
 import { adminClient, createUser, requireEnv } from './lib/admin-client.mjs'
 
-const password = requireEnv('DEMO_PASSWORD')
+const password = requireEnv('DEMO_PIN')
 const admin = adminClient()
 
 const shops = await admin.from('shops').select('id, name_en, owner_name, phone').order('created_at')

@@ -54,10 +54,7 @@ export const userSchema = z
       .string()
       .transform((v) => normalizePhone(v))
       .refine(isValidPhone, { message: 'admin.errors.phone' }),
-    password: z
-      .string()
-      .min(8, { message: 'admin.errors.password' })
-      .max(72, { message: 'admin.errors.password' }),
+    password: z.string().regex(/^[0-9]{4}$/, { message: 'admin.errors.password' }),
     role: z.enum(['admin', 'distributor', 'shop']),
     shopId: z.string().nullable(),
     language: z.enum(['en', 'ta']),
@@ -68,10 +65,7 @@ export const userSchema = z
   })
 
 export const passwordSchema = z.object({
-  password: z
-    .string()
-    .min(8, { message: 'admin.errors.password' })
-    .max(72, { message: 'admin.errors.password' }),
+  password: z.string().regex(/^[0-9]{4}$/, { message: 'admin.errors.password' }),
 })
 
 export const settingsSchema = z.object({

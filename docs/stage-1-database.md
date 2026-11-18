@@ -13,7 +13,7 @@ Status: built and tested locally (39 tests). Not yet applied to a Supabase cloud
 - `supabase/functions/admin-users/`: the only way logins are created, reset or switched off.
 - `supabase/seed.sql`: 5 sample shops, 15 sample items with Tamil names, HSN codes and today's rates.
 - `scripts/`: `bootstrap-admin.mjs` (first admin) and `seed-demo-users.mjs` (dev only).
-- `supabase/config.toml`: public sign-up is switched off and passwords need 8 or more characters.
+- `supabase/config.toml`: public sign-up is switched off and Supabase wants 8 or more characters, so the 4-digit PIN is stored with a fixed suffix (see `lib/pin.ts`).
 
 ## Who can see and do what (as enforced by the database)
 
@@ -42,7 +42,7 @@ database functions added in Stages 4 to 7. The balance is calculated (invoices m
 
 ## Logins
 
-- A login is a mobile number plus a password. Supabase needs an email, so each phone maps to `<phone>@rk.local`.
+- A login is a mobile number plus a 4-digit PIN. Supabase needs an email, so each phone maps to `<phone>@rk.local`.
 - There is no public sign-up. The admin creates every login through `admin-users`, which keeps the
   service-role key on the server side only.
 - A deactivated user sees no data and cannot sign in.

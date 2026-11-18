@@ -147,7 +147,7 @@ describe('logins', () => {
     renderAt('/admin/more/users/new')
     await userEvent.type(await screen.findByLabelText('Name'), 'Ravi')
     await userEvent.type(screen.getByLabelText('Mobile number'), '98765 43210')
-    await userEvent.type(screen.getByLabelText('Password'), 'goodpass1')
+    await userEvent.type(screen.getByLabelText('PIN'), '1234')
     await userEvent.selectOptions(screen.getByLabelText('Shop'), 'Annam Hotel')
     await userEvent.click(screen.getByRole('button', { name: 'Create login' }))
     expect(await screen.findByText('Ravi')).toBeInTheDocument()
@@ -158,7 +158,7 @@ describe('logins', () => {
     renderAt('/admin/more/users/new')
     await userEvent.type(await screen.findByLabelText('Name'), 'Ravi')
     await userEvent.type(screen.getByLabelText('Mobile number'), '9876543210')
-    await userEvent.type(screen.getByLabelText('Password'), 'goodpass1')
+    await userEvent.type(screen.getByLabelText('PIN'), '1234')
     await userEvent.click(screen.getByRole('button', { name: 'Create login' }))
     expect(await screen.findByText('Choose the shop for this shop owner.')).toBeInTheDocument()
   })
@@ -167,7 +167,7 @@ describe('logins', () => {
     renderAt('/admin/more/users/new')
     await userEvent.type(await screen.findByLabelText('Name'), 'Someone')
     await userEvent.type(screen.getByLabelText('Mobile number'), '9200000001')
-    await userEvent.type(screen.getByLabelText('Password'), 'goodpass1')
+    await userEvent.type(screen.getByLabelText('PIN'), '1234')
     await userEvent.selectOptions(screen.getByLabelText('Role'), 'distributor')
     await userEvent.click(screen.getByRole('button', { name: 'Create login' }))
     expect(await screen.findByText('That mobile number already has a login.')).toBeInTheDocument()
@@ -175,9 +175,9 @@ describe('logins', () => {
 
   it('resets a password and will not let the admin switch themselves off', async () => {
     renderAt('/admin/more/users/demo-dist')
-    await userEvent.type(await screen.findByLabelText('New password'), 'newpass123')
-    await userEvent.click(screen.getByRole('button', { name: 'Reset password' }))
-    expect(await screen.findByText('Password changed.')).toBeInTheDocument()
+    await userEvent.type(await screen.findByLabelText('New PIN'), '4321')
+    await userEvent.click(screen.getByRole('button', { name: 'Reset PIN' }))
+    expect(await screen.findByText('PIN changed.')).toBeInTheDocument()
   })
 
   it('protects the admin’s own login', async () => {

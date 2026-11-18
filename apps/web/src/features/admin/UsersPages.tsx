@@ -150,7 +150,9 @@ export function NewUserForm() {
           value={values.password}
           onChange={(x) => set('password', x)}
           error={errors.password}
-          autoComplete="new-password"
+          inputMode="numeric"
+          maxLength={4}
+          autoComplete="off"
           hint={t('admin.users.passwordHint')}
         />
         <SelectField
@@ -276,7 +278,9 @@ function UserDetailBody({ userId }: { userId: string }) {
           value={form.values.password}
           onChange={(x) => form.set('password', x)}
           error={form.errors.password}
-          autoComplete="new-password"
+          inputMode="numeric"
+          maxLength={4}
+          autoComplete="off"
           hint={t('admin.users.passwordHint')}
         />
         <div>

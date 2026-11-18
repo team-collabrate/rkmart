@@ -70,7 +70,7 @@ describe('login form', () => {
   const user = {
     fullName: 'Ravi',
     phone: '98765 43210',
-    password: 'goodpass1',
+    password: '1234',
     role: 'shop' as const,
     shopId: 's1',
     language: 'ta' as const,
@@ -87,7 +87,7 @@ describe('login form', () => {
     expect(userSchema.safeParse({ ...user, role: 'distributor', shopId: null }).success).toBe(true)
   })
 
-  it('needs a valid phone and an 8-character password', () => {
+  it('needs a valid phone and a 4-digit PIN', () => {
     const r = userSchema.safeParse({ ...user, phone: '12', password: 'short' })
     expect(!r.success && fieldErrors(r.error)).toEqual({
       phone: 'admin.errors.phone',

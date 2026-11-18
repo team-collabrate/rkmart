@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { phoneToEmail } from '../../lib/phone'
+import { pinToPassword } from '../../lib/pin'
 import type { AuthService, Language, Profile, SignInResult, UserRole } from './types'
 
 interface ProfileRow {
@@ -47,7 +48,10 @@ export function createSupabaseAuth(client: SupabaseClient): AuthService {
     async signIn(phone, password): Promise<SignInResult> {
       let signedIn
       try {
-        signedIn = await client.auth.signInWithPassword({ email: phoneToEmail(phone), password })
+        signedIn = await client.auth.signInWithPassword({
+          email: phoneToEmail(phone),
+          password: pinToPassword(password),
+        })
       } catch {
         return { ok: false, error: 'network' }
       }

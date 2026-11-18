@@ -17,6 +17,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2'
 import {
   parseCreateUser,
   parseResetPassword,
+  pinToPassword,
   parseSetActive,
   phoneToEmail,
 } from '../_shared/validate.ts'
@@ -93,7 +94,7 @@ Deno.serve(async (req) => {
 
       const created = await admin.auth.admin.createUser({
         email: phoneToEmail(input.phone),
-        password: input.password,
+        password: pinToPassword(input.password),
         email_confirm: true,
         user_metadata: { full_name: input.fullName },
       })
@@ -127,7 +128,7 @@ Deno.serve(async (req) => {
       const parsed = parseResetPassword(body)
       if (!parsed.ok) return json(400, { error: parsed.error })
       const { error } = await admin.auth.admin.updateUserById(parsed.value.userId, {
-        password: parsed.value.password,
+        password: pinToPassword(parsed.value.password),
       })
       if (error) return json(400, { error: 'Could not reset the password.' })
       await audit('user.reset_password', parsed.value.userId)

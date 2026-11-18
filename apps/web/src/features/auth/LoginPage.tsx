@@ -5,8 +5,9 @@ import { Navigate } from 'react-router'
 import { startPath } from '../../app/roles'
 import { LanguageSwitch } from '../../components/LanguageSwitch'
 import { isValidPhone, normalizePhone } from '../../lib/phone'
+import { isPin } from '../../lib/pin'
 import { useAuth } from './AuthProvider'
-import { DEMO_PASSWORD } from './mockAuth'
+import { DEMO_PIN } from './mockAuth'
 import { isDemoMode } from './createAuthService'
 import type { SignInError } from './types'
 
@@ -27,7 +28,7 @@ export function LoginPage() {
     event.preventDefault()
     const normalized = normalizePhone(phone)
     if (!isValidPhone(normalized)) return setError('phone')
-    if (!password) return setError('password')
+    if (!isPin(password)) return setError('password')
 
     setError(null)
     setBusy(true)
@@ -88,10 +89,12 @@ export function LoginPage() {
               id="password"
               name="password"
               type={showPassword ? 'text' : 'password'}
+              inputMode="numeric"
+              maxLength={4}
               autoComplete="current-password"
               value={password}
               onChange={(e) => {
-                setPassword(e.target.value)
+                setPassword(e.target.value.replace(/D/g, '').slice(0, 4))
                 if (error) setError(null)
               }}
               aria-invalid={passwordInvalid}
@@ -131,7 +134,7 @@ export function LoginPage() {
       {(import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') && isDemoMode() && (
         <aside className="mt-8 rounded-2xl border-2 border-dashed border-ink p-3 text-sm">
           <p className="font-bold">{t('login.demoTitle')}</p>
-          <p className="mt-1">{t('login.demoBody', { password: DEMO_PASSWORD })}</p>
+          <p className="mt-1">{t('login.demoBody', { password: DEMO_PIN })}</p>
           <p className="mt-1 text-mute">{t('login.demoAccounts')}</p>
         </aside>
       )}

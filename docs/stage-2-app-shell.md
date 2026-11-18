@@ -22,11 +22,11 @@ Status: built and tested. Login against a real Supabase project is written but n
 
 Run `npm run dev` and open http://localhost:5173. The login page lists the demo accounts:
 
-| Role        | Mobile number | Password      |
-| ----------- | ------------- | ------------- |
-| Admin       | 9000000001    | demo-password |
-| Shop owner  | 9100000001    | demo-password |
-| Distributor | 9200000001    | demo-password |
+| Role        | Mobile number | PIN  |
+| ----------- | ------------- | ---- |
+| Admin       | 9000000001    | 1234 |
+| Shop owner  | 9100000001    | 1234 |
+| Distributor | 9200000001    | 1234 |
 
 `npm run build:demo -w apps/web` makes a build with the demo login, for testing the APK on a phone.
 Never ship that build to the client as the real app.

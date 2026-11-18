@@ -1,7 +1,7 @@
 // Creates the FIRST admin login. After this, the admin creates every other login in the app.
 //
 //   SUPABASE_URL=...  SUPABASE_SERVICE_ROLE_KEY=...  \
-//   ADMIN_PHONE=98xxxxxxxx  ADMIN_PASSWORD=...  ADMIN_NAME="RK Owner"  \
+//   ADMIN_PHONE=98xxxxxxxx  ADMIN_PIN=...  ADMIN_NAME="RK Owner"  \
 //   node scripts/bootstrap-admin.mjs
 import { adminClient, createUser, requireEnv } from './lib/admin-client.mjs'
 
@@ -16,9 +16,9 @@ if (existing.data.length > 0) {
 
 const id = await createUser(admin, {
   phone: requireEnv('ADMIN_PHONE'),
-  password: requireEnv('ADMIN_PASSWORD'),
+  password: requireEnv('ADMIN_PIN'),
   fullName: process.env.ADMIN_NAME || 'Admin',
   role: 'admin',
   language: process.env.ADMIN_LANGUAGE === 'ta' ? 'ta' : 'en',
 })
-console.log(`Admin created (id ${id}). Sign in with the phone number and password.`)
+console.log(`Admin created (id ${id}). Sign in with the phone number and PIN.`)

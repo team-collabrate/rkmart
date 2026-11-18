@@ -31,7 +31,7 @@ describe('phone numbers', () => {
 describe('parseCreateUser', () => {
   const base = {
     phone: '98765 43210',
-    password: 'goodpass1',
+    password: '1234',
     fullName: ' Ravi ',
     role: 'shop',
     shopId: SHOP,
@@ -43,7 +43,7 @@ describe('parseCreateUser', () => {
       ok: true,
       value: {
         phone: '9876543210',
-        password: 'goodpass1',
+        password: '1234',
         fullName: 'Ravi',
         role: 'shop',
         shopId: SHOP,
@@ -64,9 +64,9 @@ describe('parseCreateUser', () => {
       ok: false,
       error: expect.stringContaining('10-digit'),
     })
-    expect(parseCreateUser({ ...base, password: 'short' })).toMatchObject({
+    expect(parseCreateUser({ ...base, password: '12' })).toMatchObject({
       ok: false,
-      error: expect.stringContaining('8'),
+      error: expect.stringContaining('4 digits'),
     })
     expect(parseCreateUser({ ...base, fullName: '  ' })).toMatchObject({ ok: false })
     expect(parseCreateUser({ ...base, role: 'owner' })).toMatchObject({ ok: false })
@@ -80,8 +80,8 @@ describe('parseCreateUser', () => {
 
 describe('other actions', () => {
   it('validates password reset', () => {
-    expect(parseResetPassword({ userId: SHOP, password: 'newpass123' })).toMatchObject({ ok: true })
-    expect(parseResetPassword({ userId: 'x', password: 'newpass123' })).toMatchObject({ ok: false })
+    expect(parseResetPassword({ userId: SHOP, password: '4321' })).toMatchObject({ ok: true })
+    expect(parseResetPassword({ userId: 'x', password: '4321' })).toMatchObject({ ok: false })
     expect(parseResetPassword({ userId: SHOP, password: 'abc' })).toMatchObject({ ok: false })
   })
 

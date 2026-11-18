@@ -74,6 +74,6 @@ npm run build:demo -w apps/web          # demo build (demo logins, in-memory dat
 cd apps/web && npx vite preview --port 3000 --host 127.0.0.1
 ```
 
-Demo logins (password `demo-password`): admin `9000000001`, shop owner `9100000001`, distributor `9200000001`.
+Demo logins (PIN `1234`): admin `9000000001`, shop owner `9100000001`, distributor `9200000001`.
 
 Open items from earlier stages are in `docs/stage-*.md` (Supabase and Firebase accounts, client questions, accountant checks).

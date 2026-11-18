@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { setLanguage } from '../../i18n'
 import { AuthProvider } from './AuthProvider'
 import { LoginPage } from './LoginPage'
-import { createMockAuth, DEMO_PASSWORD } from './mockAuth'
+import { createMockAuth, DEMO_PIN } from './mockAuth'
 
 function renderLogin() {
   const service = createMockAuth(0)
@@ -39,21 +39,21 @@ describe('login screen', () => {
     renderLogin()
     await userEvent.type(await screen.findByLabelText('Mobile number'), '9100000001')
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
-    expect(await screen.findByText('Enter your password.')).toBeInTheDocument()
+    expect(await screen.findByText('Enter your 4-digit PIN.')).toBeInTheDocument()
   })
 
   it('shows a clear message for a wrong password', async () => {
     renderLogin()
     await userEvent.type(await screen.findByLabelText('Mobile number'), '9100000001')
-    await userEvent.type(screen.getByLabelText('Password'), 'wrong-pass')
+    await userEvent.type(screen.getByLabelText('PIN'), '9999')
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
-    expect(await screen.findByText('Wrong mobile number or password.')).toBeInTheDocument()
+    expect(await screen.findByText('Wrong mobile number or PIN.')).toBeInTheDocument()
   })
 
   it('opens the shop area for a shop owner', async () => {
     renderLogin()
     await userEvent.type(await screen.findByLabelText('Mobile number'), '+91 91000 00001')
-    await userEvent.type(screen.getByLabelText('Password'), DEMO_PASSWORD)
+    await userEvent.type(screen.getByLabelText('PIN'), DEMO_PIN)
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
     await waitFor(() => expect(screen.getByText('SHOP AREA')).toBeInTheDocument())
   })
@@ -61,14 +61,14 @@ describe('login screen', () => {
   it('opens the admin area for the admin', async () => {
     renderLogin()
     await userEvent.type(await screen.findByLabelText('Mobile number'), '9000000001')
-    await userEvent.type(screen.getByLabelText('Password'), DEMO_PASSWORD)
+    await userEvent.type(screen.getByLabelText('PIN'), DEMO_PIN)
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
     await waitFor(() => expect(screen.getByText('ADMIN AREA')).toBeInTheDocument())
   })
 
   it('can show the password and switch to Tamil', async () => {
     renderLogin()
-    const password = await screen.findByLabelText('Password')
+    const password = await screen.findByLabelText('PIN')
     expect(password).toHaveAttribute('type', 'password')
     await userEvent.click(screen.getByRole('button', { name: /Show/ }))
     expect(password).toHaveAttribute('type', 'text')

@@ -4,7 +4,10 @@
 export type UserRole = 'admin' | 'distributor' | 'shop'
 export type Language = 'en' | 'ta'
 
-export const MIN_PASSWORD_LENGTH = 8
+// Logins use a 4-digit PIN. Supabase needs a longer password, so the PIN gets a fixed suffix.
+// MUST match apps/web/src/lib/pin.ts and scripts/lib/admin-client.mjs.
+const PIN_SUFFIX = 'rk-pin-v1'
+export const pinToPassword = (pin: string): string => pin + PIN_SUFFIX
 const ROLES: readonly UserRole[] = ['admin', 'distributor', 'shop']
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -53,10 +56,9 @@ function asObject(body: unknown): Record<string, unknown> | null {
 }
 
 function checkPassword(password: unknown): string | null {
-  if (typeof password !== 'string' || password.length < MIN_PASSWORD_LENGTH) {
-    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`
+  if (typeof password !== 'string' || !/^[0-9]{4}$/.test(password)) {
+    return 'The PIN must be exactly 4 digits.'
   }
-  if (password.length > 72) return 'Password is too long (72 characters at most).'
   return null
 }
 
