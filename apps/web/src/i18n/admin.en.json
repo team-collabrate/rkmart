@@ -198,12 +198,7 @@
     "viewBill": "View bill",
     "billNo": "Bill {{no}}",
     "notEditable": "Quantities can only be changed before the bill is made.",
-    "open": "Open",
-    "greeting": {
-      "morning": "Good morning, {{name}}",
-      "afternoon": "Good afternoon, {{name}}",
-      "evening": "Good evening, {{name}}"
-    }
+    "open": "Open"
   },
   "bill": {
     "title": "Bill",

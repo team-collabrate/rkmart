@@ -10,7 +10,7 @@ import { Banner, Empty } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
 import type { AdminOrderSummary } from '../../data/adminOrders'
 import type { OrderStatus } from '../../data/shopApi'
-import { formatTime, hourInIndia, todayISO } from '../../lib/dates'
+import { formatTime, todayISO } from '../../lib/dates'
 import { formatINR } from '../../lib/money'
 import { displayNames } from '../../lib/names'
 import { useAuth } from '../auth/AuthProvider'
@@ -41,17 +41,13 @@ const TILES: { status: OrderStatus; tint: string }[] = [
   { status: 'delivered', tint: 'bg-brand-soft text-brand-dark' },
 ]
 
-function greetingKey(hour: number): 'morning' | 'afternoon' | 'evening' {
-  return hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening'
-}
-
 /** The day's orders: counters by status, one button to bill the new ones, one card per order. */
 export function OrdersInbox() {
   const { t, i18n } = useTranslation()
   const language: Language = i18n.language === 'ta' ? 'ta' : 'en'
   const api = useAdminApi()
   const queryClient = useQueryClient()
-  const { profile, signOut } = useAuth()
+  const { signOut } = useAuth()
   const today = todayISO()
 
   const [date, setDate] = useState(today)
@@ -100,7 +96,6 @@ export function OrdersInbox() {
     )
   }
 
-  const firstName = (profile?.fullName ?? '').split(/\s+/)[0] ?? ''
   const extraFilters: Filter[] = count('cancelled') > 0 ? ['all', 'cancelled'] : ['all']
 
   return (
@@ -121,9 +116,6 @@ export function OrdersInbox() {
             </button>
           </div>
         </div>
-        <p className="h-5 truncate text-sm leading-5 text-mute">
-          {t(`admin.orders.greeting.${greetingKey(hourInIndia())}`, { name: firstName })}
-        </p>
         <h1 className="mb-4 h-10 truncate text-[2rem] leading-10">{t('admin.orders.title')}</h1>
         <DayNav date={date} onChange={go} />
       </div>

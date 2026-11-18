@@ -13,15 +13,6 @@ export function todayISO(now: Date = new Date()): string {
   }).format(now)
 }
 
-/** The hour of the day (0 to 23) on the Indian clock, for "good morning" style greetings. */
-export function hourInIndia(now: Date = new Date()): number {
-  return Number(
-    new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hour12: false, timeZone: TIME_ZONE })
-      .format(now)
-      .slice(0, 2),
-  )
-}
-
 /** "2026-11-17" plus 1 -> "2026-11-18" (works across month and year ends). */
 export function addDays(iso: string, days: number): string {
   const [y, m, d] = iso.split('-').map(Number)
