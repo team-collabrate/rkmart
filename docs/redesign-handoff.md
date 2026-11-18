@@ -46,11 +46,13 @@ en.filter((a, i) => a[0] !== ta[i][0] || a[1] !== ta[i][1]).length // must be 0
 
 ## Done on `redesign`
 
-Admin: Orders, order detail, bill, Balances and shop statement (payment form), Bills (day's PDF), Rates. Also: floating bottom nav, shared top bar, status pills, green theme, phone-only layout, Tamil font fit.
+Admin: Orders, order detail, bill, Balances and shop statement (payment form), Bills (day's PDF), Rates, More (2x2 icon cards with counts, Alerts card), and the Items, Shops and Users lists (card lists, round + buttons, avatars/emoji tiles; shared `PageHeader` and `StatusPill` in `components/ui.tsx`). English and Tamil layouts were measured identical on More and Items.
+
+**New feature: admin places an order for a shop** (for clients who phone or visit). `orders/new` (`NewOrderPage.tsx`, the + on Orders), DB function `admin_place_order` (migration 20261123100000, tests in `supabase/tests/admin_place_order.test.ts`), `AdminApi.placeOrderForShop`. The order then opens like any other: bill it, mark delivered. The shop does not get a new-order alert for it; other admins do. Also: floating bottom nav, shared top bar, status pills, green theme, phone-only layout, Tamil font fit.
 
 ## Still to do (in this order of value)
 
-1. **Admin More**: `features/admin/MorePage.tsx`, `ItemsPages.tsx`, `ShopsPages.tsx`, `UsersPages.tsx`, `SettingsPage.tsx`. These still use the lighter restyle only. Add them to `ownHeader` in `AppShell.tsx` when they get their own headers.
+1. **Admin forms**: Settings, Item/Shop/New user forms and User detail only inherit the new header and colours. Redesign them Figma-first, then run the stability check. Also run the English vs Tamil check on Shops, Users and New order.
 2. **Shop owner screens**: `features/shop/` (home, order grid is closest to the reference but not Figma-first, review, my orders, order detail, payments).
 3. **Distributor screens**: `features/delivery/DeliveryPages.tsx`, `MarkDeliveredPanel.tsx`.
 4. **Login page**: `features/auth/LoginPage.tsx`.
