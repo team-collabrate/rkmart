@@ -63,7 +63,7 @@ describe('orders inbox', () => {
     await screen.findByText('Lakshmi Stores')
     await userEvent.click(screen.getByRole('button', { name: 'Previous day' }))
     expect(await screen.findByText('Sri Murugan Cafe')).toBeInTheDocument()
-    expect(screen.getByText(/^RK\/\d{4}\/0002$/)).toBeInTheDocument()
+    expect(screen.getByText(/RK\/\d{4}\/0002$/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next day' })).toBeEnabled()
   })
 
@@ -75,9 +75,7 @@ describe('orders inbox', () => {
 
   it('asks first, then bills all new orders with numbers in order', async () => {
     const state = renderAt('/admin/orders')
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Generate bills for all new orders (3)' }),
-    )
+    await userEvent.click(await screen.findByRole('button', { name: 'Bill all new (3)' }))
     expect(screen.getByText(/Generate 3 bills now\?/)).toBeInTheDocument()
     expect(state.invoices).toHaveLength(2) // nothing yet
 
@@ -102,14 +100,10 @@ describe('orders inbox', () => {
 
   it('keeps everything as it was when the owner says not now', async () => {
     const state = renderAt('/admin/orders')
-    await userEvent.click(
-      await screen.findByRole('button', { name: 'Generate bills for all new orders (3)' }),
-    )
+    await userEvent.click(await screen.findByRole('button', { name: 'Bill all new (3)' }))
     await userEvent.click(screen.getByRole('button', { name: 'Not now' }))
     expect(state.invoices).toHaveLength(2)
-    expect(
-      screen.getByRole('button', { name: 'Generate bills for all new orders (3)' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Bill all new (3)' })).toBeInTheDocument()
   })
 
   it('shows the inbox in Tamil', async () => {

@@ -9,6 +9,8 @@ export interface AdminOrderSummary {
   orderDate: string
   status: OrderStatus
   itemCount: number
+  /** English names of the first three items, for the small picture strip on a card. */
+  itemNames: string[]
   /** Quantity times rate, before tax. The bill has the final amount. */
   total: number
   createdAt: string

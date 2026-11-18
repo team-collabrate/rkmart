@@ -5,7 +5,7 @@ import type { Language } from '../features/auth/types'
 const OPTIONS: Language[] = ['en', 'ta']
 
 /** A small two-way switch: the chosen language is a filled green pill. */
-export function LanguageSwitch() {
+export function LanguageSwitch({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation()
   const { changeLanguage } = useAuth()
   const current: Language = i18n.language === 'ta' ? 'ta' : 'en'
@@ -24,12 +24,13 @@ export function LanguageSwitch() {
             type="button"
             onClick={() => changeLanguage(lang)}
             aria-pressed={active}
+            aria-label={lang === 'en' ? t('common.english') : t('common.tamil')}
             className={
               'min-h-8 rounded-full px-3 text-sm font-semibold ' +
               (active ? 'bg-brand text-paper' : 'text-ink')
             }
           >
-            {lang === 'en' ? t('common.english') : t('common.tamil')}
+            {lang === 'en' ? (compact ? 'EN' : t('common.english')) : t('common.tamil')}
           </button>
         )
       })}

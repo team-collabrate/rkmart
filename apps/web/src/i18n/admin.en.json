@@ -163,7 +163,7 @@
     "empty": "No orders on this day.",
     "emptyFilter": "No orders in this list.",
     "items": "{{count}} items",
-    "billAll": "Generate bills for all new orders ({{count}})",
+    "billAll": "Bill all new ({{count}})",
     "billAllAsk": "Generate {{count}} bills now? Each gets the next invoice number. Check the quantities first.",
     "billAllConfirm": "Yes, generate",
     "billAllCancel": "Not now",

@@ -16,6 +16,12 @@ function orderSummary(state: MockState, o: MockOrder): AdminOrderSummary {
     orderDate: o.orderDate,
     status: o.status,
     itemCount: o.items.length,
+    itemNames: [...o.items]
+      .map((i) => state.products.find((p) => p.id === i.productId))
+      .filter((p): p is NonNullable<typeof p> => Boolean(p))
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .slice(0, 3)
+      .map((p) => p.nameEn),
     total: roundPaise(o.items.reduce((sum, i) => sum + i.qty * i.rate, 0)),
     createdAt: o.createdAt,
     invoiceNo: invoice?.invoiceNo ?? null,

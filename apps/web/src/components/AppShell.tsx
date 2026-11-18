@@ -97,14 +97,16 @@ export function AppShell() {
               to={item.to}
               end={item.to === HOME_PATH[profile.role]}
               className={({ isActive }) =>
-                'flex min-h-12 items-center justify-center gap-2 rounded-full px-3.5 text-sm font-semibold no-underline transition-colors ' +
-                (isActive ? 'bg-brand-soft text-brand-dark' : 'text-mute')
+                'flex h-12 min-w-0 items-center justify-center gap-1.5 rounded-full px-2 text-sm font-semibold no-underline ' +
+                (isActive ? 'flex-[2.2] bg-brand-soft text-brand-dark' : 'flex-1 text-mute')
               }
             >
               {({ isActive }) => (
                 <>
                   <Icon size={22} aria-hidden="true" />
-                  <span className={isActive ? '' : 'sr-only'}>{t(`nav.${item.labelKey}`)}</span>
+                  <span className={isActive ? 'truncate' : 'sr-only'}>
+                    {t(`nav.${item.labelKey}`)}
+                  </span>
                 </>
               )}
             </NavLink>

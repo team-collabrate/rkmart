@@ -105,7 +105,11 @@ interface OrderListRow {
   status: AdminOrderSummary['status']
   created_at: string
   shops: { name_en: string; name_ta: string | null } | null
-  order_items: { qty: number | string; rate: number | string }[]
+  order_items: {
+    qty: number | string
+    rate: number | string
+    products?: { name_en: string; sort_order: number } | null
+  }[]
   invoices: { invoice_no: string; status: string }[]
 }
 
@@ -181,6 +185,11 @@ function toOrderSummary(row: OrderListRow): AdminOrderSummary {
     orderDate: row.order_date,
     status: row.status,
     itemCount: row.order_items.length,
+    itemNames: [...row.order_items]
+      .filter((i) => i.products)
+      .sort((a, b) => (a.products?.sort_order ?? 0) - (b.products?.sort_order ?? 0))
+      .slice(0, 3)
+      .map((i) => i.products?.name_en ?? ''),
     total:
       Math.round(
         row.order_items.reduce((sum, i) => sum + Number(i.qty) * Number(i.rate), 0) * 100,
@@ -472,7 +481,7 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
       const { data, error } = await client
         .from('orders')
         .select(
-          'id, shop_id, order_date, status, created_at, shops(name_en, name_ta), order_items(qty, rate), invoices(invoice_no, status)',
+          'id, shop_id, order_date, status, created_at, shops(name_en, name_ta), order_items(qty, rate, products(name_en, sort_order)), invoices(invoice_no, status)',
         )
         .eq('order_date', date)
         .order('created_at', { ascending: false })
