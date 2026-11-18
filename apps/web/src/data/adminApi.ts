@@ -1,4 +1,5 @@
 import type { AdminOrderDetail, AdminOrderSummary, DayPdf, Invoice } from './adminOrders'
+import type { PaymentInput, ShopBalance, Statement } from './payments'
 import type { CartLine } from './shopApi'
 import type {
   AppUser,
@@ -29,6 +30,11 @@ export type ApiErrorCode =
   | 'has_payments'
   | 'reason_required'
   | 'not_in_order'
+  | 'not_allowed'
+  | 'not_billed'
+  | 'bad_amount'
+  | 'bad_date'
+  | 'invoice_mismatch'
   | 'unknown'
 
 /** A failure the screens can show in plain words. `code` picks the translated message. */
@@ -81,6 +87,15 @@ export interface AdminApi {
   saveDayPdf(date: string, pdf: Blob, invoiceIds: string[]): Promise<DayPdf>
   /** Gets a saved PDF back, to download or print again. */
   getDayPdf(id: string): Promise<Blob>
+
+  /** What every shop owes, biggest balance first. */
+  listBalances(): Promise<ShopBalance[]>
+  /** One shop's bills and payments in date order, with the balance after each line. */
+  getShopStatement(shopId: string): Promise<Statement>
+  /** Records money received from a shop. It counts toward the shop's running balance. */
+  recordPayment(input: PaymentInput): Promise<{ paymentId: string }>
+  /** Removes a wrongly entered payment. The reason is kept in the audit log. */
+  voidPayment(paymentId: string, reason: string): Promise<void>
 
   getSettings(): Promise<CompanySettings>
   saveSettings(input: CompanySettings): Promise<CompanySettings>

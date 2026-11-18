@@ -1,11 +1,12 @@
 import { lazy, Suspense, type ComponentType } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes } from 'react-router'
 import { NotFound } from './app/NotFound'
 import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
 import { AppShell } from './components/AppShell'
-import { ComingSoon } from './components/ComingSoon'
+import { BalancesPage, ShopStatementPage } from './features/admin/BalancesPages'
 import { BillPage } from './features/admin/BillPage'
+import { DeliveriesPage, DeliveryHistoryPage } from './features/delivery/DeliveryPages'
+import { ShopPaymentsPage } from './features/shop/PaymentsPage'
 import { BillsPage } from './features/admin/BillsPage'
 import { ItemForm, ItemsList } from './features/admin/ItemsPages'
 import { MorePage } from './features/admin/MorePage'
@@ -32,10 +33,6 @@ const StatusSpike: ComponentType | null = spikesEnabled
   : null
 
 /** A screen that a later stage builds, with its title in the current language. */
-function Soon({ area, page, stage }: { area: string; page: string; stage: number }) {
-  const { t } = useTranslation()
-  return <ComingSoon title={t(`pages.${area}.${page}`)} stage={stage} />
-}
 
 export default function App() {
   return (
@@ -57,7 +54,7 @@ export default function App() {
           <Route path="order/review" element={<ReviewPage />} />
           <Route path="orders" element={<OrdersList />} />
           <Route path="orders/:id" element={<OrderDetailPage />} />
-          <Route path="payments" element={<Soon area="shop" page="payments" stage={7} />} />
+          <Route path="payments" element={<ShopPaymentsPage />} />
         </Route>
 
         <Route
@@ -74,7 +71,8 @@ export default function App() {
           <Route path="orders/:id/bill" element={<BillPage />} />
           <Route path="rates" element={<RatesPage />} />
           <Route path="bills" element={<BillsPage />} />
-          <Route path="balances" element={<Soon area="admin" page="balances" stage={7} />} />
+          <Route path="balances" element={<BalancesPage />} />
+          <Route path="balances/:shopId" element={<ShopStatementPage />} />
           <Route path="more" element={<MorePage />} />
           <Route path="more/items" element={<ItemsList />} />
           <Route path="more/items/new" element={<ItemForm />} />
@@ -96,8 +94,8 @@ export default function App() {
             </RequireRole>
           }
         >
-          <Route index element={<Soon area="delivery" page="home" stage={7} />} />
-          <Route path="history" element={<Soon area="delivery" page="history" stage={7} />} />
+          <Route index element={<DeliveriesPage />} />
+          <Route path="history" element={<DeliveryHistoryPage />} />
         </Route>
 
         {PdfSpike && <Route path="/spikes/pdf" element={<PdfSpike />} />}

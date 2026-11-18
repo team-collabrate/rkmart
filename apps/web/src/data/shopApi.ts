@@ -1,3 +1,5 @@
+import type { Statement } from './payments'
+
 export type OrderStatus = 'placed' | 'billed' | 'delivered' | 'cancelled'
 
 /** An item a shop can order today: active, with a rate set for today. */
@@ -48,4 +50,6 @@ export interface ShopApi {
   placeOrder(lines: CartLine[], note: string): Promise<{ orderId: string }>
   listMyOrders(): Promise<OrderSummary[]>
   getOrder(id: string): Promise<OrderDetail>
+  /** This shop's bills and payments, and what it owes now. */
+  getMyStatement(): Promise<Statement>
 }

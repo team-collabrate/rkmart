@@ -9,6 +9,7 @@
 | `stage-4-shop-ordering.md`                        | Stage 4: shop ordering, the place_order function, repeat order             |
 | `stage-5-billing.md`                              | Stage 5: admin orders inbox, GST billing, bill numbers, cancel and reissue |
 | `stage-6-day-pdf.md`                              | Stage 6: the day's bills as one PDF, saved versions, printing and sharing  |
+| `stage-7-delivery-payments.md`                    | Stage 7: delivery, payments, balances and statements                       |
 | `approved-sheets/RK-Grocery-Workflow-English.pdf` | Client-approved workflow, app screens and bill sheets (English, B&W)       |
 | `approved-sheets/RK-Grocery-Workflow-Tamil.pdf`   | The same sheets in simple everyday Tamil                                   |
 

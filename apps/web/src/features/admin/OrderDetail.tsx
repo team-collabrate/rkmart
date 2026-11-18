@@ -12,6 +12,7 @@ import { displayNames } from '../../lib/names'
 import type { Language } from '../auth/types'
 import { formatQty, parseQty } from '../shop/cart'
 import { OrderStatusPill } from '../shop/OrderStatusPill'
+import { MarkDeliveredPanel } from '../delivery/MarkDeliveredPanel'
 import { errorText, useOrderDetail } from './queries'
 
 type Notice = { kind: 'success' | 'error'; text: string } | null
@@ -276,6 +277,11 @@ function OrderEditor({
               <FileText size={18} aria-hidden="true" />
               {t('admin.orders.viewBill')} · {order.invoiceNo}
             </Link>
+          )}
+          {order.status === 'billed' && (
+            <div className="mt-3">
+              <MarkDeliveredPanel orderId={order.id} />
+            </div>
           )}
         </div>
       )}

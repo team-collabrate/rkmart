@@ -1,6 +1,8 @@
 import { FunctionsHttpError, type SupabaseClient } from '@supabase/supabase-js'
 import { ApiError, type AdminApi, type ApiErrorCode } from './adminApi'
 import type { AdminOrderDetail, AdminOrderSummary, DayPdf, Invoice } from './adminOrders'
+import type { PaymentInput, ShopBalance } from './payments'
+import { loadStatement } from './supabaseStatement'
 import type {
   AppUser,
   CompanySettings,
@@ -281,7 +283,7 @@ function toOrderDetail(row: OrderDetailRow): AdminOrderDetail {
 }
 
 /** The billing functions raise short codes like "not_placed" or "has_payments". */
-function billingError(error: { message?: string; code?: string }): ApiError {
+export function billingError(error: { message?: string; code?: string }): ApiError {
   const message = error.message ?? ''
   const known: ApiErrorCode[] = [
     'not_found',
@@ -293,6 +295,11 @@ function billingError(error: { message?: string; code?: string }): ApiError {
     'already_delivered',
     'has_payments',
     'reason_required',
+    'not_allowed',
+    'not_billed',
+    'bad_amount',
+    'bad_date',
+    'invoice_mismatch',
   ]
   const hit = known.find((code) => message.includes(code))
   if (hit) return new ApiError(hit)
@@ -573,6 +580,61 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
       const download = await client.storage.from('daily-bills').download(row.file_path as string)
       if (download.error || !download.data) throw new ApiError('network')
       return download.data
+    },
+
+    async listBalances() {
+      const [balances, last] = await Promise.all([
+        client.from('shop_balances').select('shop_id, name_en, name_ta, invoiced, paid, balance'),
+        client.from('payments').select('shop_id, paid_on').order('paid_on', { ascending: false }),
+      ])
+      if (balances.error) fail(balances.error)
+      if (last.error) fail(last.error)
+      const lastPaid = new Map<string, string>()
+      for (const row of last.data as { shop_id: string; paid_on: string }[]) {
+        if (!lastPaid.has(row.shop_id)) lastPaid.set(row.shop_id, row.paid_on)
+      }
+      return (
+        balances.data as {
+          shop_id: string
+          name_en: string
+          name_ta: string | null
+          invoiced: number | string
+          paid: number | string
+          balance: number | string
+        }[]
+      )
+        .map((r): ShopBalance => ({
+          shopId: r.shop_id,
+          nameEn: r.name_en,
+          nameTa: r.name_ta ?? '',
+          invoiced: Number(r.invoiced),
+          paid: Number(r.paid),
+          balance: Number(r.balance),
+          lastPaymentOn: lastPaid.get(r.shop_id) ?? null,
+        }))
+        .sort((a, b) => b.balance - a.balance || a.nameEn.localeCompare(b.nameEn))
+    },
+
+    async getShopStatement(shopId) {
+      return loadStatement(client, shopId)
+    },
+
+    async recordPayment(input: PaymentInput) {
+      const { data, error } = await client.rpc('record_payment', {
+        p_shop: input.shopId,
+        p_amount: input.amount,
+        p_method: input.method,
+        p_paid_on: input.paidOn,
+        p_invoice: input.invoiceId,
+        p_note: input.note,
+      })
+      if (error) throw billingError(error)
+      return { paymentId: String(data) }
+    },
+
+    async voidPayment(paymentId, reason) {
+      const { error } = await client.rpc('void_payment', { p_payment: paymentId, p_reason: reason })
+      if (error) throw billingError(error)
     },
 
     async getSettings() {

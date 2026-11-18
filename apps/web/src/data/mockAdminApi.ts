@@ -1,6 +1,7 @@
 import { ApiError, type AdminApi } from './adminApi'
 import type { AdminOrderSummary, DayPdf } from './adminOrders'
 import { cancelInvoice, issueInvoice } from './mockBilling'
+import { balances, recordPayment, statementFor, voidPayment } from './mockPayments'
 import { createMockState, notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
 import { roundPaise } from '../lib/money'
 
@@ -273,6 +274,27 @@ export function createMockAdminApi(
       const found = state.dayPdfs.find((p) => p.meta.id === id)
       if (!found) throw new ApiError('not_found')
       return found.blob
+    },
+
+    async listBalances() {
+      await wait()
+      return balances(state)
+    },
+
+    async getShopStatement(shopId) {
+      await wait()
+      if (!state.shops.some((s) => s.id === shopId)) throw new ApiError('not_found')
+      return statementFor(state, shopId)
+    },
+
+    async recordPayment(input) {
+      await wait()
+      return { paymentId: recordPayment(state, input) }
+    },
+
+    async voidPayment(paymentId, reason) {
+      await wait()
+      voidPayment(state, paymentId, reason)
     },
 
     async getSettings() {

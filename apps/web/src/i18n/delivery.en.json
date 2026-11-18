@@ -1,0 +1,19 @@
+{
+  "empty": "Nothing to deliver right now.",
+  "toDeliver": "To deliver ({{count}})",
+  "done": "Delivered ({{count}})",
+  "bill": "Bill {{no}}",
+  "amount": "Bill amount",
+  "call": "Call {{phone}}",
+  "markDelivered": "Mark delivered",
+  "photo": "Photo of the signed copy (optional)",
+  "photoHint": "Take a photo of the paper bill the shop signed.",
+  "confirm": "Confirm delivered",
+  "notYet": "Not yet",
+  "working": "Saving…",
+  "marked": "Marked delivered.",
+  "deliveredAt": "Delivered {{time}}",
+  "historyTitle": "Past deliveries",
+  "historyEmpty": "No deliveries in the last 7 days.",
+  "delivered": "Delivered"
+}

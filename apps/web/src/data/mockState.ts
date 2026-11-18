@@ -1,6 +1,7 @@
 import { todayISO } from '../lib/dates'
 import type { DayPdf, Invoice } from './adminOrders'
 import { issueInvoice } from './mockBilling'
+import type { PaymentMethod } from './payments'
 import {
   SAMPLE_PREVIOUS_RATES,
   SAMPLE_SETTINGS,
@@ -22,6 +23,8 @@ export interface MockOrder {
   note: string
   createdAt: string
   items: { productId: string; qty: number; rate: number }[]
+  /** Set when the order is delivered. */
+  deliveredAt?: string
 }
 
 export interface MockPayment {
@@ -29,6 +32,10 @@ export interface MockPayment {
   shopId: string
   amount: number
   invoiceId: string | null
+  method: PaymentMethod
+  paidOn: string
+  note: string
+  createdAt: string
 }
 
 export interface MockState {
@@ -117,6 +124,18 @@ export function createMockState(options: { seedDemo?: boolean } = {}): MockState
     issueInvoice(state, 'o1', daysAgo(3))
     issueInvoice(state, 'o2', daysAgo(1))
     state.orders[0].status = 'delivered'
+    state.orders[0].deliveredAt = `${daysAgo(2)}T07:30:00.000Z`
+    // The first shop has paid part of its older bill.
+    state.payments.push({
+      id: 'pay1',
+      shopId: 's1',
+      amount: 5000,
+      invoiceId: null,
+      method: 'upi',
+      paidOn: daysAgo(2),
+      note: '',
+      createdAt: `${daysAgo(2)}T10:00:00.000Z`,
+    })
 
     state.orders.push(
       {

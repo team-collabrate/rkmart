@@ -1,6 +1,7 @@
 import { todayISO } from '../lib/dates'
 import { roundPaise } from '../lib/money'
 import { ApiError } from './adminApi'
+import { statementFor } from './mockPayments'
 import { notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
 import type { OrderDetail, OrderSummary, ShopApi } from './shopApi'
 
@@ -122,6 +123,11 @@ export function createMockShopApi(
         }),
       }
       return detail
+    },
+
+    async getMyStatement() {
+      await wait()
+      return statementFor(state, requireShop())
     },
   }
 }

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { roundPaise } from '../lib/money'
 import { ApiError, type ApiErrorCode } from './adminApi'
+import { loadStatement } from './supabaseStatement'
 import type { OrderDetail, OrderStatus, OrderSummary, ShopApi } from './shopApi'
 
 // Real version of the shop API. Reads are limited by row level security (a shop sees only its own
@@ -146,6 +147,11 @@ export function createSupabaseShopApi(client: SupabaseClient): ShopApi {
         })),
       }
       return detail
+    },
+
+    async getMyStatement() {
+      // Row level security limits this to the signed-in shop's own bills and payments.
+      return loadStatement(client)
     },
   }
 }

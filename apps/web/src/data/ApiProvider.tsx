@@ -4,11 +4,13 @@ import { useAuth } from '../features/auth/AuthProvider'
 import type { AdminApi } from './adminApi'
 import {
   ApiContext,
+  DeliveryApiContext,
   ShopApiContext,
   createApis,
   makeQueryClient,
   setSignedInShopId,
 } from './apiContext'
+import type { DeliveryApi } from './deliveryApi'
 import type { ShopApi } from './shopApi'
 
 /**
@@ -19,11 +21,13 @@ export function ApiProvider({
   children,
   api,
   shopApi,
+  deliveryApi,
   client,
 }: {
   children: ReactNode
   api?: AdminApi
   shopApi?: ShopApi
+  deliveryApi?: DeliveryApi
   client?: QueryClient
 }) {
   const { profile } = useAuth()
@@ -33,14 +37,19 @@ export function ApiProvider({
     setSignedInShopId(profile?.shopId ?? null)
   }, [profile])
 
-  const defaults = useMemo(() => (api && shopApi ? null : createApis()), [api, shopApi])
+  const defaults = useMemo(
+    () => (api && shopApi && deliveryApi ? null : createApis()),
+    [api, shopApi, deliveryApi],
+  )
   const queryClient = useMemo(() => client ?? makeQueryClient(), [client])
 
   return (
     <QueryClientProvider client={queryClient}>
       <ApiContext.Provider value={api ?? defaults!.admin}>
         <ShopApiContext.Provider value={shopApi ?? defaults!.shop}>
-          {children}
+          <DeliveryApiContext.Provider value={deliveryApi ?? defaults!.delivery}>
+            {children}
+          </DeliveryApiContext.Provider>
         </ShopApiContext.Provider>
       </ApiContext.Provider>
     </QueryClientProvider>

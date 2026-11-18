@@ -136,7 +136,16 @@ describe('demo billing', () => {
     })
 
     const { invoiceId } = await admin.generateBill('o3')
-    state.payments.push({ id: 'pay1', shopId: 's2', amount: 100, invoiceId })
+    state.payments.push({
+      id: 'pay-test',
+      shopId: 's2',
+      amount: 100,
+      invoiceId,
+      method: 'cash',
+      paidOn: today,
+      note: '',
+      createdAt: new Date().toISOString(),
+    })
     await expect(admin.cancelBill(invoiceId, 'reason')).rejects.toMatchObject({
       code: 'has_payments',
     })

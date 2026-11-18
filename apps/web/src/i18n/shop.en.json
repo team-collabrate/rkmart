@@ -61,5 +61,29 @@
   },
   "errors": {
     "qty": "Enter a quantity like 2 or 2.5."
+  },
+  "payments": {
+    "title": "My payments",
+    "owe": "You owe RK ₹{{amount}}",
+    "nothingDue": "Nothing is due. Thank you!",
+    "advance": "You have paid ₹{{amount}} in advance.",
+    "reminder": "Payment reminder: please pay ₹{{amount}} to RK.",
+    "billed": "Billed",
+    "paid": "Paid",
+    "entries": "Bills and payments",
+    "empty": "No bills or payments yet.",
+    "bill": "Bill {{no}}",
+    "payment": "Payment ({{method}})",
+    "forInvoice": "For {{no}}",
+    "balanceAfter": "Balance ₹{{amount}}",
+    "howToPay": "Pay RK by cash, UPI or bank transfer. RK records your payment here.",
+    "methods": {
+      "cash": "Cash",
+      "upi": "UPI",
+      "bank": "Bank transfer",
+      "other": "Other"
+    },
+    "homeCard": "Payment due: ₹{{amount}}",
+    "homeLink": "See my payments"
   }
 }

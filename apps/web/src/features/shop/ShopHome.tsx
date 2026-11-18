@@ -10,6 +10,7 @@ import { useAuth } from '../auth/AuthProvider'
 import type { Language } from '../auth/types'
 import { OrderStatusPill } from './OrderStatusPill'
 import { useRepeatOrder } from './useRepeatOrder'
+import { useMyStatement } from './statementQuery'
 import { useCatalog, useMyOrders } from './queries'
 
 /** The shop owner's start screen: are today's rates ready, the last order, and recent orders. */
@@ -20,6 +21,7 @@ export function ShopHome() {
   const api = useShopApi()
   const catalog = useCatalog(todayISO())
   const orders = useMyOrders()
+  const statement = useMyStatement()
   const repeat = useRepeatOrder()
 
   if (catalog.isPending || orders.isPending) return <Loading />
@@ -34,6 +36,18 @@ export function ShopHome() {
   return (
     <section className="max-w-2xl">
       <h1 className="text-2xl">{t('shop.home.greeting', { name: profile?.fullName ?? '' })}</h1>
+
+      {statement.data && statement.data.balance > 0 && (
+        <Link
+          to="/shop/payments"
+          className="mt-4 block rounded-xl border-2 border-dashed border-ink p-4 no-underline"
+        >
+          <p className="font-display text-xl font-bold">
+            {t('shop.payments.homeCard', { amount: formatINR(statement.data.balance) })}
+          </p>
+          <p className="text-sm font-semibold underline">{t('shop.payments.homeLink')}</p>
+        </Link>
+      )}
 
       <div className="mt-4 rounded-xl border-2 border-ink p-4">
         <p className="font-semibold">

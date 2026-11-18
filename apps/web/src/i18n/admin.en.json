@@ -142,7 +142,12 @@
     "already_cancelled": "This bill is already cancelled.",
     "has_payments": "A payment is recorded against this bill, so it cannot be cancelled.",
     "reason_required": "Please write the reason (at least 3 letters).",
-    "not_in_order": "That item is not in this order."
+    "not_in_order": "That item is not in this order.",
+    "not_allowed": "You are not allowed to do this.",
+    "not_billed": "This order has no bill yet.",
+    "bad_amount": "Enter an amount above 0, with at most 2 decimals.",
+    "bad_date": "The date must be today or earlier (within the last year).",
+    "invoice_mismatch": "That bill does not belong to this shop, or it was cancelled."
   },
   "orders": {
     "title": "Orders",
@@ -253,5 +258,48 @@
     "notInPdf": "Not in a PDF yet",
     "pdfFailed": "The PDF could not be made. Please try again.",
     "fileTitle": "RK bills {{date}} (version {{version}})"
+  },
+  "pay": {
+    "title": "Balances",
+    "empty": "No shops yet.",
+    "totalOwed": "Total to collect: ₹{{amount}}",
+    "lastPayment": "Last payment {{date}}",
+    "noPayment": "No payment yet",
+    "owes": "Owes ₹{{amount}}",
+    "credit": "Paid ₹{{amount}} in advance",
+    "clear": "Nothing due",
+    "balanceNow": "Balance now",
+    "billed": "Billed",
+    "paid": "Paid",
+    "recordTitle": "Record a payment",
+    "amount": "Amount (₹)",
+    "method": "Paid by",
+    "methods": {
+      "cash": "Cash",
+      "upi": "UPI",
+      "bank": "Bank transfer",
+      "other": "Other"
+    },
+    "date": "Date paid",
+    "forBill": "For which bill",
+    "anyBill": "Not for a specific bill",
+    "note": "Note (optional)",
+    "save": "Record payment",
+    "saving": "Saving…",
+    "saved": "Payment of ₹{{amount}} recorded.",
+    "badAmount": "Enter an amount above 0, with at most 2 decimals.",
+    "entries": "Bills and payments",
+    "noEntries": "No bills or payments yet.",
+    "entryBill": "Bill {{no}}",
+    "entryPayment": "Payment ({{method}})",
+    "forInvoice": "For {{no}}",
+    "balanceAfter": "Balance ₹{{amount}}",
+    "remove": "Remove payment",
+    "removeAsk": "Remove this ₹{{amount}} payment? It is deleted and the balance goes back up. The reason is kept in the audit log.",
+    "reason": "Reason",
+    "removeConfirm": "Yes, remove it",
+    "keep": "Keep it",
+    "removed": "Payment removed.",
+    "statementFor": "Statement"
   }
 }
