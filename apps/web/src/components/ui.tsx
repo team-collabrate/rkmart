@@ -173,7 +173,7 @@ export function Banner({
       role={kind === 'error' ? 'alert' : 'status'}
       className={
         'rounded-xl border-2 px-3 py-2 font-medium ' +
-        (kind === 'error' ? 'border-dashed border-ink' : 'border-solid border-ink bg-pale')
+        (kind === 'error' ? 'border-dashed border-ink' : 'border-solid border-line bg-pale')
       }
     >
       {children}
@@ -188,7 +188,7 @@ export function StatusPill({ active }: { active: boolean }) {
     <span
       className={
         'inline-block rounded-full border-2 px-2 text-xs font-bold ' +
-        (active ? 'border-ink bg-ink text-paper' : 'border-dashed border-ink text-ink')
+        (active ? 'border-line bg-brand text-paper' : 'border-dashed border-ink text-ink')
       }
     >
       {active ? t('admin.common.on') : t('admin.common.off')}

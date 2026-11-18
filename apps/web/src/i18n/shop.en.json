@@ -23,7 +23,9 @@
     "perUnit": "per {{unit}}",
     "cartItems_one": "{{count}} item",
     "cartItems_other": "{{count}} items",
-    "review": "Review order"
+    "review": "Review order",
+    "all": "All",
+    "ratesFor": "Rates for {{date}}"
   },
   "review": {
     "title": "Review your order",

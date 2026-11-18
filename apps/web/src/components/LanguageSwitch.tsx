@@ -20,8 +20,8 @@ export function LanguageSwitch() {
             onClick={() => changeLanguage(lang)}
             aria-pressed={active}
             className={
-              'min-h-9 rounded-full border-2 border-ink px-3 text-sm font-semibold ' +
-              (active ? 'bg-ink text-paper' : 'bg-paper text-ink')
+              'min-h-9 rounded-full border-2 border-line px-3 text-sm font-semibold ' +
+              (active ? 'bg-brand text-paper' : 'bg-paper text-ink')
             }
           >
             {lang === 'en' ? t('common.english') : t('common.tamil')}

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formatQty, parseQty, stepQty } from './cart'
 
 const STEP_BUTTON =
-  'grid size-11 place-items-center rounded-xl border-2 border-ink bg-paper font-bold'
+  'grid size-11 shrink-0 place-items-center rounded-xl border-2 border-brand bg-brand font-bold text-paper'
 
 /**
  * "Add" when nothing is chosen, otherwise a minus button, a number box and a plus button.
@@ -26,7 +26,7 @@ export function QtyControl({
 
   if (qty <= 0 && draft === null) {
     return (
-      <button type="button" className="btn btn-outline min-w-24" onClick={() => onChange(1)}>
+      <button type="button" className="btn w-full min-w-24" onClick={() => onChange(1)}>
         <Plus size={18} aria-hidden="true" />
         {t('shop.order.add')}
       </button>
@@ -34,7 +34,7 @@ export function QtyControl({
   }
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex w-full items-center gap-1">
       <button
         type="button"
         className={STEP_BUTTON}
@@ -52,7 +52,7 @@ export function QtyControl({
         value={draft ?? formatQty(qty)}
         aria-label={t('shop.order.quantity', { name })}
         aria-invalid={invalid}
-        className="field w-16 px-1 text-center"
+        className="field w-0 min-w-0 flex-1 px-1 text-center"
         onChange={(e) => {
           setDraft(e.target.value)
           const parsed = parseQty(e.target.value)

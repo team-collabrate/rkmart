@@ -45,7 +45,7 @@ export function BalancesPage() {
           <p className="mb-3 font-display text-xl font-bold">
             {t('admin.pay.totalOwed', { amount: formatINR(owed) })}
           </p>
-          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
             {list.data.map((s) => (
               <BalanceRow key={s.shopId} balance={s} language={language} />
             ))}
@@ -114,7 +114,7 @@ export function ShopStatementPage() {
         backTo="/admin/balances"
       />
 
-      <div className="mb-4 rounded-xl border-2 border-ink p-4">
+      <div className="mb-4 rounded-xl border-2 border-line p-4">
         <p className="text-sm text-mute">{t('admin.pay.balanceNow')}</p>
         <p className="font-display text-3xl font-bold">{balanceText(t, s.balance)}</p>
         <p className="mt-1 text-sm text-mute">
@@ -142,7 +142,7 @@ export function ShopStatementPage() {
       {s.entries.length === 0 ? (
         <Empty>{t('admin.pay.noEntries')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
           {s.entries.map((e) => (
             <EntryRow
               key={`${e.kind}-${e.id}`}
@@ -214,7 +214,7 @@ function RecordPaymentForm({
 
   return (
     <form
-      className="space-y-3 rounded-xl border-2 border-ink p-3"
+      className="space-y-3 rounded-xl border-2 border-line p-3"
       noValidate
       onSubmit={(e) => {
         e.preventDefault()

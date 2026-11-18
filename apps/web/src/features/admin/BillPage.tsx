@@ -106,8 +106,8 @@ function BillView({
         </div>
       )}
 
-      <article className="rounded-xl border-2 border-ink p-4">
-        <header className="mb-3 border-b-2 border-ink pb-3 text-center">
+      <article className="rounded-xl border-2 border-line p-4">
+        <header className="mb-3 border-b-2 border-line pb-3 text-center">
           <p className="text-xs font-bold tracking-wide">{t('admin.bill.taxInvoice')}</p>
           <h2 className="font-display text-xl font-bold">{company.companyName}</h2>
           {company.tagline && <p className="text-sm text-mute">{company.tagline}</p>}
@@ -143,7 +143,7 @@ function BillView({
           </div>
         </div>
 
-        <ol className="mb-3 divide-y-2 divide-hair border-y-2 border-ink">
+        <ol className="mb-3 divide-y-2 divide-hair border-y-2 border-line">
           {invoice.lines.map((l) => {
             const names = displayNames(l.nameEn, l.nameTa, language)
             const gstAmount = l.cgst + l.sgst + l.igst
@@ -184,11 +184,11 @@ function BillView({
               value={`${invoice.roundOff > 0 ? '+' : '−'}${money(Math.abs(invoice.roundOff))}`}
             />
           )}
-          <div className="border-t-2 border-ink pt-1">
+          <div className="border-t-2 border-line pt-1">
             <Row label={t('admin.bill.grandTotal')} value={money(invoice.grandTotal)} strong />
           </div>
           <Row label={t('admin.bill.previousBalance')} value={money(invoice.previousBalance)} />
-          <div className="border-t-2 border-ink pt-1 text-lg">
+          <div className="border-t-2 border-line pt-1 text-lg">
             <Row label={t('admin.bill.totalDue')} value={money(invoice.totalDue)} strong />
           </div>
         </div>

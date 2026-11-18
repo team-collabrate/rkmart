@@ -14,8 +14,8 @@
 @import '@fontsource/bricolage-grotesque/latin-700.css';
 
 /*
- * Design tokens taken from the approved black-and-white print sheets.
- * Roles are told apart by shape, border style and label, never by colour alone.
+ * Design tokens. Text stays black on white; green is the brand colour.
+ * Roles and statuses are still told apart by shape, border style and label, never by colour alone.
  */
 @theme {
   --font-sans: 'Inter', 'Noto Sans Tamil', 'Nirmala UI', system-ui, sans-serif;
@@ -27,17 +27,37 @@
   --color-hair: #c8c8c8;
   --color-pale: #efefef;
   --color-paper: #ffffff;
+
+  /* Brand green, the soft tints used on item cards, and the colour around the phone-width page. */
+  --color-brand: #15803d;
+  --color-brand-dark: #166534;
+  --color-brand-soft: #dcfce7;
+  --color-line: #d5ddd5;
+  --color-page: #eef1ee;
+  --color-tint-green: #d9f5d3;
+  --color-tint-yellow: #fdf0c4;
+  --color-tint-peach: #fde0d0;
+  --color-tint-pink: #fbd8dc;
+  --color-tint-blue: #d8e8fb;
+  --color-tint-lilac: #e8e0f7;
 }
 
 @layer base {
   html,
-  body,
-  #root {
+  body {
     height: 100%;
+  }
+  /* The app is built for phones. On a bigger screen it stays one phone-width column in the middle. */
+  #root {
+    min-height: 100%;
+    max-width: 30rem;
+    margin: 0 auto;
+    background: var(--color-paper);
+    box-shadow: 0 0 0 1px var(--color-line);
   }
   body {
     margin: 0;
-    background: var(--color-paper);
+    background: var(--color-page);
     color: var(--color-ink);
     font-family: var(--font-sans);
     line-height: 1.5; /* Tamil needs more line height than Latin */

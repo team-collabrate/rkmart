@@ -9,7 +9,7 @@ export function OfflineBanner() {
   return (
     <div
       role="status"
-      className="flex items-center gap-2 border-b-2 border-ink bg-pale px-4 py-2 text-sm font-medium"
+      className="flex items-center gap-2 border-b-2 border-line bg-pale px-4 py-2 text-sm font-medium"
     >
       <WifiOff size={18} aria-hidden="true" />
       {t('shell.offline')}

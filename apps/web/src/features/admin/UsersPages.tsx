@@ -45,7 +45,7 @@ export function UsersList() {
       ) : users.data.length === 0 ? (
         <Empty>{t('admin.users.empty')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
           {users.data.map((u) => (
             <li key={u.id}>
               <Link
@@ -252,7 +252,7 @@ function UserDetailBody({ userId }: { userId: string }) {
       <form
         onSubmit={onReset}
         noValidate
-        className="mb-8 flex flex-col gap-4 rounded-xl border-2 border-ink p-4"
+        className="mb-8 flex flex-col gap-4 rounded-xl border-2 border-line p-4"
       >
         <h2 className="text-lg">{t('admin.users.resetTitle')}</h2>
         <TextField

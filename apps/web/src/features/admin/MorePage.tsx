@@ -17,7 +17,7 @@ export function MorePage() {
   return (
     <section>
       <PageHeader title={t('admin.more.title')} />
-      <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+      <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
         {ITEMS.map(({ to, key, icon: Icon }) => (
           <li key={to}>
             <Link to={to} className="flex items-center gap-3 px-3 py-4 no-underline">

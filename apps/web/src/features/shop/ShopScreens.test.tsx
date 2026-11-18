@@ -138,7 +138,7 @@ describe('placing an order', () => {
     await userEvent.clear(sugar)
     await userEvent.type(sugar, '10')
 
-    await userEvent.click(screen.getByRole('link', { name: 'Review order' }))
+    await userEvent.click(screen.getByRole('link', { name: /Review order/ }))
     expect(await screen.findByRole('heading', { name: 'Review your order' })).toBeInTheDocument()
     expect(screen.getByText('₹3,160.00', { selector: 'span' })).toBeInTheDocument()
 
@@ -161,7 +161,7 @@ describe('placing an order', () => {
         name: 'Add',
       }),
     )
-    await userEvent.click(screen.getByRole('link', { name: 'Review order' }))
+    await userEvent.click(screen.getByRole('link', { name: /Review order/ }))
     await userEvent.click(await screen.findByRole('button', { name: 'Place order' }))
     await screen.findByText(/Your order is placed/)
 
@@ -178,7 +178,7 @@ describe('placing an order', () => {
         name: 'Add',
       }),
     )
-    await userEvent.click(screen.getByRole('link', { name: 'Review order' }))
+    await userEvent.click(screen.getByRole('link', { name: /Review order/ }))
     await screen.findByRole('button', { name: 'Place order' })
 
     delete state.rates[today].p7 // RK removed the rate in the meantime

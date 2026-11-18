@@ -59,7 +59,7 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
 
   return (
     <section
-      className="mt-6 max-w-2xl rounded-xl border-2 border-ink p-4"
+      className="mt-6 max-w-2xl rounded-xl border-2 border-line p-4"
       aria-labelledby="alerts-title"
     >
       <h2 id="alerts-title" className="text-lg">

@@ -1,4 +1,4 @@
-/* Shared building blocks. Black and white, big touch targets (44px and up), 16px text in inputs
+/* Shared building blocks. Green and white, big touch targets (44px and up), 16px text in inputs
    so phones do not zoom in when a field is focused. */
 
 @layer components {
@@ -9,9 +9,9 @@
     gap: 0.5rem;
     min-height: 2.75rem;
     padding: 0.5rem 1.25rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 0.75rem;
-    background: var(--color-ink);
+    border: 2px solid var(--color-brand);
+    border-radius: 0.875rem;
+    background: var(--color-brand);
     color: var(--color-paper);
     font-weight: 600;
     cursor: pointer;
@@ -22,19 +22,23 @@
   }
   .btn-outline {
     background: var(--color-paper);
-    color: var(--color-ink);
+    color: var(--color-brand-dark);
   }
   .field {
     width: 100%;
     min-height: 2.75rem;
     padding: 0.5rem 0.75rem;
-    border: 2px solid var(--color-ink);
-    border-radius: 0.75rem;
+    border: 2px solid var(--color-line);
+    border-radius: 0.875rem;
     background: var(--color-paper);
     font-size: 1rem;
   }
+  .field:focus {
+    border-color: var(--color-brand);
+  }
   .field[aria-invalid='true'] {
     border-style: dashed;
+    border-color: var(--color-ink);
   }
 }
 
@@ -43,7 +47,7 @@
     color: inherit;
   }
   :focus-visible {
-    outline: 3px solid var(--color-ink);
+    outline: 3px solid var(--color-brand);
     outline-offset: 2px;
   }
 }

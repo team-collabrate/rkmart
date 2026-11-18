@@ -86,7 +86,7 @@ export function ReviewPage() {
       )}
 
       {available.length > 0 && (
-        <ul className="mb-4 divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="mb-4 divide-y-2 divide-hair rounded-xl border-2 border-line">
           {available.map((id) => {
             const item = byId.get(id)!
             const names = displayNames(item.nameEn, item.nameTa, language)
@@ -150,7 +150,7 @@ export function ReviewPage() {
         </Field>
       </div>
 
-      <div className="mb-4 flex items-baseline justify-between border-t-2 border-ink pt-3">
+      <div className="mb-4 flex items-baseline justify-between border-t-2 border-line pt-3">
         <span className="font-semibold">{t('shop.review.total')}</span>
         <span className="font-display text-2xl font-bold">
           ₹{formatINR(cartTotal(lines, rates))}

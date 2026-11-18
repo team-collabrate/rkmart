@@ -5,9 +5,9 @@ import type { OrderStatus } from '../../data/shopApi'
 // and always carries a text label.
 const STYLE: Record<OrderStatus, string> = {
   placed: 'border-dashed border-ink bg-paper text-ink',
-  billed: 'border-double border-4 border-ink bg-paper text-ink',
-  delivered: 'border-solid border-ink bg-ink text-paper',
-  cancelled: 'border-solid border-ink bg-paper text-mute line-through',
+  billed: 'border-double border-4 border-line bg-paper text-ink',
+  delivered: 'border-solid border-line bg-brand text-paper',
+  cancelled: 'border-solid border-line bg-paper text-mute line-through',
 }
 
 export function OrderStatusPill({ status }: { status: OrderStatus }) {

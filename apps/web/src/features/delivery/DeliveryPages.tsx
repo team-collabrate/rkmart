@@ -25,7 +25,7 @@ function DeliveryCard({ item, language }: { item: DeliveryItem; language: Langua
   const { t } = useTranslation()
   const names = displayNames(item.shopNameEn, item.shopNameTa, language)
   return (
-    <li className="rounded-xl border-2 border-ink p-3">
+    <li className="rounded-xl border-2 border-line p-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-lg font-semibold">{names.primary}</p>
@@ -100,7 +100,7 @@ export function DeliveriesPage() {
               <h2 className="mb-2 mt-6 text-lg">
                 {t('delivery.done', { count: doneToday.length })}
               </h2>
-              <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+              <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
                 {doneToday.map((d) => (
                   <li key={d.orderId} className="flex items-center justify-between gap-3 px-3 py-3">
                     <div className="min-w-0">
@@ -147,7 +147,7 @@ export function DeliveryHistoryPage() {
         days.map((day) => (
           <div key={day} className="mb-5">
             <h2 className="mb-2 text-lg">{formatDay(day, language)}</h2>
-            <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+            <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
               {delivered
                 .filter((d) => d.orderDate === day)
                 .map((d) => (

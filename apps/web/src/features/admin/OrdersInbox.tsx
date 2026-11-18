@@ -90,8 +90,8 @@ export function OrdersInbox() {
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
             className={
-              'min-h-11 rounded-full border-2 border-ink px-3 font-semibold ' +
-              (filter === f ? 'bg-ink text-paper' : 'bg-paper text-ink')
+              'min-h-11 rounded-full border-2 border-line px-3 font-semibold ' +
+              (filter === f ? 'bg-brand text-paper' : 'bg-paper text-ink')
             }
           >
             {t(`admin.orders.${FILTER_KEY[f]}`)} ({count(f)})
@@ -141,7 +141,7 @@ export function OrdersInbox() {
       ) : shown.length === 0 ? (
         <Empty>{all.length === 0 ? t('admin.orders.empty') : t('admin.orders.emptyFilter')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
           {shown.map((o) => (
             <OrderRow key={o.id} order={o} language={language} />
           ))}

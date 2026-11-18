@@ -151,7 +151,7 @@ function RatesEditor({
                 <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-mute">
                   {category}
                 </h2>
-                <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+                <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
                   {items.map((item) => {
                     const names = displayNames(item.nameEn, item.nameTa, language)
                     const parsed = parseRate(currentDraft[item.id] ?? '')
@@ -205,7 +205,7 @@ function RatesEditor({
             ))}
           </div>
 
-          <div className="sticky bottom-16 mt-6 flex justify-end border-t-2 border-ink bg-paper py-3 md:bottom-0">
+          <div className="sticky bottom-16 mt-6 flex justify-end border-t-2 border-line bg-paper py-3 md:bottom-0">
             <button type="button" className="btn" onClick={onSave} disabled={save.isPending}>
               <Save size={18} aria-hidden="true" />
               {save.isPending ? t('admin.common.saving') : t('admin.rates.save')}

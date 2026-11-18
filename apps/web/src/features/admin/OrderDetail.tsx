@@ -121,7 +121,7 @@ function OrderEditor({
         {t('admin.orders.placedAt', { time: formatTime(order.createdAt, language) })}
       </p>
 
-      <div className="mb-4 rounded-xl border-2 border-ink p-3">
+      <div className="mb-4 rounded-xl border-2 border-line p-3">
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
           <dt className="font-semibold">{t('admin.orders.owner')}</dt>
           <dd>{order.shop.ownerName}</dd>
@@ -142,7 +142,7 @@ function OrderEditor({
       )}
 
       <h2 className="mb-2 text-lg">{t('admin.orders.lines')}</h2>
-      <ul className="mb-3 divide-y-2 divide-hair rounded-xl border-2 border-ink">
+      <ul className="mb-3 divide-y-2 divide-hair rounded-xl border-2 border-line">
         {edited.map(({ line, value, gone }) => {
           const names = displayNames(line.nameEn, line.nameTa, language)
           const bad = !gone && value === null
@@ -235,7 +235,7 @@ function OrderEditor({
         })}
       </ul>
 
-      <div className="mb-1 flex items-baseline justify-between border-t-2 border-ink pt-3">
+      <div className="mb-1 flex items-baseline justify-between border-t-2 border-line pt-3">
         <span className="font-semibold">{t('admin.orders.subtotal')}</span>
         <span className="font-display text-2xl font-bold">₹{formatINR(subtotal)}</span>
       </div>

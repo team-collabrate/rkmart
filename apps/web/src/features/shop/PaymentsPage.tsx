@@ -20,7 +20,7 @@ export function ShopPaymentsPage() {
     <section className="max-w-2xl">
       <PageHeader title={t('shop.payments.title')} />
 
-      <div className="mb-4 rounded-xl border-2 border-ink p-4">
+      <div className="mb-4 rounded-xl border-2 border-line p-4">
         {s.balance > 0 ? (
           <>
             <p className="font-display text-3xl font-bold">
@@ -48,7 +48,7 @@ export function ShopPaymentsPage() {
       {s.entries.length === 0 ? (
         <Empty>{t('shop.payments.empty')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
           {s.entries.map((e) => (
             <li
               key={`${e.kind}-${e.id}`}

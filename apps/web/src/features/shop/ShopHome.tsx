@@ -50,7 +50,7 @@ export function ShopHome() {
         </Link>
       )}
 
-      <div className="mt-4 rounded-xl border-2 border-ink p-4">
+      <div className="mt-4 rounded-xl border-2 border-line p-4">
         <p className="font-semibold">
           {ready > 0 ? t('shop.home.ratesReady', { count: ready }) : t('shop.home.ratesMissing')}
         </p>
@@ -63,7 +63,7 @@ export function ShopHome() {
       </div>
 
       {last && (
-        <div className="mt-4 rounded-xl border-2 border-ink p-4">
+        <div className="mt-4 rounded-xl border-2 border-line p-4">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-lg">{t('shop.home.lastOrder')}</h2>
             <OrderStatusPill status={last.status} />
@@ -90,7 +90,7 @@ export function ShopHome() {
         </p>
       ) : (
         <>
-          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
             {recent.map((o) => (
               <li key={o.id}>
                 <Link

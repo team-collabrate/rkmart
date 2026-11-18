@@ -27,7 +27,7 @@ export function OrdersList() {
       ) : orders.data.length === 0 ? (
         <Empty>{t('shop.orders.empty')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-ink">
+        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
           {orders.data.map((o) => (
             <li key={o.id}>
               <Link
@@ -77,7 +77,7 @@ export function OrderDetailPage() {
         </div>
       )}
 
-      <ul className="mb-4 divide-y-2 divide-hair rounded-xl border-2 border-ink">
+      <ul className="mb-4 divide-y-2 divide-hair rounded-xl border-2 border-line">
         {o.lines.map((line) => {
           const names = displayNames(line.nameEn, line.nameTa, language)
           return (
@@ -98,7 +98,7 @@ export function OrderDetailPage() {
         })}
       </ul>
 
-      <div className="mb-4 flex items-baseline justify-between border-t-2 border-ink pt-3">
+      <div className="mb-4 flex items-baseline justify-between border-t-2 border-line pt-3">
         <span className="font-semibold">{t('shop.orders.total')}</span>
         <span className="font-display text-2xl font-bold">₹{formatINR(o.total)}</span>
       </div>
