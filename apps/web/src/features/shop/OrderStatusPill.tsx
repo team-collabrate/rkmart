@@ -9,7 +9,20 @@ const STYLE: Record<OrderStatus, { pill: string; dot: string }> = {
   cancelled: { pill: 'bg-red-soft text-red line-through', dot: 'bg-red' },
 }
 
-export function OrderStatusPill({ status }: { status: OrderStatus }) {
+// The admin calls a fresh order "New"; the shop sees "Placed".
+const ADMIN_LABEL = {
+  placed: 'filterPlaced',
+  billed: 'filterBilled',
+  delivered: 'filterDelivered',
+} as const
+
+export function OrderStatusPill({
+  status,
+  admin = false,
+}: {
+  status: OrderStatus
+  admin?: boolean
+}) {
   const { t } = useTranslation()
   const style = STYLE[status]
   return (
@@ -17,7 +30,9 @@ export function OrderStatusPill({ status }: { status: OrderStatus }) {
       className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${style.pill}`}
     >
       <span className={`size-1.5 rounded-full ${style.dot}`} aria-hidden="true" />
-      {t(`shop.status.${status}`)}
+      {admin && status !== 'cancelled'
+        ? t(`admin.orders.${ADMIN_LABEL[status]}`)
+        : t(`shop.status.${status}`)}
     </span>
   )
 }
