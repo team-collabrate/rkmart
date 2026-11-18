@@ -11,6 +11,7 @@
 | `stage-6-day-pdf.md`                              | Stage 6: the day's bills as one PDF, saved versions, printing and sharing      |
 | `stage-7-delivery-payments.md`                    | Stage 7: delivery, payments, balances and statements                           |
 | `stage-8-notifications.md`                        | Stage 8: alerts for orders, deliveries and payments, and how to switch them on |
+| `redesign-handoff.md`                             | Redesign: process, design system, what is done and what is left                |
 | `approved-sheets/RK-Grocery-Workflow-English.pdf` | Client-approved workflow, app screens and bill sheets (English, B&W)           |
 | `approved-sheets/RK-Grocery-Workflow-Tamil.pdf`   | The same sheets in simple everyday Tamil                                       |
 
