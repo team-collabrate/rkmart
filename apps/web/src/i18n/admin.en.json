@@ -36,7 +36,11 @@
     "saved_other": "Saved {{count}} rates.",
     "nothingToSave": "Nothing has changed.",
     "invalid": "Some rates are not valid. Use numbers like 1350 or 46.50.",
-    "noItems": "There are no active items yet. Add items first."
+    "noItems": "There are no active items yet. Add items first.",
+    "missingShort": "{{count}} need a rate",
+    "pricedOf": "{{done}} of {{total}} priced",
+    "allSet": "All items priced",
+    "saveShort": "Save"
   },
   "items": {
     "title": "Items",

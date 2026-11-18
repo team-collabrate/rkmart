@@ -53,7 +53,7 @@ function renderAt(path: string, profile: Profile | null) {
             }
           >
             <Route path="orders" element={<p>ADMIN ORDERS</p>} />
-            <Route path="rates" element={<p>ADMIN RATES</p>} />
+            <Route path="more" element={<p>ADMIN MORE</p>} />
           </Route>
           <Route path="/delivery" element={<p>DELIVERY HOME</p>} />
         </Routes>
@@ -99,8 +99,8 @@ describe('app shell', () => {
   })
 
   it('shows the admin five tabs and switches them to Tamil', async () => {
-    // Not Orders: that screen has its own header with the language switch.
-    renderAt('/admin/rates', user('admin'))
+    // Not Orders, Rates, Bills or Balances: those screens have their own headers.
+    renderAt('/admin/more', user('admin'))
     const nav = await screen.findByRole('navigation', { name: 'Main' })
     expect(within(nav).getAllByRole('link')).toHaveLength(5)
 
