@@ -1,6 +1,7 @@
 import { ApiError, type AdminApi } from './adminApi'
 import type { AdminOrderSummary, DayPdf } from './adminOrders'
 import { cancelInvoice, issueInvoice } from './mockBilling'
+import { createMockOrder } from './mockOrders'
 import { balances, recordPayment, statementFor, voidPayment } from './mockPayments'
 import { createMockState, notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
 import { roundPaise } from '../lib/money'
@@ -193,6 +194,11 @@ export function createMockAdminApi(
         }),
         invoice: invoice ? structuredClone(invoice) : null,
       }
+    },
+
+    async placeOrderForShop(shopId, lines, note) {
+      await wait()
+      return { orderId: createMockOrder(state, shopId, lines, note) }
     },
 
     async adjustOrder(orderId, lines) {

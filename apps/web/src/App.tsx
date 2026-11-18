@@ -12,6 +12,7 @@ import { BillsPage } from './features/admin/BillsPage'
 import { ItemForm, ItemsList } from './features/admin/ItemsPages'
 import { MorePage } from './features/admin/MorePage'
 import { OrderDetailPage as AdminOrderDetailPage } from './features/admin/OrderDetail'
+import { NewOrderPage } from './features/admin/NewOrderPage'
 import { OrdersInbox } from './features/admin/OrdersInbox'
 import { RatesPage } from './features/admin/RatesPage'
 import { SettingsPage } from './features/admin/SettingsPage'
@@ -69,6 +70,7 @@ export default function App() {
         >
           <Route index element={<Navigate to="orders" replace />} />
           <Route path="orders" element={<OrdersInbox />} />
+          <Route path="orders/new" element={<NewOrderPage />} />
           <Route path="orders/:id" element={<AdminOrderDetailPage />} />
           <Route path="orders/:id/bill" element={<BillPage />} />
           <Route path="rates" element={<RatesPage />} />

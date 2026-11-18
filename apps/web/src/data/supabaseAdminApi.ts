@@ -305,6 +305,10 @@ export function billingError(error: { message?: string; code?: string }): ApiErr
     'has_payments',
     'reason_required',
     'not_allowed',
+    'shop_inactive',
+    'empty_order',
+    'inactive_item',
+    'no_rate',
     'not_billed',
     'bad_amount',
     'bad_date',
@@ -503,6 +507,16 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
       if (error) fail(error)
       if (!data) throw new ApiError('not_found')
       return toOrderDetail(data as unknown as OrderDetailRow)
+    },
+
+    async placeOrderForShop(shopId, lines, note) {
+      const { data, error } = await client.rpc('admin_place_order', {
+        p_shop: shopId,
+        p_items: lines.map((l) => ({ product_id: l.productId, qty: l.qty })),
+        p_note: note,
+      })
+      if (error) throw billingError(error)
+      return { orderId: String(data) }
     },
 
     async adjustOrder(orderId, lines) {

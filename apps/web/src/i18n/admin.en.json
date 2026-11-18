@@ -312,5 +312,15 @@
     "statementFor": "Statement",
     "toCollect": "To collect",
     "recordShort": "Payment"
+  },
+  "newOrder": {
+    "title": "New order",
+    "shop": "Shop",
+    "items": "Items",
+    "note": "Note (optional)",
+    "place": "Place order",
+    "placeShort": "Place order",
+    "noRate": "{{count}} items have no rate today",
+    "noRates": "Set today's rates first, then you can place orders."
   }
 }

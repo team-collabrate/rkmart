@@ -70,6 +70,8 @@ export interface AdminApi {
   /** Orders of one day, newest first. */
   listOrders(date: string): Promise<AdminOrderSummary[]>
   getOrderDetail(id: string): Promise<AdminOrderDetail>
+  /** The admin orders for a shop (a shop that phoned or visited). Same checks as a shop's own order. */
+  placeOrderForShop(shopId: string, lines: CartLine[], note: string): Promise<{ orderId: string }>
   /** Fix quantities after packing (placed orders only). Lines left out are removed. */
   adjustOrder(orderId: string, lines: CartLine[]): Promise<void>
   /** Makes the GST bill for a placed order. */

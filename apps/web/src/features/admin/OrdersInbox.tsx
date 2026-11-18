@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { ChevronRight, Clock, FilePlus2 } from 'lucide-react'
+import { ChevronRight, Clock, FilePlus2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
@@ -100,7 +100,16 @@ export function OrdersInbox() {
     <section className="-mx-4 -mb-28 -mt-2 min-h-[calc(100dvh-4rem)] bg-page pb-28">
       <div className="rounded-b-[2rem] bg-paper px-5 pb-4 pt-5">
         <TopBar />
-        <h1 className="mb-4 h-10 truncate text-[2rem] leading-10">{t('admin.orders.title')}</h1>
+        <div className="mb-4 flex h-10 items-center justify-between gap-3">
+          <h1 className="min-w-0 truncate text-[2rem] leading-10">{t('admin.orders.title')}</h1>
+          <Link
+            to="/admin/orders/new"
+            aria-label={t('admin.newOrder.title')}
+            className="grid size-10 shrink-0 place-items-center rounded-full bg-brand text-paper no-underline"
+          >
+            <Plus size={22} aria-hidden="true" />
+          </Link>
+        </div>
         <DayNav date={date} onChange={go} />
       </div>
 
