@@ -21,19 +21,29 @@
   --font-sans: 'Inter', 'Noto Sans Tamil', 'Nirmala UI', system-ui, sans-serif;
   --font-display: 'Bricolage Grotesque', 'Noto Sans Tamil', 'Nirmala UI', system-ui, sans-serif;
 
-  --color-ink: #000000;
-  --color-mute: #4a4a4a;
-  --color-rail: #6e6e6e;
-  --color-hair: #c8c8c8;
-  --color-pale: #efefef;
+  --color-ink: #0f1a14;
+  --color-mute: #5b6b61;
+  --color-rail: #7a8a80;
+  --color-hair: #e4eae5;
+  --color-pale: #eef3ef;
   --color-paper: #ffffff;
 
-  /* Brand green, the soft tints used on item cards, and the colour around the phone-width page. */
-  --color-brand: #15803d;
+  /* Brand green and the calm surfaces around it. */
+  --color-brand: #16a34a;
   --color-brand-dark: #166534;
-  --color-brand-soft: #dcfce7;
-  --color-line: #d5ddd5;
-  --color-page: #eef1ee;
+  --color-brand-soft: #e8f7ec;
+  --color-line: #e4eae5;
+  --color-page: #f6f8f6;
+
+  /* Status colours, each with a soft tint. Always printed with a word, never colour alone. */
+  --color-amber: #b45309;
+  --color-amber-soft: #fef3c7;
+  --color-blue: #1d4ed8;
+  --color-blue-soft: #dbeafe;
+  --color-red: #b91c1c;
+  --color-red-soft: #fee2e2;
+
+  /* Soft tints for item cards, one per category. */
   --color-tint-green: #d9f5d3;
   --color-tint-yellow: #fdf0c4;
   --color-tint-peach: #fde0d0;

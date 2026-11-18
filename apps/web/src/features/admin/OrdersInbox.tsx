@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { FilePlus2 } from 'lucide-react'
+import { ChevronRight, FilePlus2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { Avatar } from '../../components/Avatar'
 import { Banner, Empty, Loading, PageHeader } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
 import type { AdminOrderSummary } from '../../data/adminOrders'
@@ -82,7 +83,11 @@ export function OrdersInbox() {
 
       <DayNav date={date} onChange={go} />
 
-      <div role="group" aria-label={t('admin.orders.title')} className="mb-3 flex flex-wrap gap-2">
+      <div
+        role="group"
+        aria-label={t('admin.orders.title')}
+        className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {FILTERS.map((f) => (
           <button
             key={f}
@@ -90,8 +95,8 @@ export function OrdersInbox() {
             aria-pressed={filter === f}
             onClick={() => setFilter(f)}
             className={
-              'min-h-11 rounded-full border-2 border-line px-3 font-semibold ' +
-              (filter === f ? 'bg-brand text-paper' : 'bg-paper text-ink')
+              'min-h-10 shrink-0 rounded-full border px-4 text-sm font-semibold ' +
+              (filter === f ? 'border-brand bg-brand text-paper' : 'border-line bg-paper text-ink')
             }
           >
             {t(`admin.orders.${FILTER_KEY[f]}`)} ({count(f)})
@@ -108,18 +113,18 @@ export function OrdersInbox() {
       {newOnes.length > 0 && !asking && (
         <button
           type="button"
-          className="btn mb-3"
+          className="btn mb-4 w-full"
           onClick={() => setAsking(true)}
           disabled={working}
         >
-          <FilePlus2 size={18} aria-hidden="true" />
+          <FilePlus2 size={20} aria-hidden="true" />
           {working
             ? t('admin.orders.billAllWorking')
             : t('admin.orders.billAll', { count: newOnes.length })}
         </button>
       )}
       {asking && (
-        <div className="mb-3 rounded-xl border-2 border-dashed border-ink p-3">
+        <div className="mb-4 rounded-3xl border border-brand bg-brand-soft p-4">
           <p className="mb-3 font-medium">
             {t('admin.orders.billAllAsk', { count: newOnes.length })}
           </p>
@@ -141,13 +146,13 @@ export function OrdersInbox() {
       ) : shown.length === 0 ? (
         <Empty>{all.length === 0 ? t('admin.orders.empty') : t('admin.orders.emptyFilter')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+        <ul className="flex flex-col gap-3">
           {shown.map((o) => (
             <OrderRow key={o.id} order={o} language={language} />
           ))}
         </ul>
       )}
-      <p className="mt-3 text-sm text-mute">{t('admin.orders.refreshed')}</p>
+      <p className="mt-4 text-center text-sm text-mute">{t('admin.orders.refreshed')}</p>
     </section>
   )
 }
@@ -157,16 +162,32 @@ function OrderRow({ order: o, language }: { order: AdminOrderSummary; language: 
   const names = displayNames(o.shopNameEn, o.shopNameTa, language)
   return (
     <li>
-      <Link to={`/admin/orders/${o.id}`} className="flex items-center gap-3 px-3 py-3 no-underline">
-        <div className="min-w-0 flex-1">
-          <p className="font-semibold">{names.primary}</p>
-          <p className="text-sm text-mute">
-            {formatTime(o.createdAt, language)} · {t('admin.orders.items', { count: o.itemCount })}{' '}
-            · ₹{formatINR(o.total)}
-          </p>
-          {o.invoiceNo && <p className="text-sm font-semibold">{o.invoiceNo}</p>}
+      <Link
+        to={`/admin/orders/${o.id}`}
+        className="block rounded-3xl border border-line bg-paper p-4 no-underline shadow-[0_1px_2px_rgba(15,26,20,0.04)]"
+      >
+        <div className="flex items-center gap-3">
+          <Avatar name={o.shopNameEn} />
+          <div className="min-w-0 flex-1">
+            <p className="truncate font-semibold">{names.primary}</p>
+            {names.secondary && <p className="truncate text-sm text-mute">{names.secondary}</p>}
+          </div>
+          <OrderStatusPill status={o.status} />
         </div>
-        <OrderStatusPill status={o.status} />
+        <div className="mt-3 flex items-end justify-between gap-3">
+          <div>
+            <p className="text-xs text-mute">
+              {formatTime(o.createdAt, language)} ·{' '}
+              {t('admin.orders.items', { count: o.itemCount })}
+            </p>
+            <p className="font-display text-xl font-bold">₹{formatINR(o.total)}</p>
+            {o.invoiceNo && <p className="text-xs font-semibold text-brand-dark">{o.invoiceNo}</p>}
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-3.5 py-2 text-sm font-semibold text-brand-dark">
+            {t('admin.orders.open')}
+            <ChevronRight size={16} aria-hidden="true" />
+          </span>
+        </div>
       </Link>
     </li>
   )

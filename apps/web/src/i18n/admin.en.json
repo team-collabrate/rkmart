@@ -197,7 +197,8 @@
     "generating": "Generating…",
     "viewBill": "View bill",
     "billNo": "Bill {{no}}",
-    "notEditable": "Quantities can only be changed before the bill is made."
+    "notEditable": "Quantities can only be changed before the bill is made.",
+    "open": "Open"
   },
   "bill": {
     "title": "Bill",
@@ -300,6 +301,8 @@
     "removeConfirm": "Yes, remove it",
     "keep": "Keep it",
     "removed": "Payment removed.",
-    "statementFor": "Statement"
+    "statementFor": "Statement",
+    "toCollect": "Total to collect",
+    "owingClear": "{{owing}} shops owe · {{clear}} clear"
   }
 }

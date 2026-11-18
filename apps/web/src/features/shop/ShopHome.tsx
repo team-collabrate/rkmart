@@ -41,7 +41,7 @@ export function ShopHome() {
       {statement.data && statement.data.balance > 0 && (
         <Link
           to="/shop/payments"
-          className="mt-4 block rounded-xl border-2 border-dashed border-ink p-4 no-underline"
+          className="mt-4 block rounded-2xl border-2 border-dashed border-ink p-4 no-underline"
         >
           <p className="font-display text-xl font-bold">
             {t('shop.payments.homeCard', { amount: formatINR(statement.data.balance) })}
@@ -50,7 +50,7 @@ export function ShopHome() {
         </Link>
       )}
 
-      <div className="mt-4 rounded-xl border-2 border-line p-4">
+      <div className="mt-4 rounded-2xl border border-line p-4">
         <p className="font-semibold">
           {ready > 0 ? t('shop.home.ratesReady', { count: ready }) : t('shop.home.ratesMissing')}
         </p>
@@ -63,7 +63,7 @@ export function ShopHome() {
       </div>
 
       {last && (
-        <div className="mt-4 rounded-xl border-2 border-line p-4">
+        <div className="mt-4 rounded-2xl border border-line p-4">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-lg">{t('shop.home.lastOrder')}</h2>
             <OrderStatusPill status={last.status} />
@@ -85,12 +85,12 @@ export function ShopHome() {
 
       <h2 className="mb-2 mt-6 text-lg">{t('shop.home.recent')}</h2>
       {recent.length === 0 ? (
-        <p className="rounded-xl border-2 border-dashed border-ink px-4 py-6 text-mute">
+        <p className="rounded-2xl border-2 border-dashed border-ink px-4 py-6 text-mute">
           {t('shop.home.noOrders')}
         </p>
       ) : (
         <>
-          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+          <ul className="divide-y divide-line rounded-2xl border border-line">
             {recent.map((o) => (
               <li key={o.id}>
                 <Link

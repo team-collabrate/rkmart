@@ -3,6 +3,7 @@ import { ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
+import { Avatar } from '../../components/Avatar'
 import { Banner, Empty, Loading, PageHeader, SelectField, TextField } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
 import {
@@ -31,8 +32,11 @@ export function BalancesPage() {
     (list.data ?? []).reduce((sum, s) => sum + (s.balance > 0 ? s.balance : 0), 0),
   )
 
+  const owing = (list.data ?? []).filter((x) => x.balance > 0).length
+  const clear = (list.data ?? []).length - owing
+
   return (
-    <section className="max-w-2xl">
+    <section>
       <PageHeader title={t('admin.pay.title')} />
       {list.isPending ? (
         <Loading />
@@ -42,10 +46,15 @@ export function BalancesPage() {
         <Empty>{t('admin.pay.empty')}</Empty>
       ) : (
         <>
-          <p className="mb-3 font-display text-xl font-bold">
-            {t('admin.pay.totalOwed', { amount: formatINR(owed) })}
-          </p>
-          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+          <div className="mb-5 rounded-3xl bg-brand p-5 text-paper">
+            <p className="text-sm text-white/85">{t('admin.pay.toCollect')}</p>
+            <p className="font-display text-4xl font-bold">₹{formatINR(owed)}</p>
+            <p className="mt-1 text-sm text-white/85">
+              {t('admin.pay.owingClear', { owing, clear })}
+            </p>
+            <span className="sr-only">{t('admin.pay.totalOwed', { amount: formatINR(owed) })}</span>
+          </div>
+          <ul className="flex flex-col gap-2.5">
             {list.data.map((s) => (
               <BalanceRow key={s.shopId} balance={s} language={language} />
             ))}
@@ -58,24 +67,31 @@ export function BalancesPage() {
 
 function BalanceRow({ balance: s, language }: { balance: ShopBalance; language: Language }) {
   const { t } = useTranslation()
+  const names = displayNames(s.nameEn, s.nameTa, language)
   return (
     <li>
       <Link
         to={`/admin/balances/${s.shopId}`}
-        className="flex items-center gap-3 px-3 py-3 no-underline"
+        className="flex items-center gap-3 rounded-3xl border border-line bg-paper p-3.5 no-underline"
       >
+        <Avatar name={s.nameEn} tone={s.balance > 0 ? 'amber' : 'green'} />
         <div className="min-w-0 flex-1">
-          <p className="font-semibold">{displayNames(s.nameEn, s.nameTa, language).primary}</p>
-          <p className="text-sm text-mute">
+          <p className="truncate font-semibold">{names.primary}</p>
+          <p className="truncate text-sm text-mute">
             {s.lastPaymentOn
               ? t('admin.pay.lastPayment', { date: formatDay(s.lastPaymentOn, language) })
               : t('admin.pay.noPayment')}
           </p>
         </div>
-        <p className={'text-right font-bold ' + (s.balance > 0 ? '' : 'text-mute')}>
+        <p
+          className={
+            'text-right ' +
+            (s.balance > 0 ? 'font-display text-lg font-bold' : 'text-sm font-medium text-mute')
+          }
+        >
           {balanceText(t, s.balance)}
         </p>
-        <ChevronRight size={18} aria-hidden="true" />
+        <ChevronRight size={18} aria-hidden="true" className="text-mute" />
       </Link>
     </li>
   )
@@ -114,7 +130,7 @@ export function ShopStatementPage() {
         backTo="/admin/balances"
       />
 
-      <div className="mb-4 rounded-xl border-2 border-line p-4">
+      <div className="mb-4 rounded-2xl border border-line p-4">
         <p className="text-sm text-mute">{t('admin.pay.balanceNow')}</p>
         <p className="font-display text-3xl font-bold">{balanceText(t, s.balance)}</p>
         <p className="mt-1 text-sm text-mute">
@@ -142,7 +158,7 @@ export function ShopStatementPage() {
       {s.entries.length === 0 ? (
         <Empty>{t('admin.pay.noEntries')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+        <ul className="divide-y divide-line rounded-2xl border border-line">
           {s.entries.map((e) => (
             <EntryRow
               key={`${e.kind}-${e.id}`}
@@ -214,7 +230,7 @@ function RecordPaymentForm({
 
   return (
     <form
-      className="space-y-3 rounded-xl border-2 border-line p-3"
+      className="space-y-3 rounded-2xl border border-line p-3"
       noValidate
       onSubmit={(e) => {
         e.preventDefault()
@@ -342,7 +358,7 @@ function EntryRow({
         </button>
       )}
       {isPayment && asking && (
-        <div className="mt-2 rounded-xl border-2 border-dashed border-ink p-3">
+        <div className="mt-2 rounded-2xl border-2 border-dashed border-ink p-3">
           <p className="mb-3 font-medium">
             {t('admin.pay.removeAsk', { amount: formatINR(e.amount) })}
           </p>

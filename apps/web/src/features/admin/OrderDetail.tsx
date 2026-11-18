@@ -121,7 +121,7 @@ function OrderEditor({
         {t('admin.orders.placedAt', { time: formatTime(order.createdAt, language) })}
       </p>
 
-      <div className="mb-4 rounded-xl border-2 border-line p-3">
+      <div className="mb-4 rounded-2xl border border-line p-3">
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
           <dt className="font-semibold">{t('admin.orders.owner')}</dt>
           <dd>{order.shop.ownerName}</dd>
@@ -135,14 +135,14 @@ function OrderEditor({
       </div>
 
       {order.note && (
-        <p className="mb-4 rounded-xl border-2 border-dashed border-ink px-3 py-2">
+        <p className="mb-4 rounded-2xl border-2 border-dashed border-ink px-3 py-2">
           <span className="font-semibold">{t('admin.orders.note')}: </span>
           {order.note}
         </p>
       )}
 
       <h2 className="mb-2 text-lg">{t('admin.orders.lines')}</h2>
-      <ul className="mb-3 divide-y-2 divide-hair rounded-xl border-2 border-line">
+      <ul className="mb-3 divide-y divide-line rounded-2xl border border-line">
         {edited.map(({ line, value, gone }) => {
           const names = displayNames(line.nameEn, line.nameTa, language)
           const bad = !gone && value === null

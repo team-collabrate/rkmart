@@ -69,7 +69,7 @@ export function ItemsList() {
       ) : shown.length === 0 ? (
         <Empty>{t('admin.common.noResults')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+        <ul className="divide-y divide-line rounded-2xl border border-line">
           {shown.map((p) => {
             const names = displayNames(p.nameEn, p.nameTa, language)
             const details = [

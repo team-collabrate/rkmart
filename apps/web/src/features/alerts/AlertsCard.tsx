@@ -59,7 +59,7 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
 
   return (
     <section
-      className="mt-6 max-w-2xl rounded-xl border-2 border-line p-4"
+      className="mt-6 max-w-2xl rounded-2xl border border-line p-4"
       aria-labelledby="alerts-title"
     >
       <h2 id="alerts-title" className="text-lg">
@@ -88,7 +88,7 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
           {busy ? t('alerts.working') : t('alerts.turnOn')}
         </button>
       ) : state ? (
-        <p className="mt-3 rounded-xl border-2 border-dashed border-ink px-3 py-2 font-medium">
+        <p className="mt-3 rounded-2xl border-2 border-dashed border-ink px-3 py-2 font-medium">
           {t(`alerts.${state}`)}
         </p>
       ) : null}

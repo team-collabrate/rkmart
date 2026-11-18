@@ -116,7 +116,7 @@ export function LoginPage() {
 
         <div id="form-error" role="alert" aria-live="polite" className="min-h-6">
           {error && (
-            <p className="rounded-xl border-2 border-dashed border-ink px-3 py-2 font-medium">
+            <p className="rounded-2xl border-2 border-dashed border-ink px-3 py-2 font-medium">
               {t(`login.errors.${error}`)}
             </p>
           )}
@@ -129,7 +129,7 @@ export function LoginPage() {
 
       {/* Written inline so a real release drops the demo hint completely. */}
       {(import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') && isDemoMode() && (
-        <aside className="mt-8 rounded-xl border-2 border-dashed border-ink p-3 text-sm">
+        <aside className="mt-8 rounded-2xl border-2 border-dashed border-ink p-3 text-sm">
           <p className="font-bold">{t('login.demoTitle')}</p>
           <p className="mt-1">{t('login.demoBody', { password: DEMO_PASSWORD })}</p>
           <p className="mt-1 text-mute">{t('login.demoAccounts')}</p>

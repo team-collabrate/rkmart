@@ -106,7 +106,7 @@ function BillView({
         </div>
       )}
 
-      <article className="rounded-xl border-2 border-line p-4">
+      <article className="rounded-2xl border border-line p-4">
         <header className="mb-3 border-b-2 border-line pb-3 text-center">
           <p className="text-xs font-bold tracking-wide">{t('admin.bill.taxInvoice')}</p>
           <h2 className="font-display text-xl font-bold">{company.companyName}</h2>
@@ -143,7 +143,7 @@ function BillView({
           </div>
         </div>
 
-        <ol className="mb-3 divide-y-2 divide-hair border-y-2 border-line">
+        <ol className="mb-3 divide-y divide-line border-y-2 border-line">
           {invoice.lines.map((l) => {
             const names = displayNames(l.nameEn, l.nameTa, language)
             const gstAmount = l.cgst + l.sgst + l.igst
@@ -209,7 +209,7 @@ function BillView({
         {delivered ? (
           <p className="text-sm text-mute">{t('admin.bill.deliveredLocked')}</p>
         ) : asking ? (
-          <div className="rounded-xl border-2 border-dashed border-ink p-3">
+          <div className="rounded-2xl border-2 border-dashed border-ink p-3">
             <p className="mb-3 font-medium">
               {t('admin.bill.cancelAsk', { no: invoice.invoiceNo })}
             </p>

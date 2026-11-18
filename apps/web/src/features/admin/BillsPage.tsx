@@ -181,7 +181,7 @@ export function BillsPage() {
           )}
 
           {made && (
-            <div className="mb-4 rounded-xl border-2 border-line p-3">
+            <div className="mb-4 rounded-2xl border border-line p-3">
               <p className="mb-3 font-semibold">
                 {t('admin.bills.made', { version: made.pdf.version, count: made.pdf.billCount })}
               </p>
@@ -210,7 +210,7 @@ export function BillsPage() {
           )}
 
           <h2 className="mb-2 text-lg">{t('admin.bills.billsHeading')}</h2>
-          <ul className="mb-5 divide-y-2 divide-hair rounded-xl border-2 border-line">
+          <ul className="mb-5 divide-y divide-line rounded-2xl border border-line">
             {all.map((i) => {
               const versions = versionOf(i.id)
               return (
@@ -244,7 +244,7 @@ export function BillsPage() {
       {saved.length > 0 && (
         <>
           <h2 className="mb-2 text-lg">{t('admin.bills.savedHeading')}</h2>
-          <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+          <ul className="divide-y divide-line rounded-2xl border border-line">
             {saved.map((p) => (
               <li
                 key={p.id}

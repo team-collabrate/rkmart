@@ -40,7 +40,7 @@ export function MarkDeliveredPanel({ orderId, onDone }: { orderId: string; onDon
   }
 
   return (
-    <div className="rounded-xl border-2 border-dashed border-ink p-3">
+    <div className="rounded-2xl border-2 border-dashed border-ink p-3">
       <label htmlFor={photoId} className="mb-1 block font-semibold">
         {t('delivery.photo')}
       </label>

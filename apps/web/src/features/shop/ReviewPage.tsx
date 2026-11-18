@@ -86,7 +86,7 @@ export function ReviewPage() {
       )}
 
       {available.length > 0 && (
-        <ul className="mb-4 divide-y-2 divide-hair rounded-xl border-2 border-line">
+        <ul className="mb-4 divide-y divide-line rounded-2xl border border-line">
           {available.map((id) => {
             const item = byId.get(id)!
             const names = displayNames(item.nameEn, item.nameTa, language)
@@ -112,7 +112,7 @@ export function ReviewPage() {
       )}
 
       {unavailable.length > 0 && (
-        <div className="mb-4 rounded-xl border-2 border-dashed border-ink p-3">
+        <div className="mb-4 rounded-2xl border-2 border-dashed border-ink p-3">
           <p className="font-semibold">{t('shop.review.unavailableTitle')}</p>
           <p className="text-sm text-mute">{t('shop.review.unavailableBody')}</p>
           <ul className="mt-2 flex flex-col gap-2">

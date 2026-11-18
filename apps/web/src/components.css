@@ -7,10 +7,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 2.75rem;
+    min-height: 3rem;
     padding: 0.5rem 1.25rem;
     border: 2px solid var(--color-brand);
-    border-radius: 0.875rem;
+    border-radius: 1rem;
     background: var(--color-brand);
     color: var(--color-paper);
     font-weight: 600;
@@ -22,14 +22,15 @@
   }
   .btn-outline {
     background: var(--color-paper);
+    border-color: var(--color-line);
     color: var(--color-brand-dark);
   }
   .field {
     width: 100%;
     min-height: 2.75rem;
     padding: 0.5rem 0.75rem;
-    border: 2px solid var(--color-line);
-    border-radius: 0.875rem;
+    border: 1.5px solid var(--color-line);
+    border-radius: 1rem;
     background: var(--color-paper);
     font-size: 1rem;
   }

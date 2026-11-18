@@ -34,8 +34,9 @@ const ICONS: Record<NavItem['icon'], LucideIcon> = {
 }
 
 /**
- * Frame around every signed-in screen: header, language switch, sign out, and the role's navigation.
- * Navigation sits at the bottom on a phone and on the left on a laptop.
+ * Frame around every signed-in screen: a slim top bar (who is signed in, language, sign out) and the
+ * role's navigation at the bottom. The active tab opens into a green pill with its name; the others
+ * show an icon, and still carry their name for screen readers.
  */
 export function AppShell() {
   const { t } = useTranslation()
@@ -45,47 +46,43 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-10 border-b border-line bg-paper pt-[env(safe-area-inset-top)]">
-          <div className="flex items-center justify-between gap-3 px-4 py-2">
-            <NavLink to={startPath(profile.role)} className="flex items-center gap-2 no-underline">
-              <img src="/logo.svg" alt="" width={32} height={32} className="rounded-lg" />
-              <span className="hidden whitespace-nowrap font-display text-lg font-bold min-[430px]:inline">
+      <header className="sticky top-0 z-10 bg-paper/95 pt-[env(safe-area-inset-top)] backdrop-blur">
+        <div className="flex items-center justify-between gap-3 px-4 py-2.5">
+          <NavLink
+            to={startPath(profile.role)}
+            className="flex min-w-0 flex-1 items-center gap-2.5 no-underline"
+          >
+            <img src="/logo.svg" alt="" width={36} height={36} className="rounded-2xl" />
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate font-display text-base font-bold">
                 {t('app.name')}
               </span>
-            </NavLink>
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:inline">
-                <RoleChip role={profile.role} />
-              </span>
-              <LanguageSwitch />
-              <button
-                type="button"
-                onClick={() => void signOut()}
-                className="flex min-h-9 items-center gap-1.5 rounded-full border-2 border-line px-3 text-sm font-semibold"
-                aria-label={t('shell.signOut')}
-              >
-                <LogOut size={16} aria-hidden="true" />
-                <span className="hidden md:inline">{t('shell.signOut')}</span>
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 border-t border-hair px-4 py-1 text-sm text-mute sm:hidden">
+              <span className="block truncate text-xs text-mute">{profile.fullName}</span>
+            </span>
+          </NavLink>
+          <div className="flex shrink-0 items-center gap-2">
             <RoleChip role={profile.role} />
-            <span className="truncate">{profile.fullName}</span>
+            <LanguageSwitch />
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              className="grid size-10 place-items-center rounded-full border border-line bg-paper"
+              aria-label={t('shell.signOut')}
+            >
+              <LogOut size={18} aria-hidden="true" />
+            </button>
           </div>
-        </header>
-
+        </div>
         <OfflineBanner />
+      </header>
 
-        <main className="flex-1 p-4 pb-28">
-          <Outlet />
-        </main>
-      </div>
+      <main className="flex-1 px-4 pb-28 pt-2">
+        <Outlet />
+      </main>
 
       <nav
         aria-label="Main"
-        className="fixed bottom-0 left-1/2 z-10 flex w-full max-w-[30rem] -translate-x-1/2 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(0,0,0,0.04)]"
+        className="fixed bottom-0 left-1/2 z-10 flex w-full max-w-[30rem] -translate-x-1/2 items-center justify-between gap-1 border-t border-line bg-paper px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-6px_20px_rgba(15,26,20,0.05)]"
       >
         {items.map((item) => {
           const Icon = ICONS[item.icon]
@@ -95,12 +92,16 @@ export function AppShell() {
               to={item.to}
               end={item.to === HOME_PATH[profile.role]}
               className={({ isActive }) =>
-                'flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-xs font-semibold no-underline ' +
-                (isActive ? 'text-brand' : 'text-mute')
+                'flex min-h-12 items-center justify-center gap-2 rounded-full px-3.5 text-sm font-semibold no-underline transition-colors ' +
+                (isActive ? 'bg-brand-soft text-brand-dark' : 'text-mute')
               }
             >
-              <Icon size={22} aria-hidden="true" />
-              <span>{t(`nav.${item.labelKey}`)}</span>
+              {({ isActive }) => (
+                <>
+                  <Icon size={22} aria-hidden="true" />
+                  <span className={isActive ? '' : 'sr-only'}>{t(`nav.${item.labelKey}`)}</span>
+                </>
+              )}
             </NavLink>
           )
         })}

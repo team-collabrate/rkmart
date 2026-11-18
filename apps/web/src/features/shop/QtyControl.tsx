@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formatQty, parseQty, stepQty } from './cart'
 
 const STEP_BUTTON =
-  'grid size-11 shrink-0 place-items-center rounded-xl border-2 border-brand bg-brand font-bold text-paper'
+  'grid size-11 shrink-0 place-items-center rounded-2xl border-2 border-brand bg-brand font-bold text-paper'
 
 /**
  * "Add" when nothing is chosen, otherwise a minus button, a number box and a plus button.

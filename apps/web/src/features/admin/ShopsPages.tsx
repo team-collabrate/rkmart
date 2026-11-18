@@ -38,7 +38,7 @@ export function ShopsList() {
       ) : shops.data.length === 0 ? (
         <Empty>{t('admin.shops.empty')}</Empty>
       ) : (
-        <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+        <ul className="divide-y divide-line rounded-2xl border border-line">
           {shops.data.map((s) => {
             const names = displayNames(s.nameEn, s.nameTa, language)
             const details = [names.secondary, s.ownerName, s.phone, s.address]

@@ -6,7 +6,7 @@ export function ComingSoon({ title, stage }: { title: string; stage: number }) {
   return (
     <section>
       <h1 className="text-2xl">{title}</h1>
-      <p className="mt-3 inline-block rounded-xl border-2 border-dashed border-ink px-4 py-3 text-mute">
+      <p className="mt-3 inline-block rounded-2xl border-2 border-dashed border-ink px-4 py-3 text-mute">
         {t('pages.comingSoon', { stage })}
       </p>
     </section>

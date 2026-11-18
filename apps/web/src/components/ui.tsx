@@ -19,14 +19,14 @@ export function PageHeader({
       {backTo && (
         <Link
           to={backTo}
-          className="mb-2 inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold no-underline"
+          className="mb-2 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-page px-3 text-sm font-semibold no-underline"
         >
           <ArrowLeft size={16} aria-hidden="true" />
           {t('admin.common.back')}
         </Link>
       )}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl">{title}</h1>
+        <h1 className="text-[1.75rem] leading-tight">{title}</h1>
         {action}
       </div>
     </div>
@@ -172,7 +172,7 @@ export function Banner({
     <p
       role={kind === 'error' ? 'alert' : 'status'}
       className={
-        'rounded-xl border-2 px-3 py-2 font-medium ' +
+        'rounded-2xl border-2 px-3 py-2 font-medium ' +
         (kind === 'error' ? 'border-dashed border-ink' : 'border-solid border-line bg-pale')
       }
     >
@@ -207,6 +207,6 @@ export function Loading() {
 
 export function Empty({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-xl border-2 border-dashed border-ink px-4 py-6 text-mute">{children}</p>
+    <p className="rounded-2xl border-2 border-dashed border-ink px-4 py-6 text-mute">{children}</p>
   )
 }

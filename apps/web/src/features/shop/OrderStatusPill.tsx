@@ -1,21 +1,22 @@
 import { useTranslation } from 'react-i18next'
 import type { OrderStatus } from '../../data/shopApi'
 
-// Each status has its own outline and fill, so it still reads in black and white,
-// and always carries a text label.
-const STYLE: Record<OrderStatus, string> = {
-  placed: 'border-dashed border-ink bg-paper text-ink',
-  billed: 'border-double border-4 border-line bg-paper text-ink',
-  delivered: 'border-solid border-line bg-brand text-paper',
-  cancelled: 'border-solid border-line bg-paper text-mute line-through',
+// A coloured dot and tint, and always the status in words, so it never relies on colour alone.
+const STYLE: Record<OrderStatus, { pill: string; dot: string }> = {
+  placed: { pill: 'bg-amber-soft text-amber', dot: 'bg-amber' },
+  billed: { pill: 'bg-blue-soft text-blue', dot: 'bg-blue' },
+  delivered: { pill: 'bg-brand-soft text-brand-dark', dot: 'bg-brand' },
+  cancelled: { pill: 'bg-red-soft text-red line-through', dot: 'bg-red' },
 }
 
 export function OrderStatusPill({ status }: { status: OrderStatus }) {
   const { t } = useTranslation()
+  const style = STYLE[status]
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded-full border-2 px-2 text-xs font-bold ${STYLE[status]}`}
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${style.pill}`}
     >
+      <span className={`size-1.5 rounded-full ${style.dot}`} aria-hidden="true" />
       {t(`shop.status.${status}`)}
     </span>
   )

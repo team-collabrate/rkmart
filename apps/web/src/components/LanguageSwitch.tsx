@@ -4,13 +4,18 @@ import type { Language } from '../features/auth/types'
 
 const OPTIONS: Language[] = ['en', 'ta']
 
+/** A small two-way switch: the chosen language is a filled green pill. */
 export function LanguageSwitch() {
   const { t, i18n } = useTranslation()
   const { changeLanguage } = useAuth()
   const current: Language = i18n.language === 'ta' ? 'ta' : 'en'
 
   return (
-    <div role="group" aria-label={t('common.language')} className="flex gap-1.5">
+    <div
+      role="group"
+      aria-label={t('common.language')}
+      className="flex gap-0.5 rounded-full bg-page p-1"
+    >
       {OPTIONS.map((lang) => {
         const active = current === lang
         return (
@@ -20,8 +25,8 @@ export function LanguageSwitch() {
             onClick={() => changeLanguage(lang)}
             aria-pressed={active}
             className={
-              'min-h-9 rounded-full border-2 border-line px-3 text-sm font-semibold ' +
-              (active ? 'bg-brand text-paper' : 'bg-paper text-ink')
+              'min-h-8 rounded-full px-3 text-sm font-semibold ' +
+              (active ? 'bg-brand text-paper' : 'text-ink')
             }
           >
             {lang === 'en' ? t('common.english') : t('common.tamil')}

@@ -151,7 +151,7 @@ function RatesEditor({
                 <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-mute">
                   {category}
                 </h2>
-                <ul className="divide-y-2 divide-hair rounded-xl border-2 border-line">
+                <ul className="divide-y divide-line rounded-2xl border border-line">
                   {items.map((item) => {
                     const names = displayNames(item.nameEn, item.nameTa, language)
                     const parsed = parseRate(currentDraft[item.id] ?? '')
