@@ -1,7 +1,7 @@
 import { todayISO } from '../lib/dates'
 import { roundPaise } from '../lib/money'
 import { ApiError } from './adminApi'
-import type { MockOrder, MockState } from './mockState'
+import { notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
 import type { OrderDetail, OrderSummary, ShopApi } from './shopApi'
 
 // Demo version of the shop API. It repeats the checks of the real place_order() database
@@ -89,6 +89,7 @@ export function createMockShopApi(
         items,
       }
       state.orders.push(order)
+      notifyOrdersChanged(state)
       return { orderId: order.id }
     },
 

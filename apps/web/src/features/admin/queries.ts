@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import type { TFunction } from 'i18next'
 import { ApiError } from '../../data/adminApi'
 import { useAdminApi } from '../../data/apiContext'
@@ -10,6 +11,8 @@ export const keys = {
   settings: ['settings'] as const,
   rates: (date: string) => ['rates', date] as const,
   previousRates: (date: string) => ['rates-previous', date] as const,
+  orders: (date: string) => ['admin-orders', date] as const,
+  order: (id: string) => ['admin-order', id] as const,
 }
 
 export function useProducts() {
@@ -40,6 +43,34 @@ export function useRates(date: string) {
 export function usePreviousRates(date: string) {
   const api = useAdminApi()
   return useQuery({ queryKey: keys.previousRates(date), queryFn: () => api.getPreviousRates(date) })
+}
+
+/** The day's orders. Refreshes when the server says an order changed, and every 30 seconds as a back-up. */
+export function useOrders(date: string) {
+  const api = useAdminApi()
+  const queryClient = useQueryClient()
+  useEffect(
+    () =>
+      api.onOrdersChanged(() => {
+        void queryClient.invalidateQueries({ queryKey: ['admin-orders'] })
+        void queryClient.invalidateQueries({ queryKey: ['admin-order'] })
+      }),
+    [api, queryClient],
+  )
+  return useQuery({
+    queryKey: keys.orders(date),
+    queryFn: () => api.listOrders(date),
+    refetchInterval: 30_000,
+  })
+}
+
+export function useOrderDetail(id: string | undefined) {
+  const api = useAdminApi()
+  return useQuery({
+    queryKey: keys.order(id ?? ''),
+    queryFn: () => api.getOrderDetail(id!),
+    enabled: Boolean(id),
+  })
 }
 
 /** A failed request in plain words, in the current language. */

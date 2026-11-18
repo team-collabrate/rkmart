@@ -108,7 +108,13 @@ describe('demo shop API', () => {
   it('has seeded demo orders only when asked', async () => {
     expect(createMockState().orders).toHaveLength(0)
     const demo = createMockState({ seedDemo: true })
-    expect(demo.orders.map((o) => o.status)).toEqual(['delivered', 'billed'])
+    expect(demo.orders.map((o) => o.status)).toEqual([
+      'delivered',
+      'billed',
+      'placed',
+      'placed',
+      'placed',
+    ])
     expect(Object.keys(demo.rates[today]).length).toBe(15)
   })
 })

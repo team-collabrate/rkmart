@@ -13,6 +13,22 @@ export function todayISO(now: Date = new Date()): string {
   }).format(now)
 }
 
+/** "2026-11-17" plus 1 -> "2026-11-18" (works across month and year ends). */
+export function addDays(iso: string, days: number): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10)
+}
+
+/** An ISO timestamp as the Indian clock time, e.g. "2:30 pm". */
+export function formatTime(iso: string, language: 'en' | 'ta'): string {
+  return new Intl.DateTimeFormat(language === 'ta' ? 'ta-IN' : 'en-IN', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: TIME_ZONE,
+  }).format(new Date(iso))
+}
+
 /** "2026-11-17" -> "17 Nov 2026" (month name in the chosen language). */
 export function formatDay(iso: string, language: 'en' | 'ta'): string {
   const [y, m, d] = iso.split('-').map(Number)

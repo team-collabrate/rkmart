@@ -1,0 +1,101 @@
+[
+  {
+    "name": "5% exclusive, within state",
+    "qty": 4,
+    "rate": 1350,
+    "gst": 5,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 5400, "cgst": 135, "sgst": 135, "igst": 0, "amount": 5670 }
+  },
+  {
+    "name": "0% item",
+    "qty": 10,
+    "rate": 140,
+    "gst": 0,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 1400, "cgst": 0, "sgst": 0, "igst": 0, "amount": 1400 }
+  },
+  {
+    "name": "5% on a small bill",
+    "qty": 20,
+    "rate": 46,
+    "gst": 5,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 920, "cgst": 23, "sgst": 23, "igst": 0, "amount": 966 }
+  },
+  {
+    "name": "oil cans",
+    "qty": 6,
+    "rate": 780,
+    "gst": 5,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 4680, "cgst": 117, "sgst": 117, "igst": 0, "amount": 4914 }
+  },
+  {
+    "name": "decimal quantity, odd paise split",
+    "qty": 2.5,
+    "rate": 46.5,
+    "gst": 5,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 116.25, "cgst": 2.91, "sgst": 2.9, "igst": 0, "amount": 122.06 }
+  },
+  {
+    "name": "other state uses IGST",
+    "qty": 3,
+    "rate": 100,
+    "gst": 12,
+    "inclusive": false,
+    "intra": false,
+    "expect": { "taxable": 300, "cgst": 0, "sgst": 0, "igst": 36, "amount": 336 }
+  },
+  {
+    "name": "rate includes GST",
+    "qty": 1,
+    "rate": 105,
+    "gst": 5,
+    "inclusive": true,
+    "intra": true,
+    "expect": { "taxable": 100, "cgst": 2.5, "sgst": 2.5, "igst": 0, "amount": 105 }
+  },
+  {
+    "name": "rate includes GST, 18%, odd paise",
+    "qty": 3,
+    "rate": 99.99,
+    "gst": 18,
+    "inclusive": true,
+    "intra": true,
+    "expect": { "taxable": 254.21, "cgst": 22.88, "sgst": 22.88, "igst": 0, "amount": 299.97 }
+  },
+  {
+    "name": "half-up rounding of tax",
+    "qty": 0.333,
+    "rate": 10.01,
+    "gst": 5,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 3.33, "cgst": 0.09, "sgst": 0.08, "igst": 0, "amount": 3.5 }
+  },
+  {
+    "name": "0.25% slab",
+    "qty": 100,
+    "rate": 10,
+    "gst": 0.25,
+    "inclusive": false,
+    "intra": true,
+    "expect": { "taxable": 1000, "cgst": 1.25, "sgst": 1.25, "igst": 0, "amount": 1002.5 }
+  },
+  {
+    "name": "3% slab, other state, half-up",
+    "qty": 7,
+    "rate": 12.5,
+    "gst": 3,
+    "inclusive": false,
+    "intra": false,
+    "expect": { "taxable": 87.5, "cgst": 0, "sgst": 0, "igst": 2.63, "amount": 90.13 }
+  }
+]

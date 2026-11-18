@@ -1,5 +1,6 @@
 import { FunctionsHttpError, type SupabaseClient } from '@supabase/supabase-js'
-import { ApiError, type AdminApi } from './adminApi'
+import { ApiError, type AdminApi, type ApiErrorCode } from './adminApi'
+import type { AdminOrderDetail, AdminOrderSummary, Invoice } from './adminOrders'
 import type {
   AppUser,
   CompanySettings,
@@ -91,6 +92,192 @@ function fail(error: unknown): never {
   if (e?.code === '42501' || e?.status === 401 || e?.status === 403) throw new ApiError('forbidden')
   if (e?.message?.toLowerCase().includes('fetch')) throw new ApiError('network')
   throw new ApiError('unknown', e?.message)
+}
+
+// --- Orders and bills -------------------------------------------------------------------
+
+interface OrderListRow {
+  id: string
+  shop_id: string
+  order_date: string
+  status: AdminOrderSummary['status']
+  created_at: string
+  shops: { name_en: string; name_ta: string | null } | null
+  order_items: { qty: number | string; rate: number | string }[]
+  invoices: { invoice_no: string; status: string }[]
+}
+
+interface InvoiceRow {
+  id: string
+  order_id: string
+  invoice_no: string
+  issue_date: string
+  status: 'issued' | 'cancelled'
+  cancelled_reason: string | null
+  shop_name: string
+  shop_address: string | null
+  shop_gstin: string | null
+  shop_state_code: string
+  taxable_total: number | string
+  cgst_total: number | string
+  sgst_total: number | string
+  igst_total: number | string
+  round_off: number | string
+  grand_total: number | string
+  previous_balance: number | string
+  total_due: number | string
+  invoice_items: {
+    line_no: number
+    name_en: string
+    name_ta: string | null
+    hsn_code: string | null
+    unit: string
+    qty: number | string
+    rate: number | string
+    taxable: number | string
+    gst_rate: number | string
+    cgst: number | string
+    sgst: number | string
+    igst: number | string
+    amount: number | string
+  }[]
+}
+
+interface OrderDetailRow extends Omit<OrderListRow, 'shops' | 'order_items' | 'invoices'> {
+  note: string | null
+  shops: {
+    name_en: string
+    name_ta: string | null
+    owner_name: string | null
+    phone: string | null
+    address: string | null
+    gstin: string | null
+    state_code: string
+  } | null
+  order_items: {
+    product_id: string
+    qty: number | string
+    rate: number | string
+    products: {
+      name_en: string
+      name_ta: string | null
+      unit: string
+      hsn_code: string | null
+      gst_rate: number | string
+      sort_order: number
+    } | null
+  }[]
+  invoices: InvoiceRow[]
+}
+
+function toOrderSummary(row: OrderListRow): AdminOrderSummary {
+  return {
+    id: row.id,
+    shopId: row.shop_id,
+    shopNameEn: row.shops?.name_en ?? '',
+    shopNameTa: row.shops?.name_ta ?? '',
+    orderDate: row.order_date,
+    status: row.status,
+    itemCount: row.order_items.length,
+    total:
+      Math.round(
+        row.order_items.reduce((sum, i) => sum + Number(i.qty) * Number(i.rate), 0) * 100,
+      ) / 100,
+    createdAt: row.created_at,
+    invoiceNo: row.invoices.find((i) => i.status === 'issued')?.invoice_no ?? null,
+  }
+}
+
+function toInvoice(row: InvoiceRow): Invoice {
+  return {
+    id: row.id,
+    orderId: row.order_id,
+    invoiceNo: row.invoice_no,
+    issueDate: row.issue_date,
+    status: row.status,
+    cancelledReason: row.cancelled_reason ?? '',
+    shopName: row.shop_name,
+    shopAddress: row.shop_address ?? '',
+    shopGstin: row.shop_gstin ?? '',
+    shopStateCode: row.shop_state_code,
+    taxableTotal: Number(row.taxable_total),
+    cgstTotal: Number(row.cgst_total),
+    sgstTotal: Number(row.sgst_total),
+    igstTotal: Number(row.igst_total),
+    roundOff: Number(row.round_off),
+    grandTotal: Number(row.grand_total),
+    previousBalance: Number(row.previous_balance),
+    totalDue: Number(row.total_due),
+    lines: [...row.invoice_items]
+      .sort((a, b) => a.line_no - b.line_no)
+      .map((l) => ({
+        lineNo: l.line_no,
+        nameEn: l.name_en,
+        nameTa: l.name_ta ?? '',
+        hsnCode: l.hsn_code ?? '',
+        unit: l.unit,
+        qty: Number(l.qty),
+        rate: Number(l.rate),
+        taxable: Number(l.taxable),
+        gstRate: Number(l.gst_rate),
+        cgst: Number(l.cgst),
+        sgst: Number(l.sgst),
+        igst: Number(l.igst),
+        amount: Number(l.amount),
+      })),
+  }
+}
+
+function toOrderDetail(row: OrderDetailRow): AdminOrderDetail {
+  const issued = row.invoices.find((i) => i.status === 'issued')
+  const summary = toOrderSummary({ ...row, shops: row.shops, invoices: row.invoices })
+  return {
+    ...summary,
+    note: row.note ?? '',
+    shop: {
+      nameEn: row.shops?.name_en ?? '',
+      nameTa: row.shops?.name_ta ?? '',
+      ownerName: row.shops?.owner_name ?? '',
+      phone: row.shops?.phone ?? '',
+      address: row.shops?.address ?? '',
+      gstin: row.shops?.gstin ?? '',
+      stateCode: row.shops?.state_code ?? '',
+    },
+    lines: [...row.order_items]
+      .sort((a, b) => (a.products?.sort_order ?? 0) - (b.products?.sort_order ?? 0))
+      .map((i) => ({
+        productId: i.product_id,
+        nameEn: i.products?.name_en ?? '',
+        nameTa: i.products?.name_ta ?? '',
+        unit: i.products?.unit ?? '',
+        hsnCode: i.products?.hsn_code ?? '',
+        gstRate: Number(i.products?.gst_rate ?? 0),
+        qty: Number(i.qty),
+        rate: Number(i.rate),
+      })),
+    invoice: issued ? toInvoice(issued) : null,
+  }
+}
+
+/** The billing functions raise short codes like "not_placed" or "has_payments". */
+function billingError(error: { message?: string; code?: string }): ApiError {
+  const message = error.message ?? ''
+  const known: ApiErrorCode[] = [
+    'not_found',
+    'not_placed',
+    'empty_order',
+    'bad_quantity',
+    'not_in_order',
+    'already_cancelled',
+    'already_delivered',
+    'has_payments',
+    'reason_required',
+  ]
+  const hit = known.find((code) => message.includes(code))
+  if (hit) return new ApiError(hit)
+  if (message.includes('not_admin') || error.code === '42501') return new ApiError('forbidden')
+  if (message.toLowerCase().includes('fetch')) return new ApiError('network')
+  return new ApiError('unknown', message)
 }
 
 function dayBefore(date: string, days: number): string {
@@ -251,6 +438,64 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
 
     async setUserActive(userId, active) {
       await callUsers({ action: 'set_active', userId, active })
+    },
+
+    async listOrders(date) {
+      const { data, error } = await client
+        .from('orders')
+        .select(
+          'id, shop_id, order_date, status, created_at, shops(name_en, name_ta), order_items(qty, rate), invoices(invoice_no, status)',
+        )
+        .eq('order_date', date)
+        .order('created_at', { ascending: false })
+      if (error) fail(error)
+      return (data as unknown as OrderListRow[]).map(toOrderSummary)
+    },
+
+    async getOrderDetail(id) {
+      const { data, error } = await client
+        .from('orders')
+        .select(
+          `id, shop_id, order_date, status, note, created_at,
+           shops(name_en, name_ta, owner_name, phone, address, gstin, state_code),
+           order_items(product_id, qty, rate, products(name_en, name_ta, unit, hsn_code, gst_rate, sort_order)),
+           invoices(*, invoice_items(*))`,
+        )
+        .eq('id', id)
+        .maybeSingle()
+      if (error) fail(error)
+      if (!data) throw new ApiError('not_found')
+      return toOrderDetail(data as unknown as OrderDetailRow)
+    },
+
+    async adjustOrder(orderId, lines) {
+      const { error } = await client.rpc('adjust_order', {
+        p_order: orderId,
+        p_items: lines.map((l) => ({ product_id: l.productId, qty: l.qty })),
+      })
+      if (error) throw billingError(error)
+    },
+
+    async generateBill(orderId) {
+      const { data, error } = await client.rpc('finalize_bill', { p_order: orderId })
+      if (error) throw billingError(error)
+      return { invoiceId: String(data) }
+    },
+
+    async cancelBill(invoiceId, reason) {
+      const { error } = await client.rpc('cancel_bill', { p_invoice: invoiceId, p_reason: reason })
+      if (error) throw billingError(error)
+    },
+
+    onOrdersChanged(callback) {
+      // Row level security decides which changes this admin receives.
+      const channel = client
+        .channel(`orders-live-${Math.random().toString(36).slice(2)}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => callback())
+        .subscribe()
+      return () => {
+        void client.removeChannel(channel)
+      }
     },
 
     async getSettings() {

@@ -1,3 +1,5 @@
+import type { AdminOrderDetail, AdminOrderSummary } from './adminOrders'
+import type { CartLine } from './shopApi'
 import type {
   AppUser,
   CompanySettings,
@@ -21,6 +23,12 @@ export type ApiErrorCode =
   | 'bad_quantity'
   | 'inactive_item'
   | 'no_rate'
+  | 'not_placed'
+  | 'already_delivered'
+  | 'already_cancelled'
+  | 'has_payments'
+  | 'reason_required'
+  | 'not_in_order'
   | 'unknown'
 
 /** A failure the screens can show in plain words. `code` picks the translated message. */
@@ -52,6 +60,18 @@ export interface AdminApi {
   createUser(input: NewUserInput): Promise<{ userId: string }>
   resetPassword(userId: string, password: string): Promise<void>
   setUserActive(userId: string, active: boolean): Promise<void>
+
+  /** Orders of one day, newest first. */
+  listOrders(date: string): Promise<AdminOrderSummary[]>
+  getOrderDetail(id: string): Promise<AdminOrderDetail>
+  /** Fix quantities after packing (placed orders only). Lines left out are removed. */
+  adjustOrder(orderId: string, lines: CartLine[]): Promise<void>
+  /** Makes the GST bill for a placed order. */
+  generateBill(orderId: string): Promise<{ invoiceId: string }>
+  /** Cancels a bill (its number stays used). The order goes back to placed. */
+  cancelBill(invoiceId: string, reason: string): Promise<void>
+  /** Calls back when orders change. Returns a function that stops listening. */
+  onOrdersChanged(callback: () => void): () => void
 
   getSettings(): Promise<CompanySettings>
   saveSettings(input: CompanySettings): Promise<CompanySettings>

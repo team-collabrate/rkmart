@@ -127,7 +127,8 @@ export function LoginPage() {
         </button>
       </form>
 
-      {isDemoMode() && (
+      {/* Written inline so a real release drops the demo hint completely. */}
+      {(import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') && isDemoMode() && (
         <aside className="mt-8 rounded-xl border-2 border-dashed border-ink p-3 text-sm">
           <p className="font-bold">{t('login.demoTitle')}</p>
           <p className="mt-1">{t('login.demoBody', { password: DEMO_PASSWORD })}</p>

@@ -5,8 +5,11 @@ import { NotFound } from './app/NotFound'
 import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
 import { AppShell } from './components/AppShell'
 import { ComingSoon } from './components/ComingSoon'
+import { BillPage } from './features/admin/BillPage'
 import { ItemForm, ItemsList } from './features/admin/ItemsPages'
 import { MorePage } from './features/admin/MorePage'
+import { OrderDetailPage as AdminOrderDetailPage } from './features/admin/OrderDetail'
+import { OrdersInbox } from './features/admin/OrdersInbox'
 import { RatesPage } from './features/admin/RatesPage'
 import { SettingsPage } from './features/admin/SettingsPage'
 import { ShopForm, ShopsList } from './features/admin/ShopsPages'
@@ -65,7 +68,9 @@ export default function App() {
           }
         >
           <Route index element={<Navigate to="orders" replace />} />
-          <Route path="orders" element={<Soon area="admin" page="orders" stage={5} />} />
+          <Route path="orders" element={<OrdersInbox />} />
+          <Route path="orders/:id" element={<AdminOrderDetailPage />} />
+          <Route path="orders/:id/bill" element={<BillPage />} />
           <Route path="rates" element={<RatesPage />} />
           <Route path="bills" element={<Soon area="admin" page="bills" stage={6} />} />
           <Route path="balances" element={<Soon area="admin" page="balances" stage={7} />} />

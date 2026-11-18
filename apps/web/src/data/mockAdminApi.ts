@@ -1,5 +1,25 @@
 import { ApiError, type AdminApi } from './adminApi'
-import { createMockState, type MockState } from './mockState'
+import type { AdminOrderSummary } from './adminOrders'
+import { cancelInvoice, issueInvoice } from './mockBilling'
+import { createMockState, notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
+import { roundPaise } from '../lib/money'
+
+function orderSummary(state: MockState, o: MockOrder): AdminOrderSummary {
+  const shop = state.shops.find((s) => s.id === o.shopId)
+  const invoice = state.invoices.find((i) => i.orderId === o.id && i.status === 'issued')
+  return {
+    id: o.id,
+    shopId: o.shopId,
+    shopNameEn: shop?.nameEn ?? '',
+    shopNameTa: shop?.nameTa ?? '',
+    orderDate: o.orderDate,
+    status: o.status,
+    itemCount: o.items.length,
+    total: roundPaise(o.items.reduce((sum, i) => sum + i.qty * i.rate, 0)),
+    createdAt: o.createdAt,
+    invoiceNo: invoice?.invoiceNo ?? null,
+  }
+}
 import type { Product, RateMap, Shop, AppUser } from './types'
 
 // In-memory demo version of the admin API, used when no Supabase project is configured
@@ -123,6 +143,91 @@ export function createMockAdminApi(
       const found = state.users.find((u) => u.id === userId)
       if (!found) throw new ApiError('not_found')
       found.isActive = active
+    },
+
+    async listOrders(date) {
+      await wait()
+      return state.orders
+        .filter((o) => o.orderDate === date)
+        .map((o) => orderSummary(state, o))
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    },
+
+    async getOrderDetail(id) {
+      await wait()
+      const order = state.orders.find((o) => o.id === id)
+      if (!order) throw new ApiError('not_found')
+      const shop = state.shops.find((s) => s.id === order.shopId)!
+      const invoice = state.invoices.find((i) => i.orderId === id && i.status === 'issued') ?? null
+      return {
+        ...orderSummary(state, order),
+        note: order.note,
+        shop: {
+          nameEn: shop.nameEn,
+          nameTa: shop.nameTa,
+          ownerName: shop.ownerName,
+          phone: shop.phone,
+          address: shop.address,
+          gstin: shop.gstin,
+          stateCode: shop.stateCode,
+        },
+        lines: order.items.map((item) => {
+          const product = state.products.find((p) => p.id === item.productId)!
+          return {
+            productId: item.productId,
+            nameEn: product.nameEn,
+            nameTa: product.nameTa,
+            unit: product.unit,
+            hsnCode: product.hsnCode,
+            gstRate: product.gstRate,
+            qty: item.qty,
+            rate: item.rate,
+          }
+        }),
+        invoice: invoice ? structuredClone(invoice) : null,
+      }
+    },
+
+    async adjustOrder(orderId, lines) {
+      await wait()
+      const order = state.orders.find((o) => o.id === orderId)
+      if (!order) throw new ApiError('not_found')
+      if (order.status !== 'placed') throw new ApiError('not_placed')
+      if (lines.length === 0) throw new ApiError('empty_order')
+
+      const merged = new Map<string, number>()
+      for (const line of lines)
+        merged.set(line.productId, (merged.get(line.productId) ?? 0) + line.qty)
+      for (const [productId, qty] of merged) {
+        if (!(qty > 0) || qty > 100_000 || Math.round(qty * 1000) / 1000 !== qty) {
+          throw new ApiError('bad_quantity')
+        }
+        if (!order.items.some((i) => i.productId === productId)) throw new ApiError('not_in_order')
+      }
+      order.items = order.items
+        .filter((i) => merged.has(i.productId))
+        .map((i) => ({ ...i, qty: merged.get(i.productId)! }))
+      notifyOrdersChanged(state)
+    },
+
+    async generateBill(orderId) {
+      await wait()
+      const invoice = issueInvoice(state, orderId)
+      notifyOrdersChanged(state)
+      return { invoiceId: invoice.id }
+    },
+
+    async cancelBill(invoiceId, reason) {
+      await wait()
+      cancelInvoice(state, invoiceId, reason)
+      notifyOrdersChanged(state)
+    },
+
+    onOrdersChanged(callback) {
+      state.listeners.add(callback)
+      return () => {
+        state.listeners.delete(callback)
+      }
     },
 
     async getSettings() {
