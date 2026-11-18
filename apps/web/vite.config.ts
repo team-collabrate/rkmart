@@ -38,6 +38,8 @@ export default defineConfig({
         // woff2 only: every browser and the Android WebView that can install a PWA supports it.
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
         navigateFallback: '/index.html',
+        // Alerts: shows push messages and opens the right screen (public/push-sw.js).
+        importScripts: ['push-sw.js'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
       },
     }),

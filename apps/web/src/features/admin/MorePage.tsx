@@ -2,6 +2,7 @@ import { Building2, ChevronRight, Package, Store, UsersRound, type LucideIcon } 
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { PageHeader } from '../../components/ui'
+import { AlertsCard } from '../alerts/AlertsCard'
 
 const ITEMS: { to: string; key: string; icon: LucideIcon }[] = [
   { to: '/admin/more/items', key: 'items', icon: Package },
@@ -30,6 +31,7 @@ export function MorePage() {
           </li>
         ))}
       </ul>
+      <AlertsCard />
     </section>
   )
 }

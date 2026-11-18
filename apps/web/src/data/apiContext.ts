@@ -3,6 +3,9 @@ import { createContext, useContext } from 'react'
 import { getSupabase, isSupabaseConfigured } from '../lib/supabase'
 import { ApiError, type AdminApi } from './adminApi'
 import type { DeliveryApi } from './deliveryApi'
+import type { PushApi } from './pushApi'
+import { createMockPushApi } from './mockPushApi'
+import { createSupabasePushApi } from './supabasePushApi'
 import { createMockDeliveryApi } from './mockDeliveryApi'
 import { createSupabaseDeliveryApi } from './supabaseDeliveryApi'
 import { createMockAdminApi } from './mockAdminApi'
@@ -15,6 +18,7 @@ import { createSupabaseShopApi } from './supabaseShopApi'
 export const ApiContext = createContext<AdminApi | null>(null)
 export const ShopApiContext = createContext<ShopApi | null>(null)
 export const DeliveryApiContext = createContext<DeliveryApi | null>(null)
+export const PushApiContext = createContext<PushApi | null>(null)
 
 export function useAdminApi(): AdminApi {
   const value = useContext(ApiContext)
@@ -25,6 +29,12 @@ export function useAdminApi(): AdminApi {
 export function useDeliveryApi(): DeliveryApi {
   const value = useContext(DeliveryApiContext)
   if (!value) throw new Error('useDeliveryApi must be used inside <ApiProvider>')
+  return value
+}
+
+export function usePushApi(): PushApi {
+  const value = useContext(PushApiContext)
+  if (!value) throw new Error('usePushApi must be used inside <ApiProvider>')
   return value
 }
 
@@ -52,6 +62,7 @@ export interface Apis {
   admin: AdminApi
   shop: ShopApi
   delivery: DeliveryApi
+  push: PushApi
 }
 
 /** Picks the real server, the demo backend, or nothing, depending on how the app was built. */
@@ -62,6 +73,7 @@ export function createApis(getShopId: () => string | null = () => signedInShopId
       admin: createSupabaseAdminApi(client),
       shop: createSupabaseShopApi(client),
       delivery: createSupabaseDeliveryApi(client),
+      push: createSupabasePushApi(client),
     }
   }
   // Written inline (not via a shared constant) so a real release drops the demo data completely.
@@ -71,12 +83,14 @@ export function createApis(getShopId: () => string | null = () => signedInShopId
       admin: createMockAdminApi({ delayMs: 150, state }),
       shop: createMockShopApi(state, getShopId, { delayMs: 150 }),
       delivery: createMockDeliveryApi(state, { delayMs: 150 }),
+      push: createMockPushApi(),
     }
   }
   return {
     admin: notConfigured<AdminApi>(),
     shop: notConfigured<ShopApi>(),
     delivery: notConfigured<DeliveryApi>(),
+    push: notConfigured<PushApi>(),
   }
 }
 

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import { NotFound } from './app/NotFound'
 import { FullPageLoading, RequireRole, RootRedirect } from './app/RequireRole'
 import { AppShell } from './components/AppShell'
+import { PushSync } from './features/alerts/PushSync'
 import { BalancesPage, ShopStatementPage } from './features/admin/BalancesPages'
 import { BillPage } from './features/admin/BillPage'
 import { DeliveriesPage, DeliveryHistoryPage } from './features/delivery/DeliveryPages'
@@ -37,6 +38,7 @@ const StatusSpike: ComponentType | null = spikesEnabled
 export default function App() {
   return (
     <Suspense fallback={<FullPageLoading />}>
+      <PushSync />
       <Routes>
         <Route path="/" element={<RootRedirect />} />
         <Route path="/login" element={<LoginPage />} />

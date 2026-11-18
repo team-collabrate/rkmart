@@ -8,6 +8,7 @@ import { formatINR } from '../../lib/money'
 import { errorText } from '../admin/queries'
 import { useAuth } from '../auth/AuthProvider'
 import type { Language } from '../auth/types'
+import { AlertsCard } from '../alerts/AlertsCard'
 import { OrderStatusPill } from './OrderStatusPill'
 import { useRepeatOrder } from './useRepeatOrder'
 import { useMyStatement } from './statementQuery'
@@ -112,6 +113,7 @@ export function ShopHome() {
           </Link>
         </>
       )}
+      <AlertsCard />
     </section>
   )
 }

@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_SPIKES?: string
   /** "1" allows the demo login in a production build. Never set this for a real release. */
   readonly VITE_MOCK_AUTH?: string
+  /** Public VAPID key for browser alerts (Web Push). */
+  readonly VITE_VAPID_PUBLIC_KEY?: string
   readonly VITE_SUPABASE_URL?: string
   readonly VITE_SUPABASE_ANON_KEY?: string
 }

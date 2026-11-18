@@ -84,5 +84,20 @@
     "pdf": "Tamil PDF spike",
     "pwa": "PWA status",
     "native": "Android (Capacitor) status"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "about": {
+      "shop": "Get an alert on this device when your order is delivered, a payment is received, or a payment is due.",
+      "admin": "Get an alert on this device when a shop places an order."
+    },
+    "turnOn": "Turn on alerts",
+    "turnOff": "Turn off alerts",
+    "working": "Turning on…",
+    "on": "Alerts are on for this device.",
+    "denied": "Alerts are blocked. Allow notifications for RK Grocery in your phone or browser settings, then try again.",
+    "unsupported": "This browser cannot show alerts. On an iPhone, add the app to the Home screen first.",
+    "not_configured": "Alerts are not set up in this version of the app yet.",
+    "failed": "Could not change alerts. Please try again."
   }
 }
