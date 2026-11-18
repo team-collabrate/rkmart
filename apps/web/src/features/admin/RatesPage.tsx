@@ -205,7 +205,7 @@ function RatesEditor({
             ))}
           </div>
 
-          <div className="sticky bottom-16 mt-6 flex justify-end border-t-2 border-line bg-paper py-3 md:bottom-0">
+          <div className="sticky bottom-24 mt-6 flex justify-end border-t-2 border-line bg-paper py-3 md:bottom-0">
             <button type="button" className="btn" onClick={onSave} disabled={save.isPending}>
               <Save size={18} aria-hidden="true" />
               {save.isPending ? t('admin.common.saving') : t('admin.rates.save')}

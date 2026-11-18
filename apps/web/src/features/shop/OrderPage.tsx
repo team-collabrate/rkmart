@@ -170,7 +170,7 @@ export function OrderPage() {
       </div>
 
       {count > 0 && (
-        <div className="fixed bottom-[4.5rem] left-1/2 z-10 w-full max-w-[30rem] -translate-x-1/2 px-4">
+        <div className="fixed bottom-[6.25rem] left-1/2 z-10 w-full max-w-[30rem] -translate-x-1/2 px-4">
           <Link
             to="/shop/order/review"
             className="btn flex w-full justify-between rounded-2xl px-5 py-3 text-base no-underline shadow-lg"

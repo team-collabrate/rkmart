@@ -345,7 +345,7 @@ function OrderEditor({
       )}
 
       {editable ? (
-        <div className="fixed bottom-[4.75rem] left-1/2 z-10 w-full max-w-[30rem] -translate-x-1/2 px-4">
+        <div className="fixed bottom-[6.25rem] left-1/2 z-10 w-full max-w-[30rem] -translate-x-1/2 px-4">
           <div className="rounded-[1.75rem] border border-line bg-paper p-3 shadow-[0_8px_30px_rgba(15,26,20,0.12)]">
             {dirty && (
               <p className="mb-2 flex items-center gap-1.5 px-1 text-xs text-mute">
