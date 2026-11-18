@@ -258,7 +258,11 @@
     "inPdf": "In PDF {{versions}}",
     "notInPdf": "Not in a PDF yet",
     "pdfFailed": "The PDF could not be made. Please try again.",
-    "fileTitle": "RK bills {{date}} (version {{version}})"
+    "fileTitle": "RK bills {{date}} (version {{version}})",
+    "pdfShort": "PDF ({{count}})",
+    "newShort": "New ({{count}})",
+    "allShort": "All ({{count}})",
+    "noGstin": "Add your GSTIN in Settings"
   },
   "pay": {
     "title": "Balances",

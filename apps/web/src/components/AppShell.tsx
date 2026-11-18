@@ -18,7 +18,7 @@ export function AppShell() {
   const { pathname } = useLocation()
   if (!profile) return null
   // The admin order screens have their own headers (logo, back button, title).
-  const ownHeader = ['/admin/orders', '/admin/balances'].some(
+  const ownHeader = ['/admin/orders', '/admin/balances', '/admin/bills'].some(
     (p) => pathname === p || pathname.startsWith(p + '/'),
   )
   const items = NAV[profile.role]
