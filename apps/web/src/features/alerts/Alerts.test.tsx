@@ -146,7 +146,7 @@ describe('alerts card', () => {
   it('describes what an admin gets, differently from a shop owner', async () => {
     const { device } = fakeDevice('off', { status: 'on' })
     renderCard(device, { ...shop, role: 'admin', shopId: null })
-    expect(await screen.findByText(/when a shop places an order/)).toBeInTheDocument()
+    expect(await screen.findByText(/new orders/)).toBeInTheDocument()
   })
 
   it('is not shown to a distributor', async () => {

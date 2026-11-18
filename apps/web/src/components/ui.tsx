@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
-/** Page title with an optional back link and one action button on the right. */
+/** Page title with an optional round back button and one action on the right. One fixed line. */
 export function PageHeader({
   title,
   backTo,
@@ -15,20 +15,18 @@ export function PageHeader({
 }) {
   const { t } = useTranslation()
   return (
-    <div className="mb-4">
+    <div className="mb-4 flex h-11 items-center gap-3">
       {backTo && (
         <Link
           to={backTo}
-          className="mb-2 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-page px-3 text-sm font-semibold no-underline"
+          aria-label={t('admin.common.back')}
+          className="grid size-11 shrink-0 place-items-center rounded-full bg-paper no-underline shadow-[0_1px_2px_rgba(15,26,20,0.08)]"
         >
-          <ArrowLeft size={16} aria-hidden="true" />
-          {t('admin.common.back')}
+          <ArrowLeft size={20} aria-hidden="true" />
         </Link>
       )}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-[1.75rem] leading-tight">{title}</h1>
-        {action}
-      </div>
+      <h1 className="min-w-0 flex-1 truncate text-[1.5rem] leading-tight">{title}</h1>
+      {action}
     </div>
   )
 }
@@ -181,16 +179,20 @@ export function Banner({
   )
 }
 
-/** "On" is solid black, "Off" is a dashed outline. */
+/** "On" is green with a dot, "Off" is grey, and the word is always printed. */
 export function StatusPill({ active }: { active: boolean }) {
   const { t } = useTranslation()
   return (
     <span
       className={
-        'inline-block rounded-full border-2 px-2 text-xs font-bold ' +
-        (active ? 'border-line bg-brand text-paper' : 'border-dashed border-ink text-ink')
+        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ' +
+        (active ? 'bg-brand-soft text-brand-dark' : 'bg-page text-mute')
       }
     >
+      <span
+        className={'size-1.5 rounded-full ' + (active ? 'bg-brand' : 'bg-rail')}
+        aria-hidden="true"
+      />
       {active ? t('admin.common.on') : t('admin.common.off')}
     </span>
   )

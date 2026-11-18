@@ -18,9 +18,12 @@ export function AppShell() {
   const { pathname } = useLocation()
   if (!profile) return null
   // The admin order screens have their own headers (logo, back button, title).
-  const ownHeader = ['/admin/orders', '/admin/balances', '/admin/bills', '/admin/rates'].some(
-    (p) => pathname === p || pathname.startsWith(p + '/'),
-  )
+  const ownHeader =
+    pathname === '/admin/more' ||
+    ['/admin/orders', '/admin/balances', '/admin/bills', '/admin/rates'].some(
+      (p) => pathname === p || pathname.startsWith(p + '/'),
+    )
+  const greyPage = profile.role === 'admin'
   const items = NAV[profile.role]
 
   return (
@@ -57,7 +60,7 @@ export function AppShell() {
         </header>
       )}
 
-      <main className="flex-1 px-4 pb-28 pt-2">
+      <main className={'flex-1 px-4 pb-28 pt-2 ' + (greyPage ? 'bg-page' : '')}>
         <Outlet />
       </main>
 

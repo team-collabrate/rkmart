@@ -65,7 +65,7 @@ export function AlertsCard({ device: given }: { device?: PushDevice }) {
       <h2 id="alerts-title" className="text-lg">
         {t('alerts.title')}
       </h2>
-      <p className="mt-1 text-mute">
+      <p className="mt-1 h-6 truncate text-mute">
         {t(`alerts.about.${profile.role === 'admin' ? 'admin' : 'shop'}`)}
       </p>
 

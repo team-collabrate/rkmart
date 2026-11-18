@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { Banner, Empty, Loading, PageHeader, StatusPill, TextField } from '../../components/ui'
+import { Avatar } from '../../components/Avatar'
 import { useAdminApi } from '../../data/apiContext'
 import type { Shop } from '../../data/types'
 import { displayNames } from '../../lib/names'
@@ -25,9 +26,12 @@ export function ShopsList() {
         title={t('admin.shops.title')}
         backTo="/admin/more"
         action={
-          <Link to={`${BASE}/new`} className="btn no-underline">
-            <Plus size={18} aria-hidden="true" />
-            {t('admin.shops.add')}
+          <Link
+            to={`${BASE}/new`}
+            aria-label={t('admin.shops.add')}
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-paper no-underline"
+          >
+            <Plus size={22} aria-hidden="true" />
           </Link>
         }
       />
@@ -38,7 +42,7 @@ export function ShopsList() {
       ) : shops.data.length === 0 ? (
         <Empty>{t('admin.shops.empty')}</Empty>
       ) : (
-        <ul className="divide-y divide-line rounded-2xl border border-line">
+        <ul className="divide-y divide-line overflow-hidden rounded-[1.75rem] border border-line bg-paper">
           {shops.data.map((s) => {
             const names = displayNames(s.nameEn, s.nameTa, language)
             const details = [names.secondary, s.ownerName, s.phone, s.address]
@@ -48,8 +52,9 @@ export function ShopsList() {
               <li key={s.id}>
                 <Link
                   to={`${BASE}/${s.id}`}
-                  className="flex items-center gap-3 px-3 py-3 no-underline"
+                  className="flex items-center gap-3 px-3.5 py-3 no-underline"
                 >
+                  <Avatar name={s.nameEn} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{names.primary}</p>
                     <p className="truncate text-sm text-mute">{details}</p>

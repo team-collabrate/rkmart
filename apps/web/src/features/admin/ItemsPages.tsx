@@ -16,6 +16,7 @@ import { useAdminApi } from '../../data/apiContext'
 import { GST_RATES, type Product } from '../../data/types'
 import { displayNames } from '../../lib/names'
 import type { Language } from '../auth/types'
+import { emojiFor, TINT_BG, tintFor } from '../shop/itemVisual'
 import { errorText, keys, useProducts } from './queries'
 import { productSchema } from './schemas'
 import { toNumber, useForm } from './useForm'
@@ -40,9 +41,12 @@ export function ItemsList() {
         title={t('admin.items.title')}
         backTo="/admin/more"
         action={
-          <Link to={`${BASE}/new`} className="btn no-underline">
-            <Plus size={18} aria-hidden="true" />
-            {t('admin.items.add')}
+          <Link
+            to={`${BASE}/new`}
+            aria-label={t('admin.items.add')}
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-paper no-underline"
+          >
+            <Plus size={22} aria-hidden="true" />
           </Link>
         }
       />
@@ -69,7 +73,7 @@ export function ItemsList() {
       ) : shown.length === 0 ? (
         <Empty>{t('admin.common.noResults')}</Empty>
       ) : (
-        <ul className="divide-y divide-line rounded-2xl border border-line">
+        <ul className="divide-y divide-line overflow-hidden rounded-[1.75rem] border border-line bg-paper">
           {shown.map((p) => {
             const names = displayNames(p.nameEn, p.nameTa, language)
             const details = [
@@ -85,8 +89,14 @@ export function ItemsList() {
               <li key={p.id}>
                 <Link
                   to={`${BASE}/${p.id}`}
-                  className="flex items-center gap-3 px-3 py-3 no-underline"
+                  className="flex items-center gap-3 px-3.5 py-3 no-underline"
                 >
+                  <span
+                    aria-hidden="true"
+                    className={`grid size-11 shrink-0 place-items-center rounded-2xl text-xl ${TINT_BG[tintFor(p.category || '—')]}`}
+                  >
+                    {emojiFor(p.nameEn, p.category)}
+                  </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{names.primary}</p>
                     <p className="truncate text-sm text-mute">{details}</p>

@@ -88,8 +88,8 @@
   "alerts": {
     "title": "Alerts",
     "about": {
-      "shop": "Get an alert on this device when your order is delivered, a payment is received, or a payment is due.",
-      "admin": "Get an alert on this device when a shop places an order."
+      "shop": "Alerts for deliveries and payments",
+      "admin": "Alerts for new orders"
     },
     "turnOn": "Turn on alerts",
     "turnOff": "Turn off alerts",

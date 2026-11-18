@@ -13,6 +13,7 @@ import {
   TextField,
 } from '../../components/ui'
 import { RoleChip } from '../../components/RoleChip'
+import { Avatar } from '../../components/Avatar'
 import { useAdminApi } from '../../data/apiContext'
 import { useAuth } from '../auth/AuthProvider'
 import type { Language, UserRole } from '../auth/types'
@@ -32,9 +33,12 @@ export function UsersList() {
         title={t('admin.users.title')}
         backTo="/admin/more"
         action={
-          <Link to={`${BASE}/new`} className="btn no-underline">
-            <Plus size={18} aria-hidden="true" />
-            {t('admin.users.add')}
+          <Link
+            to={`${BASE}/new`}
+            aria-label={t('admin.users.add')}
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-paper no-underline"
+          >
+            <Plus size={22} aria-hidden="true" />
           </Link>
         }
       />
@@ -45,13 +49,14 @@ export function UsersList() {
       ) : users.data.length === 0 ? (
         <Empty>{t('admin.users.empty')}</Empty>
       ) : (
-        <ul className="divide-y divide-line rounded-2xl border border-line">
+        <ul className="divide-y divide-line overflow-hidden rounded-[1.75rem] border border-line bg-paper">
           {users.data.map((u) => (
             <li key={u.id}>
               <Link
                 to={`${BASE}/${u.id}`}
-                className="flex items-center gap-3 px-3 py-3 no-underline"
+                className="flex items-center gap-3 px-3.5 py-3 no-underline"
               >
+                <Avatar name={u.fullName} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{u.fullName}</p>
                   <p className="truncate text-sm text-mute">
