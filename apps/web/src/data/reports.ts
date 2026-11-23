@@ -1,8 +1,11 @@
+import { addDays } from '../lib/dates'
 import { roundPaise } from '../lib/money'
 import type { Invoice } from './adminOrders'
 
 // Sales reports: the issued bills of a date range, added up by day, by shop and by item.
 // Cancelled bills are left out. The database does the same sums (report_sales_by_* functions).
+
+export type RangeKey = 'today' | 'week' | 'month' | 'lastMonth'
 
 export interface SalesDay {
   day: string
@@ -117,4 +120,14 @@ export function buildSalesReport(invoices: Invoice[], from: string, to: string):
       .sort((a, b) => b.amount - a.amount)
       .map((r) => money(r, ['qty', 'taxable', 'amount'])),
   }
+}
+
+/** The first and last day of the range the person picked (never past today). */
+export function rangeDates(key: RangeKey, today: string): { from: string; to: string } {
+  const monthStart = today.slice(0, 8) + '01'
+  if (key === 'today') return { from: today, to: today }
+  if (key === 'week') return { from: addDays(today, -6), to: today }
+  if (key === 'month') return { from: monthStart, to: today }
+  const lastEnd = addDays(monthStart, -1)
+  return { from: lastEnd.slice(0, 8) + '01', to: lastEnd }
 }

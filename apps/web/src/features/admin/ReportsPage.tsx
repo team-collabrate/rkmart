@@ -6,9 +6,9 @@ import { Avatar } from '../../components/Avatar'
 import { TopBar } from '../../components/TopBar'
 import { Banner, PageHeader } from '../../components/ui'
 import { useAdminApi } from '../../data/apiContext'
-import { totalsOf } from '../../data/reports'
+import { rangeDates, totalsOf, type RangeKey } from '../../data/reports'
 import { toCsv } from '../../lib/csv'
-import { addDays, formatDay, todayISO } from '../../lib/dates'
+import { formatDay, todayISO } from '../../lib/dates'
 import { saveFile } from '../../lib/files'
 import { formatQty } from '../shop/cart'
 import { formatRupees, roundPaise } from '../../lib/money'
@@ -18,22 +18,11 @@ import { errorText } from './queries'
 
 // Built to stay still, like the other admin pages: fixed heights, one line per element.
 
-type RangeKey = 'today' | 'week' | 'month' | 'lastMonth'
 type Tab = 'day' | 'shop' | 'item' | 'dues'
 const RANGES: RangeKey[] = ['today', 'week', 'month', 'lastMonth']
 const TABS: Tab[] = ['day', 'shop', 'item', 'dues']
 const CARD = 'overflow-hidden rounded-[1.75rem] border border-line bg-paper'
 const ROW = 'flex h-[4.25rem] items-center gap-3 px-5'
-
-/** The first and last day of the range the person picked (never past today). */
-export function rangeDates(key: RangeKey, today: string): { from: string; to: string } {
-  const monthStart = today.slice(0, 8) + '01'
-  if (key === 'today') return { from: today, to: today }
-  if (key === 'week') return { from: addDays(today, -6), to: today }
-  if (key === 'month') return { from: monthStart, to: today }
-  const lastEnd = addDays(monthStart, -1)
-  return { from: lastEnd.slice(0, 8) + '01', to: lastEnd }
-}
 
 const money = (n: number) => `₹${formatRupees(roundPaise(n))}`
 
