@@ -108,6 +108,13 @@ the phones (WhatsApp or a download link) and allow "install from this source" on
 5. Open Balances and the day's PDF and print one bill on your printer next to the approved sheet.
 6. Do the backup restore drill in `docs/backup-restore.md`.
 
+## What we learned doing it for real (24 Nov 2026)
+
+- **Key names.** Supabase now calls the keys _publishable_ (`sb_publishable_…`, goes in the web app as `VITE_SUPABASE_ANON_KEY`) and _secret_ (`sb_secret_…`, used as `SUPABASE_SERVICE_ROLE_KEY` in your own terminal only).
+- **Deploy from GitHub.** With the GitHub integration on (production branch `main`, directory `supabase`), a push to `main` applies new migrations and deploys the functions listed in `supabase/config.toml`. A function with no `[functions.name]` entry there is not deployed.
+- **The server role needs explicit table access** on new projects. Migration `20261124130000_service_role_grants.sql` does this; without it the admin script says "permission denied for table profiles".
+- **The PIN secret is hidden after saving.** Keep the value in a password manager. The terminal and the dashboard must hold exactly the same value.
+
 ## What can go wrong
 
 - "Sign in does not work": the `PIN_PEPPER` secret is missing or differs from the one used when
