@@ -2,16 +2,16 @@ import { ChevronLeft, LogOut } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { BrandLogo } from '../../components/BrandLogo'
-import { LanguageSwitch } from '../../components/LanguageSwitch'
-import { useAuth } from '../auth/AuthProvider'
+import { BrandLogo } from './BrandLogo'
+import { LanguageSwitch } from './LanguageSwitch'
+import { useAuth } from '../features/auth/AuthProvider'
 
 /**
- * The frame of a shop screen: a white rounded header (logo, language, sign out, then a title row
+ * The frame of a shop or delivery screen: a white rounded header (logo, language, sign out, then a title row
  * with an optional round back button and one item on the right) over a grey page. One fixed line
  * for the title, so switching language never moves anything.
  */
-export function ShopPage({
+export function PhonePage({
   title,
   backTo,
   action,

@@ -15,7 +15,7 @@ import { useCart } from './cartStore'
 import { emojiFor, TINT_BG, tintFor } from './itemVisual'
 import { QtyControl } from './QtyControl'
 import { shopKeys, useCatalog } from './queries'
-import { ShopPage, SkeletonRows } from './ShopPage'
+import { PhonePage, SkeletonRows } from '../../components/PhonePage'
 
 // Designed in Figma first ("Shop / Review"). Fixed row heights, one line per element, no animation.
 
@@ -61,16 +61,16 @@ export function ReviewPage() {
 
   if (catalog.isPending) {
     return (
-      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+      <PhonePage title={t('shop.review.title')} backTo="/shop/order">
         <SkeletonRows count={3} height="h-[4.75rem]" />
-      </ShopPage>
+      </PhonePage>
     )
   }
   if (catalog.isError) {
     return (
-      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+      <PhonePage title={t('shop.review.title')} backTo="/shop/order">
         <Banner kind="error">{errorText(t, catalog.error)}</Banner>
-      </ShopPage>
+      </PhonePage>
     )
   }
 
@@ -79,14 +79,14 @@ export function ReviewPage() {
 
   if (available.length === 0 && unavailable.length === 0) {
     return (
-      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+      <PhonePage title={t('shop.review.title')} backTo="/shop/order">
         <p className={`${CARD} flex h-20 items-center px-5 text-mute`}>
           <span className="truncate">{t('shop.review.empty')}</span>
         </p>
         <Link to="/shop/order" className="btn h-[3.25rem] w-full rounded-full no-underline">
           {t('shop.review.addItems')}
         </Link>
-      </ShopPage>
+      </PhonePage>
     )
   }
 
@@ -98,7 +98,7 @@ export function ReviewPage() {
   const count = cartCount(lines, rates)
 
   return (
-    <ShopPage title={t('shop.review.title')} backTo="/shop/order" bottomSpace>
+    <PhonePage title={t('shop.review.title')} backTo="/shop/order" bottomSpace>
       {repeated && unavailable.length > 0 && (
         <Banner kind="info">{t('shop.review.skipped', { count: unavailable.length })}</Banner>
       )}
@@ -215,6 +215,6 @@ export function ReviewPage() {
           </span>
         </button>
       </div>
-    </ShopPage>
+    </PhonePage>
   )
 }

@@ -5,7 +5,7 @@ import { formatDay } from '../../lib/dates'
 import { formatINR, formatRupees } from '../../lib/money'
 import { errorText } from '../admin/queries'
 import type { Language } from '../auth/types'
-import { ShopPage, SkeletonRows } from './ShopPage'
+import { PhonePage, SkeletonRows } from '../../components/PhonePage'
 import { useMyStatement } from './statementQuery'
 
 // Designed in Figma first ("Shop / Payments"). Fixed row heights, one line per element, no animation.
@@ -20,17 +20,17 @@ export function ShopPaymentsPage() {
 
   if (statement.isPending) {
     return (
-      <ShopPage title={t('shop.payments.title')}>
+      <PhonePage title={t('shop.payments.title')}>
         <div className="h-[8.25rem] rounded-[1.75rem] bg-line" aria-hidden="true" />
         <SkeletonRows count={3} height="h-[4.75rem]" />
-      </ShopPage>
+      </PhonePage>
     )
   }
   if (statement.isError) {
     return (
-      <ShopPage title={t('shop.payments.title')}>
+      <PhonePage title={t('shop.payments.title')}>
         <Banner kind="error">{errorText(t, statement.error)}</Banner>
-      </ShopPage>
+      </PhonePage>
     )
   }
   const s = statement.data
@@ -38,7 +38,7 @@ export function ShopPaymentsPage() {
   const advance = s.balance < 0
 
   return (
-    <ShopPage title={t('shop.payments.title')}>
+    <PhonePage title={t('shop.payments.title')}>
       <div
         className={`h-[8.25rem] rounded-[1.75rem] p-5 ${owes ? 'bg-amber-soft text-amber' : 'bg-brand-soft text-brand-dark'}`}
       >
@@ -127,6 +127,6 @@ export function ShopPaymentsPage() {
           </ul>
         )}
       </div>
-    </ShopPage>
+    </PhonePage>
   )
 }

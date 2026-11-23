@@ -11,7 +11,7 @@ import { formatQty } from './cart'
 import { emojiFor, TINT_BG, tintFor } from './itemVisual'
 import { OrderStatusPill } from './OrderStatusPill'
 import { useMyOrders, useOrder } from './queries'
-import { ShopPage, SkeletonRows } from './ShopPage'
+import { PhonePage, SkeletonRows } from '../../components/PhonePage'
 import { useRepeatOrder } from './useRepeatOrder'
 
 // Designed in Figma first ("Shop / My orders", "Shop / Order detail"). Fixed row heights, one line
@@ -25,7 +25,7 @@ export function OrdersList() {
   const orders = useMyOrders()
 
   return (
-    <ShopPage title={t('shop.orders.title')}>
+    <PhonePage title={t('shop.orders.title')}>
       {orders.isPending ? (
         <SkeletonRows count={5} />
       ) : orders.isError ? (
@@ -56,7 +56,7 @@ export function OrdersList() {
           ))}
         </ul>
       )}
-    </ShopPage>
+    </PhonePage>
   )
 }
 
@@ -71,23 +71,23 @@ export function OrderDetailPage() {
 
   if (order.isPending) {
     return (
-      <ShopPage title="" backTo="/shop/orders">
+      <PhonePage title="" backTo="/shop/orders">
         <SkeletonRows count={3} height="h-[4.5rem]" />
-      </ShopPage>
+      </PhonePage>
     )
   }
   if (order.isError) {
     return (
-      <ShopPage title="" backTo="/shop/orders">
+      <PhonePage title="" backTo="/shop/orders">
         <Banner kind="error">{errorText(t, order.error)}</Banner>
-      </ShopPage>
+      </PhonePage>
     )
   }
   const o = order.data
   const day = formatDay(o.orderDate, language)
 
   return (
-    <ShopPage
+    <PhonePage
       title={
         <>
           <span className="sr-only">{t('shop.orders.detailTitle', { date: day })}</span>
@@ -161,6 +161,6 @@ export function OrderDetailPage() {
         <Repeat size={18} aria-hidden="true" className="shrink-0" />
         <span className="truncate">{t('shop.orders.repeatThis')}</span>
       </button>
-    </ShopPage>
+    </PhonePage>
   )
 }

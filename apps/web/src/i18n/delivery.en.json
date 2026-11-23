@@ -15,5 +15,6 @@
   "deliveredAt": "Delivered {{time}}",
   "historyTitle": "Past deliveries",
   "historyEmpty": "No deliveries in the last 7 days.",
-  "delivered": "Delivered"
+  "delivered": "Delivered",
+  "photoShort": "Photo of signed copy"
 }

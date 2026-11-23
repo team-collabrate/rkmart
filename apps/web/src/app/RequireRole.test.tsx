@@ -119,8 +119,8 @@ describe('app shell', () => {
   })
 
   it('shows who is signed in, with a role badge', async () => {
-    renderAt('/delivery', user('distributor'))
-    expect((await screen.findAllByText('Distributor')).length).toBeGreaterThan(0)
-    expect(screen.getByText('Test distributor')).toBeInTheDocument()
+    renderAt('/admin/more/items', user('admin'))
+    expect((await screen.findAllByText('Admin')).length).toBeGreaterThan(0)
+    expect(screen.getByText('Test admin')).toBeInTheDocument()
   })
 })

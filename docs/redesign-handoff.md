@@ -52,6 +52,8 @@ Admin: Orders, order detail, bill, Balances and shop statement (payment form), B
 
 **Shop owner (done):** Home, Order (list rows, category chips), Review, My orders, Order detail, Payments, all built from Figma frames `Shop / ...` and using `ShopPage` (header + grey page). English and Tamil measured identical. Language switch is the one-letter pill A | அ. Pack-size rules per product are still to come.
 
+**Distributor (done, built without Figma frames because the Figma tool limit was reached):** Deliveries, mark-delivered panel, History, using the shared `components/PhonePage.tsx`. English and Tamil measured identical. Make Figma frames later if wanted.
+
 ## Still to do (in this order of value)
 
 1. **Admin forms**: Settings, Item/Shop/New user forms and User detail only inherit the new header and colours. Redesign them Figma-first, then run the stability check. Also run the English vs Tamil check on Shops, Users and New order.

@@ -32,26 +32,24 @@ export function MarkDeliveredPanel({ orderId, onDone }: { orderId: string; onDon
 
   if (!open) {
     return (
-      <button type="button" className="btn" onClick={() => setOpen(true)}>
-        <Check size={18} aria-hidden="true" />
-        {t('delivery.markDelivered')}
+      <button type="button" className="btn h-12 w-full rounded-full" onClick={() => setOpen(true)}>
+        <Check size={20} aria-hidden="true" className="shrink-0" />
+        <span className="truncate">{t('delivery.markDelivered')}</span>
       </button>
     )
   }
 
   return (
-    <div className="rounded-2xl border-2 border-dashed border-ink p-3">
-      <label htmlFor={photoId} className="mb-1 block font-semibold">
-        {t('delivery.photo')}
-      </label>
-      <p className="mb-2 text-sm text-mute">{t('delivery.photoHint')}</p>
+    <div className="flex flex-col gap-2">
+      {/* The photo is optional. The full explanation is kept for screen readers. */}
+      <p className="sr-only">{t('delivery.photoHint')}</p>
       <label
         htmlFor={photoId}
-        className="btn btn-outline mb-3 cursor-pointer"
+        className="btn btn-outline h-12 w-full cursor-pointer rounded-full"
         aria-label={t('delivery.photo')}
       >
-        <Camera size={18} aria-hidden="true" />
-        {photo ? photo.name : t('delivery.photo')}
+        <Camera size={20} aria-hidden="true" className="shrink-0" />
+        <span className="truncate">{photo ? photo.name : t('delivery.photoShort')}</span>
       </label>
       <input
         id={photoId}
@@ -61,36 +59,33 @@ export function MarkDeliveredPanel({ orderId, onDone }: { orderId: string; onDon
         className="sr-only"
         onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
       />
-      {error && (
-        <div className="mb-3">
-          <Banner kind="error">{error}</Banner>
-        </div>
-      )}
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          className="btn"
-          disabled={mark.isPending}
-          onClick={() => {
-            setError(null)
-            mark.mutate()
-          }}
-        >
+      {error && <Banner kind="error">{error}</Banner>}
+      <button
+        type="button"
+        className="btn h-12 w-full rounded-full"
+        disabled={mark.isPending}
+        onClick={() => {
+          setError(null)
+          mark.mutate()
+        }}
+      >
+        <Check size={20} aria-hidden="true" className="shrink-0" />
+        <span className="truncate">
           {mark.isPending ? t('delivery.working') : t('delivery.confirm')}
-        </button>
-        <button
-          type="button"
-          className="btn btn-outline"
-          disabled={mark.isPending}
-          onClick={() => {
-            setOpen(false)
-            setPhoto(null)
-            setError(null)
-          }}
-        >
-          {t('delivery.notYet')}
-        </button>
-      </div>
+        </span>
+      </button>
+      <button
+        type="button"
+        className="btn btn-outline h-11 w-full rounded-full"
+        disabled={mark.isPending}
+        onClick={() => {
+          setOpen(false)
+          setPhoto(null)
+          setError(null)
+        }}
+      >
+        {t('delivery.notYet')}
+      </button>
     </div>
   )
 }
