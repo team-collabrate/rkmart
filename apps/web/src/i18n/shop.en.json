@@ -48,7 +48,8 @@
     "unavailableBody": "These items have no rate today and will not be ordered:",
     "remove": "Remove {{name}}",
     "skipped_one": "{{count}} item from your earlier order is not available today and was left out.",
-    "skipped_other": "{{count}} items from your earlier order are not available today and were left out."
+    "skipped_other": "{{count}} items from your earlier order are not available today and were left out.",
+    "totalShort": "Total"
   },
   "orders": {
     "title": "My orders",
@@ -60,7 +61,8 @@
     "repeatThis": "Repeat this order",
     "note": "Your note",
     "total": "Total at the rates of that day",
-    "line": "{{qty}} {{unit}} × ₹{{rate}}"
+    "line": "{{qty}} {{unit}} × ₹{{rate}}",
+    "placedShort": "Order placed"
   },
   "status": {
     "placed": "Placed",
@@ -94,6 +96,8 @@
     },
     "homeCard": "Payment due: ₹{{amount}}",
     "homeLink": "See my payments",
-    "dueShort": "Payment due"
+    "dueShort": "Payment due",
+    "advanceShort": "Paid in advance",
+    "clearShort": "All clear"
   }
 }

@@ -1,18 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Check, MessageSquareText, TriangleAlert, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useNavigate } from 'react-router'
-import { Banner, Empty, Field, Loading, PageHeader } from '../../components/ui'
+import { Banner } from '../../components/ui'
 import { useShopApi } from '../../data/apiContext'
 import { todayISO } from '../../lib/dates'
 import { formatINR, formatRupees } from '../../lib/money'
 import { displayNames } from '../../lib/names'
 import { errorText } from '../admin/queries'
 import type { Language } from '../auth/types'
-import { cartTotal, splitAvailable } from './cart'
+import { cartCount, cartTotal, splitAvailable } from './cart'
 import { useCart } from './cartStore'
+import { emojiFor, TINT_BG, tintFor } from './itemVisual'
 import { QtyControl } from './QtyControl'
 import { shopKeys, useCatalog } from './queries'
+import { ShopPage, SkeletonRows } from './ShopPage'
+
+// Designed in Figma first ("Shop / Review"). Fixed row heights, one line per element, no animation.
+
+const CARD = 'rounded-[1.75rem] border border-line bg-paper'
 
 /** Last look at the cart before sending: change quantities, add a note, place the order. */
 export function ReviewPage() {
@@ -52,21 +59,34 @@ export function ReviewPage() {
     },
   })
 
-  if (catalog.isPending) return <Loading />
-  if (catalog.isError) return <Banner kind="error">{errorText(t, catalog.error)}</Banner>
+  if (catalog.isPending) {
+    return (
+      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+        <SkeletonRows count={3} height="h-[4.75rem]" />
+      </ShopPage>
+    )
+  }
+  if (catalog.isError) {
+    return (
+      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+        <Banner kind="error">{errorText(t, catalog.error)}</Banner>
+      </ShopPage>
+    )
+  }
 
   const { available, unavailable } = splitAvailable(lines, rates)
   const repeated = Boolean((location.state as { repeated?: boolean } | null)?.repeated)
 
   if (available.length === 0 && unavailable.length === 0) {
     return (
-      <section>
-        <PageHeader title={t('shop.review.title')} />
-        <Empty>{t('shop.review.empty')}</Empty>
-        <Link to="/shop/order" className="btn mt-4 no-underline">
+      <ShopPage title={t('shop.review.title')} backTo="/shop/order">
+        <p className={`${CARD} flex h-20 items-center px-5 text-mute`}>
+          <span className="truncate">{t('shop.review.empty')}</span>
+        </p>
+        <Link to="/shop/order" className="btn h-[3.25rem] w-full rounded-full no-underline">
           {t('shop.review.addItems')}
         </Link>
-      </section>
+      </ShopPage>
     )
   }
 
@@ -75,36 +95,46 @@ export function ReviewPage() {
     place.mutate(available.map((id) => ({ productId: id, qty: lines[id] })))
   }
 
-  return (
-    <section className="max-w-2xl pb-8">
-      <PageHeader title={t('shop.review.title')} backTo="/shop/order" />
+  const count = cartCount(lines, rates)
 
+  return (
+    <ShopPage title={t('shop.review.title')} backTo="/shop/order" bottomSpace>
       {repeated && unavailable.length > 0 && (
-        <div className="mb-4">
-          <Banner kind="info">{t('shop.review.skipped', { count: unavailable.length })}</Banner>
-        </div>
+        <Banner kind="info">{t('shop.review.skipped', { count: unavailable.length })}</Banner>
       )}
 
       {available.length > 0 && (
-        <ul className="mb-4 divide-y divide-line rounded-2xl border border-line">
+        <ul className={`${CARD} divide-y divide-line overflow-hidden`}>
           {available.map((id) => {
             const item = byId.get(id)!
             const names = displayNames(item.nameEn, item.nameTa, language)
             const lineTotal = lines[id] * item.rate
             return (
-              <li key={id} className="flex items-center gap-3 px-3 py-3">
+              <li key={id} className="flex h-[4.75rem] items-center gap-3 px-3.5">
+                <span
+                  aria-hidden="true"
+                  className={`grid size-12 shrink-0 place-items-center rounded-2xl text-2xl ${TINT_BG[tintFor(item.category || '—')]}`}
+                >
+                  {emojiFor(item.nameEn, item.category)}
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold">{names.primary}</p>
-                  <p className="text-sm text-mute">
-                    ₹{formatRupees(item.rate)} {t('shop.order.perUnit', { unit: item.unit })}
+                  <p className="h-6 truncate font-semibold leading-6">{names.primary}</p>
+                  <p className="flex h-5 items-baseline gap-1 text-sm leading-5">
+                    <span className="shrink-0 font-bold text-brand-dark">
+                      ₹{formatRupees(lineTotal)}
+                    </span>
+                    <span className="truncate text-mute">
+                      · ₹{formatRupees(item.rate)}/{item.unit}
+                    </span>
                   </p>
-                  <p className="font-bold">₹{formatINR(lineTotal)}</p>
                 </div>
-                <QtyControl
-                  name={names.primary}
-                  qty={lines[id]}
-                  onChange={(q) => setQty(id, q, { en: item.nameEn, ta: item.nameTa })}
-                />
+                <div className="w-[8.5rem] shrink-0">
+                  <QtyControl
+                    name={names.primary}
+                    qty={lines[id]}
+                    onChange={(q) => setQty(id, q, { en: item.nameEn, ta: item.nameTa })}
+                  />
+                </div>
               </li>
             )
           })}
@@ -112,23 +142,26 @@ export function ReviewPage() {
       )}
 
       {unavailable.length > 0 && (
-        <div className="mb-4 rounded-2xl border-2 border-dashed border-ink p-3">
-          <p className="font-semibold">{t('shop.review.unavailableTitle')}</p>
-          <p className="text-sm text-mute">{t('shop.review.unavailableBody')}</p>
-          <ul className="mt-2 flex flex-col gap-2">
+        <div className="rounded-[1.75rem] bg-amber-soft p-4 text-amber">
+          <p className="flex h-6 items-center gap-2 font-semibold">
+            <TriangleAlert size={18} aria-hidden="true" className="shrink-0" />
+            <span className="truncate">{t('shop.review.unavailableTitle')}</span>
+          </p>
+          <p className="sr-only">{t('shop.review.unavailableBody')}</p>
+          <ul className="mt-2 flex flex-col gap-1">
             {unavailable.map((id) => {
               const label = labels[id]
               const name = label ? displayNames(label.en, label.ta, language).primary : id
               return (
-                <li key={id} className="flex items-center justify-between gap-3">
-                  <span>{name}</span>
+                <li key={id} className="flex h-10 items-center justify-between gap-3">
+                  <span className="min-w-0 flex-1 truncate">{name}</span>
                   <button
                     type="button"
-                    className="btn btn-outline min-h-9"
+                    className="grid size-9 shrink-0 place-items-center rounded-full bg-paper"
                     onClick={() => setQty(id, 0)}
                     aria-label={t('shop.review.remove', { name })}
                   >
-                    ×
+                    <X size={16} aria-hidden="true" />
                   </button>
                 </li>
               )
@@ -137,40 +170,51 @@ export function ReviewPage() {
         </div>
       )}
 
-      <div className="mb-4">
-        <Field id="note" label={t('shop.review.note')} hint={t('shop.review.noteHint')}>
-          <textarea
-            id="note"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            maxLength={500}
-            rows={2}
-            className="field"
-          />
-        </Field>
-      </div>
+      <label className={`${CARD} flex items-start gap-3 px-4 py-3 focus-within:border-brand`}>
+        <MessageSquareText size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-mute" />
+        <span className="sr-only">{t('shop.review.note')}</span>
+        <textarea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          maxLength={500}
+          rows={2}
+          placeholder={t('shop.review.note')}
+          aria-describedby="note-hint"
+          className="h-12 min-w-0 flex-1 resize-none bg-transparent outline-none"
+        />
+        <span id="note-hint" className="sr-only">
+          {t('shop.review.noteHint')}
+        </span>
+      </label>
 
-      <div className="mb-4 flex items-baseline justify-between border-t-2 border-line pt-3">
-        <span className="font-semibold">{t('shop.review.total')}</span>
-        <span className="font-display text-2xl font-bold">
+      <div className={`${CARD} flex h-[4.75rem] items-center justify-between gap-3 px-5`}>
+        <span className="sr-only">{t('shop.review.total')}</span>
+        <span className="font-semibold text-mute" aria-hidden="true">
+          {t('shop.review.totalShort')}
+        </span>
+        <span className="font-display text-[1.75rem] font-bold">
           ₹{formatINR(cartTotal(lines, rates))}
         </span>
       </div>
-      <p className="mb-4 text-sm text-mute">{t('shop.review.totalNote')}</p>
+      <p className="sr-only">{t('shop.review.totalNote')}</p>
 
-      {failure && (
-        <div className="mb-4">
-          <Banner kind="error">{failure}</Banner>
-        </div>
-      )}
-      <button
-        type="button"
-        className="btn w-full"
-        onClick={onPlace}
-        disabled={place.isPending || available.length === 0}
-      >
-        {place.isPending ? t('shop.review.placing') : t('shop.review.place')}
-      </button>
-    </section>
+      {failure && <Banner kind="error">{failure}</Banner>}
+
+      <div className="fixed bottom-[6.25rem] left-1/2 z-10 w-full max-w-[30rem] -translate-x-1/2 px-4">
+        <button
+          type="button"
+          className="btn flex h-14 w-full justify-between rounded-full px-6 text-base shadow-[0_8px_30px_rgba(15,26,20,0.18)]"
+          onClick={onPlace}
+          aria-label={place.isPending ? t('shop.review.placing') : t('shop.review.place')}
+          disabled={place.isPending || available.length === 0}
+        >
+          <span className="min-w-0 truncate">{t('shop.order.cartItems', { count })}</span>
+          <span className="flex shrink-0 items-center gap-2">
+            {place.isPending ? t('shop.review.placing') : t('shop.review.place')}
+            <Check size={20} aria-hidden="true" />
+          </span>
+        </button>
+      </div>
+    </ShopPage>
   )
 }

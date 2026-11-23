@@ -56,7 +56,16 @@ function renderAt(path: string, profile: Profile | null) {
             <Route path="orders" element={<p>ADMIN ORDERS</p>} />
             <Route path="more/items" element={<p>ADMIN ITEMS</p>} />
           </Route>
-          <Route path="/delivery" element={<p>DELIVERY HOME</p>} />
+          <Route
+            path="/delivery"
+            element={
+              <RequireRole role="distributor">
+                <AppShell />
+              </RequireRole>
+            }
+          >
+            <Route index element={<p>DELIVERY HOME</p>} />
+          </Route>
         </Routes>
       </AuthProvider>
     </MemoryRouter>,
@@ -110,8 +119,8 @@ describe('app shell', () => {
   })
 
   it('shows who is signed in, with a role badge', async () => {
-    renderAt('/shop/orders', user('shop'))
-    expect((await screen.findAllByText('Shop owner')).length).toBeGreaterThan(0)
-    expect(screen.getByText('Test shop')).toBeInTheDocument()
+    renderAt('/delivery', user('distributor'))
+    expect((await screen.findAllByText('Distributor')).length).toBeGreaterThan(0)
+    expect(screen.getByText('Test distributor')).toBeInTheDocument()
   })
 })

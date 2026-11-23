@@ -166,7 +166,7 @@ describe('placing an order', () => {
     await screen.findByText(/Your order is placed/)
 
     await userEvent.click(screen.getByRole('link', { name: /Orders/ }))
-    expect(await screen.findByText('1 item · ₹46.00')).toBeInTheDocument()
+    expect(await screen.findByText('1 item · ₹46')).toBeInTheDocument()
     expect(screen.getByText('Placed')).toBeInTheDocument()
   })
 

@@ -50,6 +50,8 @@ Admin: Orders, order detail, bill, Balances and shop statement (payment form), B
 
 **New feature: admin places an order for a shop** (for clients who phone or visit). `orders/new` (`NewOrderPage.tsx`, the + on Orders), DB function `admin_place_order` (migration 20261123100000, tests in `supabase/tests/admin_place_order.test.ts`), `AdminApi.placeOrderForShop`. The order then opens like any other: bill it, mark delivered. The shop does not get a new-order alert for it; other admins do. Also: floating bottom nav, shared top bar, status pills, green theme, phone-only layout, Tamil font fit.
 
+**Shop owner (done):** Home, Order (list rows, category chips), Review, My orders, Order detail, Payments, all built from Figma frames `Shop / ...` and using `ShopPage` (header + grey page). English and Tamil measured identical. Language switch is the one-letter pill A | அ. Pack-size rules per product are still to come.
+
 ## Still to do (in this order of value)
 
 1. **Admin forms**: Settings, Item/Shop/New user forms and User detail only inherit the new header and colours. Redesign them Figma-first, then run the stability check. Also run the English vs Tamil check on Shops, Users and New order.
