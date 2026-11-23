@@ -227,7 +227,7 @@ describe('repeat an order', () => {
   it('offers to repeat the last order from the home screen', async () => {
     renderAt('/shop', createMockState({ seedDemo: true }))
     expect(await screen.findByText('Hello, Murugan')).toBeInTheDocument()
-    expect(screen.getByText("Today's rates are ready: 15 items.")).toBeInTheDocument()
+    expect(await screen.findByText("Today's rates are ready: 15 items.")).toBeInTheDocument()
     expect(screen.getAllByText('Bill ready').length).toBeGreaterThan(0) // the latest demo order is billed
 
     await userEvent.click(screen.getByRole('button', { name: 'Repeat last order' }))
@@ -241,7 +241,7 @@ describe('shop screens in Tamil', () => {
     setLanguage('ta')
     renderAt('/shop', createMockState({ seedDemo: true }), { ...owner, language: 'ta' })
     expect(await screen.findByText('வணக்கம், Murugan')).toBeInTheDocument()
-    expect(screen.getByText('இன்றைய விலை தயார்: 15 பொருட்கள்.')).toBeInTheDocument()
+    expect(await screen.findByText('இன்றைய விலை தயார்: 15 பொருட்கள்.')).toBeInTheDocument()
     expect(screen.getAllByText('பில் தயார்').length).toBeGreaterThan(0)
   })
 })

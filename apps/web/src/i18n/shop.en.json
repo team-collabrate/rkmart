@@ -9,7 +9,12 @@
     "repeat": "Repeat last order",
     "recent": "Recent orders",
     "noOrders": "You have not placed an order yet.",
-    "viewAll": "All orders"
+    "viewAll": "All orders",
+    "itemsToday": "items today",
+    "orderNowShort": "Order now",
+    "ratesWait": "Rates not ready",
+    "lastShort": "Last order",
+    "repeatShort": "Repeat"
   },
   "order": {
     "title": "Place an order",
@@ -88,6 +93,7 @@
       "other": "Other"
     },
     "homeCard": "Payment due: ₹{{amount}}",
-    "homeLink": "See my payments"
+    "homeLink": "See my payments",
+    "dueShort": "Payment due"
   }
 }

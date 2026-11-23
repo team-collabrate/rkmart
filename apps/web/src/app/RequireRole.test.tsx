@@ -43,6 +43,7 @@ function renderAt(path: string, profile: Profile | null) {
             }
           >
             <Route index element={<p>SHOP HOME</p>} />
+            <Route path="orders" element={<p>SHOP ORDERS</p>} />
           </Route>
           <Route
             path="/admin"
@@ -109,7 +110,7 @@ describe('app shell', () => {
   })
 
   it('shows who is signed in, with a role badge', async () => {
-    renderAt('/shop', user('shop'))
+    renderAt('/shop/orders', user('shop'))
     expect((await screen.findAllByText('Shop owner')).length).toBeGreaterThan(0)
     expect(screen.getByText('Test shop')).toBeInTheDocument()
   })
