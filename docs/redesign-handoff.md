@@ -54,6 +54,8 @@ Admin: Orders, order detail, bill, Balances and shop statement (payment form), B
 
 **Distributor (done, built without Figma frames because the Figma tool limit was reached):** Deliveries, mark-delivered panel, History, using the shared `components/PhonePage.tsx`. English and Tamil measured identical. Make Figma frames later if wanted.
 
+**Login (done, no Figma frame, same tool limit):** green header with logo and language pill, white card with phone and PIN fields (icons, eye toggle), fixed-height error line. English and Tamil measured identical, with and without an error.
+
 ## Still to do (in this order of value)
 
 1. **Admin forms**: Settings, Item/Shop/New user forms and User detail only inherit the new header and colours. Redesign them Figma-first, then run the stability check. Also run the English vs Tamil check on Shops, Users and New order.

@@ -1,17 +1,22 @@
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Lock, Smartphone } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router'
 import { startPath } from '../../app/roles'
+import { BrandLogo } from '../../components/BrandLogo'
 import { LanguageSwitch } from '../../components/LanguageSwitch'
 import { isValidPhone, normalizePhone } from '../../lib/phone'
 import { isPin } from '../../lib/pin'
 import { useAuth } from './AuthProvider'
-import { DEMO_PIN } from './mockAuth'
 import { isDemoMode } from './createAuthService'
+import { DEMO_PIN } from './mockAuth'
 import type { SignInError } from './types'
 
 type FormError = SignInError | 'phone' | 'password' | null
+
+// Built to stay still, like the other screens: fixed heights, one line per element, no animation.
+const BOX =
+  'flex h-14 items-center gap-3 rounded-2xl border-[1.5px] bg-page px-4 focus-within:border-brand '
 
 export function LoginPage() {
   const { t } = useTranslation()
@@ -41,103 +46,124 @@ export function LoginPage() {
   const passwordInvalid = error === 'password'
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col px-4 pb-8 pt-[max(1rem,env(safe-area-inset-top))]">
-      <div className="flex justify-end">
-        <LanguageSwitch />
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-page">
+      <div className="h-56 rounded-b-[2rem] bg-brand px-5 pt-[max(1.25rem,env(safe-area-inset-top))] text-paper">
+        <div className="flex h-12 items-center justify-between gap-3">
+          <span className="grid size-12 place-items-center rounded-2xl bg-paper">
+            <BrandLogo size={44} />
+          </span>
+          <LanguageSwitch />
+        </div>
+        <p className="mt-5 h-9 truncate font-display text-[1.75rem] font-bold leading-9">
+          {t('app.name')}
+        </p>
+        <p className="h-6 truncate text-white/85">{t('app.tagline')}</p>
       </div>
 
-      <div className="mt-8 flex items-center gap-3">
-        <img src="/logo.svg" alt="" width={56} height={56} className="rounded-2xl" />
-        <div>
-          <p className="font-display text-2xl font-bold leading-tight">{t('app.name')}</p>
-          <p className="text-sm text-mute">{t('app.tagline')}</p>
-        </div>
-      </div>
-
-      <h1 className="mt-8 text-3xl">{t('login.title')}</h1>
-      <p className="mt-1 text-mute">{t('login.subtitle')}</p>
-
-      <form onSubmit={onSubmit} noValidate className="mt-6 flex flex-col gap-4">
-        <div>
-          <label htmlFor="phone" className="mb-1 block font-semibold">
-            {t('login.phone')}
-          </label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            inputMode="numeric"
-            autoComplete="username tel"
-            placeholder={t('login.phoneHint')}
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value)
-              if (error) setError(null)
-            }}
-            aria-invalid={phoneInvalid}
-            aria-describedby={phoneInvalid ? 'form-error' : undefined}
-            className="field"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password" className="mb-1 block font-semibold">
-            {t('login.password')}
-          </label>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              inputMode="numeric"
-              maxLength={4}
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value.replace(/D/g, '').slice(0, 4))
-                if (error) setError(null)
-              }}
-              aria-invalid={passwordInvalid}
-              aria-describedby={passwordInvalid ? 'form-error' : undefined}
-              className="field pr-24"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-1.5 top-1/2 flex min-h-9 -translate-y-1/2 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold"
-              aria-pressed={showPassword}
-            >
-              {showPassword ? (
-                <EyeOff size={16} aria-hidden="true" />
-              ) : (
-                <Eye size={16} aria-hidden="true" />
-              )}
-              {showPassword ? t('login.hide') : t('login.show')}
-            </button>
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="relative -mt-14 mb-6 flex flex-col gap-4 px-4"
+      >
+        <div className="flex flex-col gap-4 rounded-[1.75rem] border border-line bg-paper p-5 shadow-[0_8px_30px_rgba(15,26,20,0.08)]">
+          <div>
+            <h1 className="h-9 truncate text-[1.75rem] leading-9">{t('login.title')}</h1>
+            <p className="h-6 truncate text-mute">{t('login.subtitle')}</p>
           </div>
+
+          <div>
+            <label
+              htmlFor="phone"
+              className="mb-1.5 block h-5 truncate text-sm font-semibold text-mute"
+            >
+              {t('login.phone')}
+            </label>
+            <div className={BOX + (phoneInvalid ? 'border-dashed border-ink' : 'border-line')}>
+              <Smartphone size={20} aria-hidden="true" className="shrink-0 text-mute" />
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="username tel"
+                placeholder={t('login.phoneHint')}
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value)
+                  if (error) setError(null)
+                }}
+                aria-invalid={phoneInvalid}
+                aria-describedby={phoneInvalid ? 'form-error' : undefined}
+                className="min-w-0 flex-1 bg-transparent text-lg outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-1.5 block h-5 truncate text-sm font-semibold text-mute"
+            >
+              {t('login.password')}
+            </label>
+            <div className={BOX + (passwordInvalid ? 'border-dashed border-ink' : 'border-line')}>
+              <Lock size={20} aria-hidden="true" className="shrink-0 text-mute" />
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                inputMode="numeric"
+                maxLength={4}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value.replace(/\D/g, '').slice(0, 4))
+                  if (error) setError(null)
+                }}
+                aria-invalid={passwordInvalid}
+                aria-describedby={passwordInvalid ? 'form-error' : undefined}
+                className="min-w-0 flex-1 bg-transparent text-lg tracking-[0.4em] outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="grid size-10 shrink-0 place-items-center rounded-full text-mute"
+                aria-pressed={showPassword}
+                aria-label={showPassword ? t('login.hide') : t('login.show')}
+              >
+                {showPassword ? (
+                  <EyeOff size={20} aria-hidden="true" />
+                ) : (
+                  <Eye size={20} aria-hidden="true" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div id="form-error" role="alert" aria-live="polite" className="h-6">
+            {error && (
+              <p className="truncate font-semibold text-red">{t(`login.errors.${error}`)}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="btn h-14 w-full rounded-full text-base"
+            disabled={busy || status === 'loading'}
+          >
+            {busy ? t('login.submitting') : t('login.submit')}
+          </button>
         </div>
 
-        <div id="form-error" role="alert" aria-live="polite" className="min-h-6">
-          {error && (
-            <p className="rounded-2xl border-2 border-dashed border-ink px-3 py-2 font-medium">
-              {t(`login.errors.${error}`)}
-            </p>
-          )}
-        </div>
-
-        <button type="submit" className="btn" disabled={busy || status === 'loading'}>
-          {busy ? t('login.submitting') : t('login.submit')}
-        </button>
+        {/* Written inline so a real release drops the demo hint completely. */}
+        {(import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') && isDemoMode() && (
+          <aside className="rounded-[1.75rem] border border-line bg-paper p-4 text-sm">
+            <p className="font-bold">{t('login.demoTitle')}</p>
+            <p className="mt-1">{t('login.demoBody', { password: DEMO_PIN })}</p>
+            <p className="mt-1 text-mute">{t('login.demoAccounts')}</p>
+          </aside>
+        )}
       </form>
-
-      {/* Written inline so a real release drops the demo hint completely. */}
-      {(import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') && isDemoMode() && (
-        <aside className="mt-8 rounded-2xl border-2 border-dashed border-ink p-3 text-sm">
-          <p className="font-bold">{t('login.demoTitle')}</p>
-          <p className="mt-1">{t('login.demoBody', { password: DEMO_PIN })}</p>
-          <p className="mt-1 text-mute">{t('login.demoAccounts')}</p>
-        </aside>
-      )}
     </div>
   )
 }
