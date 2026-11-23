@@ -45,6 +45,14 @@ describe('security audit of the database', () => {
     expect(rows.map((r) => r.proname)).toEqual([])
   })
 
+  it('gives the server-side role (service_role) access to every table, so the functions and scripts work', async () => {
+    const rows = await q<{ relname: string }>(`
+      select c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace
+      where n.nspname = 'public' and c.relkind in ('r', 'v')
+        and not has_table_privilege('service_role', c.oid, 'select') order by 1`)
+    expect(rows.map((r) => r.relname)).toEqual([])
+  })
+
   it('keeps the lockout table and the sign-in helpers to the service role', async () => {
     const rows = await q<{ proname: string }>(`
       select p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
