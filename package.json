@@ -17,7 +17,8 @@
     "test": "npm run test -w apps/web",
     "test:db": "vitest run --config supabase/tests/vitest.config.mts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "e2e": "npm run e2e -w apps/web"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.16",

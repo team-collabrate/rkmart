@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "icons": "pwa-assets-generator",
     "preview": "vite preview",
-    "cap:sync": "cap sync android"
+    "cap:sync": "cap sync android",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^8.6.2",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/vite": "^4.3.5",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
