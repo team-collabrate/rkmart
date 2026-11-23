@@ -20,7 +20,9 @@
     "users": "Logins",
     "usersHint": "Shop owners, distributors and admin",
     "settings": "Company settings",
-    "settingsHint": "RK name, GSTIN, bank details, invoice prefix"
+    "settingsHint": "RK name, GSTIN, bank details, invoice prefix",
+    "reports": "Reports",
+    "reportsHint": "Sales by day, shop and item, and what shops owe"
   },
   "rates": {
     "title": "Today's rates",
@@ -150,7 +152,8 @@
     "not_billed": "This order has no bill yet.",
     "bad_amount": "Enter an amount above 0, with at most 2 decimals.",
     "bad_date": "The date must be today or earlier (within the last year).",
-    "invoice_mismatch": "That bill does not belong to this shop, or it was cancelled."
+    "invoice_mismatch": "That bill does not belong to this shop, or it was cancelled.",
+    "bad_range": "Pick a range of at most 400 days."
   },
   "orders": {
     "title": "Orders",
@@ -321,5 +324,42 @@
     "placeShort": "Place order",
     "noRate": "{{count}} items have no rate today",
     "noRates": "Set today's rates first, then you can place orders."
+  },
+  "reports": {
+    "title": "Reports",
+    "range": "Date range",
+    "range_today": "Today",
+    "range_week": "Last 7 days",
+    "range_month": "This month",
+    "range_lastMonth": "Last month",
+    "sales": "Sales (with GST)",
+    "tab_day": "Day",
+    "tab_shop": "Shop",
+    "tab_item": "Item",
+    "tab_dues": "Dues",
+    "none": "No bills in these dates.",
+    "noDues": "No shop owes anything.",
+    "billsCount_one": "{{count}} bill",
+    "billsCount_other": "{{count}} bills",
+    "lastPaid": "Last paid {{date}}",
+    "neverPaid": "Never paid",
+    "export": "Export CSV",
+    "exportFailed": "Could not save the file.",
+    "col": {
+      "date": "Date",
+      "bills": "Bills",
+      "taxable": "Taxable value",
+      "gst": "GST",
+      "total": "Total",
+      "shop": "Shop",
+      "item": "Item",
+      "unit": "Unit",
+      "qty": "Quantity",
+      "amount": "Amount",
+      "billed": "Billed",
+      "paid": "Paid",
+      "owes": "Owes",
+      "lastPaid": "Last paid"
+    }
   }
 }

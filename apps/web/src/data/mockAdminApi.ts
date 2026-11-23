@@ -1,9 +1,11 @@
+import { buildSalesReport } from './reports'
 import { ApiError, type AdminApi } from './adminApi'
 import type { AdminOrderSummary, DayPdf } from './adminOrders'
 import { cancelInvoice, issueInvoice } from './mockBilling'
 import { createMockOrder } from './mockOrders'
 import { balances, recordPayment, statementFor, voidPayment } from './mockPayments'
 import { createMockState, notifyOrdersChanged, type MockOrder, type MockState } from './mockState'
+import { addDays } from '../lib/dates'
 import { roundPaise } from '../lib/money'
 
 function orderSummary(state: MockState, o: MockOrder): AdminOrderSummary {
@@ -307,6 +309,12 @@ export function createMockAdminApi(
     async voidPayment(paymentId, reason) {
       await wait()
       voidPayment(state, paymentId, reason)
+    },
+
+    async getSalesReport(from, to) {
+      await wait()
+      if (from > to || to > addDays(from, 400)) throw new ApiError('bad_range')
+      return buildSalesReport(state.invoices, from, to)
     },
 
     async getSettings() {

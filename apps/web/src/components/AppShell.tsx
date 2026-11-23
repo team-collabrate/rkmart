@@ -22,6 +22,7 @@ export function AppShell() {
     profile.role === 'shop' ||
     profile.role === 'distributor' ||
     pathname === '/admin/more' ||
+    pathname === '/admin/more/reports' ||
     ['/admin/orders', '/admin/balances', '/admin/bills', '/admin/rates'].some(
       (p) => pathname === p || pathname.startsWith(p + '/'),
     )

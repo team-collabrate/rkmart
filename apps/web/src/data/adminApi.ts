@@ -1,4 +1,5 @@
 import type { AdminOrderDetail, AdminOrderSummary, DayPdf, Invoice } from './adminOrders'
+import type { SalesReport } from './reports'
 import type { PaymentInput, ShopBalance, Statement } from './payments'
 import type { CartLine } from './shopApi'
 import type {
@@ -35,6 +36,7 @@ export type ApiErrorCode =
   | 'bad_amount'
   | 'bad_date'
   | 'invoice_mismatch'
+  | 'bad_range'
   | 'unknown'
 
 /** A failure the screens can show in plain words. `code` picks the translated message. */
@@ -98,6 +100,9 @@ export interface AdminApi {
   recordPayment(input: PaymentInput): Promise<{ paymentId: string }>
   /** Removes a wrongly entered payment. The reason is kept in the audit log. */
   voidPayment(paymentId: string, reason: string): Promise<void>
+
+  /** Sales of the issued bills from one day to another (both included, at most 400 days). */
+  getSalesReport(from: string, to: string): Promise<SalesReport>
 
   getSettings(): Promise<CompanySettings>
   saveSettings(input: CompanySettings): Promise<CompanySettings>

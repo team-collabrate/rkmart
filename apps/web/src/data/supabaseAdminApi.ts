@@ -313,6 +313,7 @@ export function billingError(error: { message?: string; code?: string }): ApiErr
     'bad_amount',
     'bad_date',
     'invoice_mismatch',
+    'bad_range',
   ]
   const hit = known.find((code) => message.includes(code))
   if (hit) return new ApiError(hit)
@@ -658,6 +659,43 @@ export function createSupabaseAdminApi(client: SupabaseClient): AdminApi {
     async voidPayment(paymentId, reason) {
       const { error } = await client.rpc('void_payment', { p_payment: paymentId, p_reason: reason })
       if (error) throw billingError(error)
+    },
+
+    async getSalesReport(from, to) {
+      const args = { p_from: from, p_to: to }
+      const [days, shops, items] = await Promise.all([
+        client.rpc('report_sales_by_day', args),
+        client.rpc('report_sales_by_shop', args),
+        client.rpc('report_sales_by_item', args),
+      ])
+      for (const r of [days, shops, items]) if (r.error) throw billingError(r.error)
+      const n = (v: unknown) => Number(v ?? 0)
+      return {
+        from,
+        to,
+        days: (days.data as Record<string, unknown>[]).map((r) => ({
+          day: String(r.day),
+          bills: n(r.bills),
+          taxable: n(r.taxable),
+          tax: n(r.tax),
+          total: n(r.total),
+        })),
+        shops: (shops.data as Record<string, unknown>[]).map((r) => ({
+          shopName: String(r.shop_name),
+          bills: n(r.bills),
+          taxable: n(r.taxable),
+          tax: n(r.tax),
+          total: n(r.total),
+        })),
+        items: (items.data as Record<string, unknown>[]).map((r) => ({
+          nameEn: String(r.name_en),
+          nameTa: String(r.name_ta ?? ''),
+          unit: String(r.unit),
+          qty: n(r.qty),
+          taxable: n(r.taxable),
+          amount: n(r.amount),
+        })),
+      }
     },
 
     async getSettings() {

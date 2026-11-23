@@ -1,4 +1,12 @@
-import { Building2, ChevronRight, Package, Store, UsersRound, type LucideIcon } from 'lucide-react'
+import {
+  BarChart3,
+  Building2,
+  ChevronRight,
+  Package,
+  Store,
+  UsersRound,
+  type LucideIcon,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { TopBar } from '../../components/TopBar'
@@ -13,6 +21,7 @@ interface Entry {
   icon: LucideIcon
   tint: string
   count?: number
+  wide?: boolean
 }
 
 /** The admin's setup area: items, shops, logins and company settings, each as a big icon card. */
@@ -45,6 +54,13 @@ export function MorePage() {
       count: users.data?.filter((u) => u.isActive).length,
     },
     { to: '/admin/more/settings', key: 'settings', icon: Building2, tint: 'bg-tint-lilac' },
+    {
+      to: '/admin/more/reports',
+      key: 'reports',
+      icon: BarChart3,
+      tint: 'bg-tint-peach',
+      wide: true,
+    },
   ]
 
   return (
@@ -56,8 +72,8 @@ export function MorePage() {
 
       <div className="px-4 pt-4">
         <ul className="grid grid-cols-2 gap-3">
-          {entries.map(({ to, key, icon: Icon, tint, count }) => (
-            <li key={to}>
+          {entries.map(({ to, key, icon: Icon, tint, count, wide }) => (
+            <li key={to} className={wide ? 'col-span-2' : undefined}>
               <Link
                 to={to}
                 className="relative flex h-36 flex-col justify-between rounded-[1.75rem] border border-line bg-paper p-4 no-underline active:bg-page"

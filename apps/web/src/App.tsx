@@ -15,6 +15,7 @@ import { OrderDetailPage as AdminOrderDetailPage } from './features/admin/OrderD
 import { NewOrderPage } from './features/admin/NewOrderPage'
 import { OrdersInbox } from './features/admin/OrdersInbox'
 import { RatesPage } from './features/admin/RatesPage'
+import { ReportsPage } from './features/admin/ReportsPage'
 import { SettingsPage } from './features/admin/SettingsPage'
 import { ShopForm, ShopsList } from './features/admin/ShopsPages'
 import { NewUserForm, UserDetail, UsersList } from './features/admin/UsersPages'
@@ -88,6 +89,7 @@ export default function App() {
           <Route path="more/users/new" element={<NewUserForm />} />
           <Route path="more/users/:id" element={<UserDetail />} />
           <Route path="more/settings" element={<SettingsPage />} />
+          <Route path="more/reports" element={<ReportsPage />} />
         </Route>
 
         <Route
