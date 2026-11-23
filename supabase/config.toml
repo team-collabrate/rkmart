@@ -429,6 +429,10 @@ enabled = true
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
 
+[functions.admin-users]
+# Creates, resets and switches off logins. Called by the signed-in admin; the function checks the caller is an admin.
+verify_jwt = true
+
 [functions.sign-in]
 # Called before anyone is signed in, so there is no token to check. It checks the PIN itself and locks
 # a mobile number after 5 wrong tries.
