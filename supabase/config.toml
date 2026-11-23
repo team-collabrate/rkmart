@@ -1,5 +1,5 @@
 #:schema https://supabase.com/schemas/config/v1.json
-# RK Grocery is linked to the Supabase project pyunzxklwadmxkjgzdsd (production deploy from main is on).
+# RK Grocery is linked to the Supabase project pyunzxklwadmxkjgzdsd (production deploy from main is on, checked 24 Nov).
 # For detailed configuration reference documentation, visit:
 # https://supabase.com/docs/guides/local-development/cli/config
 # A string used to distinguish different Supabase projects on the same host. Defaults to the
