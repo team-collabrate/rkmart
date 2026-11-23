@@ -1,6 +1,6 @@
 {
   "source": "Handwritten order list dated 22/11/26, read from a photo and corrected by the owner in the shared sheet 'Order list' (46 lines, repeats removed).",
-  "status": "First pass. Not loaded into the app. Per-product ordering rules (minimum quantity, pack sizes) are still to come from the owner.",
+  "status": "Loaded into the demo (apps/web/src/data/realCatalog.ts) and supabase/seed.sql. Per-product ordering rules (minimum quantity, pack sizes) are still to come from the owner. HSN, GST and rates in the code are samples/placeholders.",
   "notes": [
     "name_ta and name_en are my conversion of the owner's English-letter spelling; confirm before loading.",
     "sampleQty and sampleUnit are only what the handwritten list happened to order that day. They are not rules.",

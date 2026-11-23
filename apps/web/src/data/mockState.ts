@@ -1,6 +1,7 @@
 import { todayISO } from '../lib/dates'
 import type { DayPdf, Invoice } from './adminOrders'
 import { issueInvoice } from './mockBilling'
+import { OLD_TO_REAL, REAL_RATES, realProducts } from './realCatalog'
 import type { PaymentMethod } from './payments'
 import {
   SAMPLE_PREVIOUS_RATES,
@@ -72,13 +73,15 @@ function daysAgo(n: number): string {
  * Tests leave it off to start from an empty day.
  */
 export function createMockState(
-  options: { seedDemo?: boolean; seedHistory?: boolean } = {},
+  options: { seedDemo?: boolean; seedHistory?: boolean; realCatalog?: boolean } = {},
 ): MockState {
   const state: MockState = {
-    products: sampleProducts(),
+    products: options.realCatalog ? realProducts() : sampleProducts(),
     shops: sampleShops(),
     users: structuredClone(SAMPLE_USERS),
-    rates: { '1970-01-01': structuredClone(SAMPLE_PREVIOUS_RATES) },
+    rates: {
+      '1970-01-01': structuredClone(options.realCatalog ? REAL_RATES : SAMPLE_PREVIOUS_RATES),
+    },
     settings: structuredClone(SAMPLE_SETTINGS),
     orders: [],
     invoices: [],
@@ -89,9 +92,15 @@ export function createMockState(
     listeners: new Set(),
   }
 
+  const pid = (id: string): string => (options.realCatalog ? OLD_TO_REAL[id] : id)
+  const rate = (id: string, sample: number): number =>
+    options.realCatalog ? REAL_RATES[OLD_TO_REAL[id]] : sample
+
   if (options.seedDemo) {
     // Today's rates: yesterday's with a few small changes, as a real morning would look.
-    state.rates[todayISO()] = { ...SAMPLE_PREVIOUS_RATES, p1: 1350, p10: 780 }
+    state.rates[todayISO()] = options.realCatalog
+      ? { ...REAL_RATES, p24: 1360, p21: 138 }
+      : { ...SAMPLE_PREVIOUS_RATES, p1: 1350, p10: 780 }
 
     const today = todayISO()
     state.orders.push(
@@ -103,9 +112,9 @@ export function createMockState(
         note: '',
         createdAt: `${daysAgo(3)}T05:10:00.000Z`,
         items: [
-          { productId: 'p1', qty: 4, rate: 1320 },
-          { productId: 'p5', qty: 10, rate: 138 },
-          { productId: 'p7', qty: 20, rate: 45 },
+          { productId: pid('p1'), qty: 4, rate: rate('p1', 1320) },
+          { productId: pid('p5'), qty: 10, rate: rate('p5', 138) },
+          { productId: pid('p7'), qty: 20, rate: rate('p7', 45) },
         ],
       },
       {
@@ -116,9 +125,9 @@ export function createMockState(
         note: 'Morning delivery please',
         createdAt: `${daysAgo(1)}T04:40:00.000Z`,
         items: [
-          { productId: 'p1', qty: 4, rate: 1330 },
-          { productId: 'p9', qty: 5, rate: 380 },
-          { productId: 'p10', qty: 6, rate: 790 },
+          { productId: pid('p1'), qty: 4, rate: rate('p1', 1330) },
+          { productId: pid('p9'), qty: 5, rate: rate('p9', 380) },
+          { productId: pid('p10'), qty: 6, rate: rate('p10', 790) },
         ],
       },
     )
@@ -148,8 +157,8 @@ export function createMockState(
         note: '',
         createdAt: `${today}T03:20:00.000Z`,
         items: [
-          { productId: 'p1', qty: 2, rate: 1350 },
-          { productId: 'p7', qty: 15, rate: 46 },
+          { productId: pid('p1'), qty: 2, rate: rate('p1', 1350) },
+          { productId: pid('p7'), qty: 15, rate: rate('p7', 46) },
         ],
       },
       {
@@ -160,9 +169,9 @@ export function createMockState(
         note: 'Call before delivery',
         createdAt: `${today}T03:45:00.000Z`,
         items: [
-          { productId: 'p10', qty: 4, rate: 780 },
-          { productId: 'p9', qty: 3, rate: 380 },
-          { productId: 'p5', qty: 8, rate: 140 },
+          { productId: pid('p10'), qty: 4, rate: rate('p10', 780) },
+          { productId: pid('p9'), qty: 3, rate: rate('p9', 380) },
+          { productId: pid('p5'), qty: 8, rate: rate('p5', 140) },
         ],
       },
       {
@@ -173,18 +182,18 @@ export function createMockState(
         note: '',
         createdAt: `${today}T04:05:00.000Z`,
         items: [
-          { productId: 'p1', qty: 3, rate: 1350 },
-          { productId: 'p3', qty: 10, rate: 58 },
+          { productId: pid('p1'), qty: 3, rate: rate('p1', 1350) },
+          { productId: pid('p3'), qty: 10, rate: rate('p3', 58) },
         ],
       },
     )
   }
-  if (options.seedDemo && options.seedHistory) addHistory(state)
+  if (options.seedDemo && options.seedHistory) addHistory(state, options.realCatalog === true)
   return state
 }
 
 /** A week of past orders for the other shops, billed and mostly delivered, with some payments. */
-function addHistory(state: MockState): void {
+function addHistory(state: MockState, real: boolean): void {
   const plan: [string, number, [string, number][]][] = [
     [
       's2',
@@ -257,9 +266,9 @@ function addHistory(state: MockState): void {
       note: '',
       createdAt: daysAgo(ago) + 'T04:00:00.000Z',
       items: lines.map(([productId, qty]) => ({
-        productId,
+        productId: real ? OLD_TO_REAL[productId] : productId,
         qty,
-        rate: SAMPLE_PREVIOUS_RATES[productId],
+        rate: real ? REAL_RATES[OLD_TO_REAL[productId]] : SAMPLE_PREVIOUS_RATES[productId],
       })),
     })
     issueInvoice(state, id, daysAgo(ago))

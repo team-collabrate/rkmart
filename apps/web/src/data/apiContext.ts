@@ -78,7 +78,7 @@ export function createApis(getShopId: () => string | null = () => signedInShopId
   }
   // Written inline (not via a shared constant) so a real release drops the demo data completely.
   if (import.meta.env.DEV || import.meta.env.VITE_MOCK_AUTH === '1') {
-    const state = createMockState({ seedDemo: true, seedHistory: true })
+    const state = createMockState({ seedDemo: true, seedHistory: true, realCatalog: true })
     return {
       admin: createMockAdminApi({ delayMs: 150, state }),
       shop: createMockShopApi(state, getShopId, { delayMs: 150 }),
