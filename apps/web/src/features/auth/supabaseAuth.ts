@@ -1,6 +1,4 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { phoneToEmail } from '../../lib/phone'
-import { pinToPassword } from '../../lib/pin'
 import type { AuthService, Language, Profile, SignInResult, UserRole } from './types'
 
 interface ProfileRow {
@@ -46,23 +44,25 @@ export function createSupabaseAuth(client: SupabaseClient): AuthService {
     },
 
     async signIn(phone, password): Promise<SignInResult> {
-      let signedIn
+      // The sign-in function checks the PIN, counts wrong tries and locks a number after too many.
+      let reply
       try {
-        signedIn = await client.auth.signInWithPassword({
-          email: phoneToEmail(phone),
-          password: pinToPassword(password),
-        })
+        reply = await client.functions.invoke<{
+          session?: { access_token: string; refresh_token: string }
+        }>('sign-in', { body: { phone, pin: password } })
       } catch {
         return { ok: false, error: 'network' }
       }
-      const { data, error } = signedIn
-      if (error || !data.user) {
-        const message = (error?.message ?? '').toLowerCase()
-        if (message.includes('banned')) return { ok: false, error: 'inactive' }
-        if (error?.status === 0 || message.includes('fetch')) return { ok: false, error: 'network' }
-        if (error?.status === 400) return { ok: false, error: 'invalid_credentials' }
-        return { ok: false, error: 'unknown' }
+      if (reply.error || !reply.data?.session) {
+        const status = (reply.error as { context?: { status?: number } } | null)?.context?.status
+        if (status === 429) return { ok: false, error: 'locked' }
+        if (status === 401) return { ok: false, error: 'invalid_credentials' }
+        if (status === 403) return { ok: false, error: 'inactive' }
+        if (status === 400) return { ok: false, error: 'invalid_credentials' }
+        return { ok: false, error: status === undefined ? 'network' : 'unknown' }
       }
+      const { data, error } = await client.auth.setSession(reply.data.session)
+      if (error || !data.user) return { ok: false, error: 'unknown' }
       const profile = await loadProfile(data.user.id)
       if (!profile) {
         await client.auth.signOut()

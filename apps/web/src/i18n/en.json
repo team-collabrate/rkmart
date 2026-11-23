@@ -34,7 +34,8 @@
       "inactive": "This login is switched off. Please contact RK.",
       "network": "No internet connection. Please try again.",
       "not_configured": "The app is not set up yet.",
-      "unknown": "Something went wrong. Please try again."
+      "unknown": "Something went wrong. Please try again.",
+      "locked": "Too many wrong tries. Wait 15 minutes, then try again."
     }
   },
   "nav": {

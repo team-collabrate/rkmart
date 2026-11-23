@@ -19,8 +19,14 @@ export function adminClient() {
 }
 
 // Must match supabase/functions/_shared/validate.ts
-// Logins use a 4-digit PIN stored with a fixed suffix. Must match supabase/functions/_shared/validate.ts
-export const pinToPassword = (pin) => pin + 'rk-pin-v1'
+// Logins use a 4-digit PIN stored together with a secret (PIN_PEPPER). Must match supabase/functions/_shared/validate.ts
+export const pinToPassword = (pin) => {
+  const pepper = process.env.PIN_PEPPER ?? ''
+  if (pepper.length < 32 || pepper.length > 60) {
+    throw new Error('Set PIN_PEPPER to the same 32 to 60 character secret the functions use')
+  }
+  return pin + pepper
+}
 export const phoneToEmail = (phone) => `${phone}@rk.local`
 
 export async function createUser(

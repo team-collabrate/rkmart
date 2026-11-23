@@ -19,6 +19,7 @@ import {
   parseResetPassword,
   pinToPassword,
   parseSetActive,
+  pepperOk,
   phoneToEmail,
 } from '../_shared/validate.ts'
 
@@ -42,7 +43,10 @@ Deno.serve(async (req) => {
   const url = Deno.env.get('SUPABASE_URL')
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY')
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-  if (!url || !anonKey || !serviceKey) return json(500, { error: 'Function is not configured.' })
+  const pepper = Deno.env.get('PIN_PEPPER')
+  if (!url || !anonKey || !serviceKey || !pepperOk(pepper)) {
+    return json(500, { error: 'Function is not configured.' })
+  }
 
   const authHeader = req.headers.get('Authorization')
   if (!authHeader) return json(401, { error: 'Sign in first.' })
@@ -94,7 +98,7 @@ Deno.serve(async (req) => {
 
       const created = await admin.auth.admin.createUser({
         email: phoneToEmail(input.phone),
-        password: pinToPassword(input.password),
+        password: pinToPassword(input.password, pepper),
         email_confirm: true,
         user_metadata: { full_name: input.fullName },
       })
@@ -128,7 +132,7 @@ Deno.serve(async (req) => {
       const parsed = parseResetPassword(body)
       if (!parsed.ok) return json(400, { error: parsed.error })
       const { error } = await admin.auth.admin.updateUserById(parsed.value.userId, {
-        password: pinToPassword(parsed.value.password),
+        password: pinToPassword(parsed.value.password, pepper),
       })
       if (error) return json(400, { error: 'Could not reset the password.' })
       await audit('user.reset_password', parsed.value.userId)

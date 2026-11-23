@@ -56,6 +56,9 @@ export function createMockAuth(delayMs = 250): AuthService {
   const wait = () => new Promise((resolve) => setTimeout(resolve, delayMs))
   const listeners = new Set<() => void>()
   let current: Profile | null = readSession()
+  // The demo locks a number after 5 wrong tries, like the real sign-in function does.
+  const wrong = new Map<string, number>()
+  const lockedUntil = new Map<string, number>()
 
   return {
     async getSession() {
@@ -64,8 +67,19 @@ export function createMockAuth(delayMs = 250): AuthService {
 
     async signIn(phone, password) {
       await wait()
+      if ((lockedUntil.get(phone) ?? 0) > Date.now()) return { ok: false, error: 'locked' }
       const user = DEMO_USERS[phone]
-      if (!user || password !== DEMO_PIN) return { ok: false, error: 'invalid_credentials' }
+      if (!user || password !== DEMO_PIN) {
+        const count = (wrong.get(phone) ?? 0) + 1
+        wrong.set(phone, count)
+        if (count >= 5) {
+          wrong.delete(phone)
+          lockedUntil.set(phone, Date.now() + 15 * 60_000)
+          return { ok: false, error: 'locked' }
+        }
+        return { ok: false, error: 'invalid_credentials' }
+      }
+      wrong.delete(phone)
       current = { ...user }
       writeSession(current)
       return { ok: true, profile: current }

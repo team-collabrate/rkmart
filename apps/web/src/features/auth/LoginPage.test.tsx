@@ -78,3 +78,18 @@ describe('login screen', () => {
     expect(screen.getByRole('button', { name: 'உள்நுழை' })).toBeInTheDocument()
   })
 })
+
+describe('login lockout', () => {
+  it('tells the person to wait after five wrong PINs', async () => {
+    renderLogin()
+    await userEvent.type(await screen.findByLabelText('Mobile number'), '9100000001')
+    for (let i = 1; i <= 5; i++) {
+      await userEvent.clear(screen.getByLabelText('PIN'))
+      await userEvent.type(screen.getByLabelText('PIN'), '0000')
+      await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+    }
+    expect(
+      await screen.findByText('Too many wrong tries. Wait 15 minutes, then try again.'),
+    ).toBeInTheDocument()
+  })
+})

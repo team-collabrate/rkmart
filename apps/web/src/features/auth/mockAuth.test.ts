@@ -39,3 +39,28 @@ describe('demo login', () => {
     expect((await auth.getSession())?.language).toBe('ta')
   })
 })
+
+describe('demo lockout', () => {
+  it('locks a number after five wrong PINs, even for the right PIN, and leaves others alone', async () => {
+    const auth = createMockAuth(0)
+    for (let i = 1; i <= 4; i++) {
+      expect(await auth.signIn('9100000001', '0000')).toEqual({
+        ok: false,
+        error: 'invalid_credentials',
+      })
+    }
+    expect(await auth.signIn('9100000001', '0000')).toEqual({ ok: false, error: 'locked' })
+    expect(await auth.signIn('9100000001', DEMO_PIN)).toEqual({ ok: false, error: 'locked' })
+    expect((await auth.signIn('9000000001', DEMO_PIN)).ok).toBe(true)
+  })
+
+  it('a right PIN clears the wrong tries', async () => {
+    const auth = createMockAuth(0)
+    for (let i = 1; i <= 4; i++) await auth.signIn('9100000001', '0000')
+    expect((await auth.signIn('9100000001', DEMO_PIN)).ok).toBe(true)
+    for (let i = 1; i <= 4; i++) {
+      expect((await auth.signIn('9100000001', '0000')).ok).toBe(false)
+    }
+    expect((await auth.signIn('9100000001', DEMO_PIN)).ok).toBe(true)
+  })
+})

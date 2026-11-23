@@ -4,10 +4,15 @@
 export type UserRole = 'admin' | 'distributor' | 'shop'
 export type Language = 'en' | 'ta'
 
-// Logins use a 4-digit PIN. Supabase needs a longer password, so the PIN gets a fixed suffix.
-// MUST match apps/web/src/lib/pin.ts and scripts/lib/admin-client.mjs.
-const PIN_SUFFIX = 'rk-pin-v1'
-export const pinToPassword = (pin: string): string => pin + PIN_SUFFIX
+// Logins use a 4-digit PIN. A PIN has only 10,000 possibilities, so it is never stored as the
+// password on its own: the password Supabase stores is the PIN plus a long secret (the PIN
+// pepper) that lives only in the functions' environment. Nobody can guess PINs straight against
+// Supabase's own sign-in, because they would need the pepper too. The sign-in function adds the
+// pepper and counts wrong tries (see supabase/functions/sign-in).
+export const PEPPER_MIN_LENGTH = 32
+export const pepperOk = (pepper: string | undefined): pepper is string =>
+  typeof pepper === 'string' && pepper.length >= PEPPER_MIN_LENGTH && pepper.length <= 60
+export const pinToPassword = (pin: string, pepper: string): string => pin + pepper
 const ROLES: readonly UserRole[] = ['admin', 'distributor', 'shop']
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -115,4 +120,21 @@ export function parseSetActive(body: unknown): Parsed<SetActiveInput> {
     return { ok: false, error: 'userId is required.' }
   if (typeof o.active !== 'boolean') return { ok: false, error: 'active must be true or false.' }
   return { ok: true, value: { userId: o.userId, active: o.active } }
+}
+
+export interface SignInInput {
+  phone: string
+  pin: string
+}
+
+/** The body of a sign-in request: a 10-digit mobile number and a 4-digit PIN. */
+export function parseSignIn(body: unknown): Parsed<SignInInput> {
+  const o = asObject(body)
+  if (!o) return { ok: false, error: 'Send the mobile number and PIN.' }
+  const phone = typeof o.phone === 'string' ? o.phone : ''
+  const pin = typeof o.pin === 'string' ? o.pin : ''
+  if (!/^[6-9][0-9]{9}$/.test(phone))
+    return { ok: false, error: 'The mobile number must be 10 digits.' }
+  if (!/^[0-9]{4}$/.test(pin)) return { ok: false, error: 'The PIN must be exactly 4 digits.' }
+  return { ok: true, value: { phone, pin } }
 }

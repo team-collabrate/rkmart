@@ -11,7 +11,7 @@ export interface Profile {
 }
 
 export type SignInError =
-  'invalid_credentials' | 'inactive' | 'network' | 'not_configured' | 'unknown'
+  'invalid_credentials' | 'inactive' | 'locked' | 'network' | 'not_configured' | 'unknown'
 
 export type SignInResult = { ok: true; profile: Profile } | { ok: false; error: SignInError }
 

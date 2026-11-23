@@ -13,7 +13,7 @@ Status: built and tested locally (39 tests). Not yet applied to a Supabase cloud
 - `supabase/functions/admin-users/`: the only way logins are created, reset or switched off.
 - `supabase/seed.sql`: 5 sample shops, 15 sample items with Tamil names, HSN codes and today's rates.
 - `scripts/`: `bootstrap-admin.mjs` (first admin) and `seed-demo-users.mjs` (dev only).
-- `supabase/config.toml`: public sign-up is switched off and Supabase wants 8 or more characters, so the 4-digit PIN is stored with a fixed suffix (see `lib/pin.ts`).
+- `supabase/config.toml`: public sign-up is switched off and Supabase wants 8 or more characters, so the 4-digit PIN is stored with a secret added (see `docs/pin-security.md`).
 
 ## Who can see and do what (as enforced by the database)
 

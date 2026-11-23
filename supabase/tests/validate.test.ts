@@ -5,7 +5,10 @@ import {
   parseCreateUser,
   parseResetPassword,
   parseSetActive,
+  parseSignIn,
+  pepperOk,
   phoneToEmail,
+  pinToPassword,
 } from '../functions/_shared/validate.ts'
 
 const SHOP = '3f2b8a1e-5c4d-4e6f-8a7b-9c0d1e2f3a4b'
@@ -91,5 +94,36 @@ describe('other actions', () => {
       value: { userId: SHOP, active: false },
     })
     expect(parseSetActive({ userId: SHOP, active: 'no' })).toMatchObject({ ok: false })
+  })
+})
+
+describe('PIN sign-in', () => {
+  const PEPPER = 'p'.repeat(40)
+
+  it('adds the secret to the PIN, so the stored password is not the PIN on its own', () => {
+    expect(pinToPassword('1234', PEPPER)).toBe('1234' + PEPPER)
+    expect(pinToPassword('1234', PEPPER).length).toBeGreaterThanOrEqual(8)
+  })
+
+  it('refuses a missing or short secret', () => {
+    expect(pepperOk(undefined)).toBe(false)
+    expect(pepperOk('short')).toBe(false)
+    expect(pepperOk('x'.repeat(61))).toBe(false)
+    expect(pepperOk(PEPPER)).toBe(true)
+  })
+
+  it('accepts a 10-digit number and a 4-digit PIN', () => {
+    expect(parseSignIn({ phone: '9100000001', pin: '1234' })).toEqual({
+      ok: true,
+      value: { phone: '9100000001', pin: '1234' },
+    })
+  })
+
+  it('rejects bad numbers and PINs', () => {
+    expect(parseSignIn(null)).toMatchObject({ ok: false })
+    expect(parseSignIn({ phone: '123', pin: '1234' })).toMatchObject({ ok: false })
+    expect(parseSignIn({ phone: '9100000001', pin: '12' })).toMatchObject({ ok: false })
+    expect(parseSignIn({ phone: '9100000001', pin: 1234 })).toMatchObject({ ok: false })
+    expect(parseSignIn({ phone: '9100000001', pin: '12345' })).toMatchObject({ ok: false })
   })
 })
