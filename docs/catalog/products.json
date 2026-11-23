@@ -1,0 +1,450 @@
+{
+  "source": "Handwritten order list dated 22/11/26, read from a photo and corrected by the owner in the shared sheet 'Order list' (46 lines, repeats removed).",
+  "status": "First pass. Not loaded into the app. Per-product ordering rules (minimum quantity, pack sizes) are still to come from the owner.",
+  "notes": [
+    "name_ta and name_en are my conversion of the owner's English-letter spelling; confirm before loading.",
+    "sampleQty and sampleUnit are only what the handwritten list happened to order that day. They are not rules.",
+    "orderRule is empty on purpose: the owner will give the minimum and the pack sizes per product (for example oil: 1, 2 or 3 litres).",
+    "extra shows the amount on a second line that was merged away as a repeat.",
+    "needsCheck lists what is still unsure."
+  ],
+  "categories": [
+    "Dals and pulses",
+    "Rice and flour",
+    "Spices and masala",
+    "Oil and ghee",
+    "Sugar and sweets",
+    "Dry fruits",
+    "Snacks and others"
+  ],
+  "products": [
+    {
+      "no": 1,
+      "name_ta": "துவரம் பருப்பு",
+      "name_en": "Toor dal",
+      "category": "Dals and pulses",
+      "sampleQty": 4,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 2,
+      "name_ta": "பாசிப்பருப்பு",
+      "name_en": "Moong dal",
+      "category": "Dals and pulses",
+      "sampleQty": 8,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 3,
+      "name_ta": "கடுகு",
+      "name_en": "Mustard",
+      "category": "Spices and masala",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 4,
+      "name_ta": "சீரகம்",
+      "name_en": "Cumin",
+      "category": "Spices and masala",
+      "sampleQty": 0.25,
+      "sampleUnit": "kg",
+      "extra": "50 g on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 5,
+      "name_ta": "மிளகு",
+      "name_en": "Pepper",
+      "category": "Spices and masala",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "extra": "50 g on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 6,
+      "name_ta": "வெந்தயம்",
+      "name_en": "Fenugreek",
+      "category": "Spices and masala",
+      "sampleQty": 100,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 7,
+      "name_ta": "கடலைப்பருப்பு",
+      "name_en": "Bengal gram dal",
+      "category": "Dals and pulses",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 8,
+      "name_ta": "வர மிளகாய்",
+      "name_en": "Dry red chilli",
+      "category": "Spices and masala",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 9,
+      "name_ta": "மிளகாய்த்தூள்",
+      "name_en": "Chilli powder",
+      "category": "Spices and masala",
+      "sampleQty": 500,
+      "sampleUnit": "g",
+      "extra": "600 g on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 10,
+      "name_ta": "மல்லித்தூள்",
+      "name_en": "Coriander powder",
+      "category": "Spices and masala",
+      "sampleQty": 500,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 11,
+      "name_ta": "சாம்பார் பொடி",
+      "name_en": "Sambar powder",
+      "category": "Spices and masala",
+      "sampleQty": 500,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 12,
+      "name_ta": "மஞ்சள்தூள்",
+      "name_en": "Turmeric powder",
+      "category": "Spices and masala",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 13,
+      "name_ta": "சிக்கன் பொடி",
+      "name_en": "Chicken podi",
+      "category": "Spices and masala",
+      "sampleQty": 600,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 14,
+      "name_ta": "மட்டன் மசாலா",
+      "name_en": "Mutton masala",
+      "category": "Spices and masala",
+      "sampleQty": 600,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 15,
+      "name_ta": "ஜவ்வரிசி",
+      "name_en": "Sago",
+      "category": "Snacks and others",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "needsCheck": "name was a guess",
+      "orderRule": null
+    },
+    {
+      "no": 16,
+      "name_ta": "சேமியா",
+      "name_en": "Vermicelli",
+      "category": "Snacks and others",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "extra": "2 kg on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 17,
+      "name_ta": "முந்திரி",
+      "name_en": "Cashew",
+      "category": "Dry fruits",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 18,
+      "name_ta": "திராட்சை",
+      "name_en": "Raisins",
+      "category": "Dry fruits",
+      "sampleQty": 600,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 19,
+      "name_ta": "ஏலக்காய்",
+      "name_en": "Cardamom",
+      "category": "Spices and masala",
+      "sampleQty": 20,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 20,
+      "name_ta": "ரவை",
+      "name_en": "Rava",
+      "category": "Rice and flour",
+      "sampleQty": 3,
+      "sampleUnit": "kg",
+      "extra": "1 kg on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 21,
+      "name_ta": "கோல்டு வின்னர் எண்ணெய்",
+      "name_en": "Gold Winner oil",
+      "category": "Oil and ghee",
+      "sampleQty": 1,
+      "sampleUnit": "litre",
+      "orderRule": null
+    },
+    {
+      "no": 22,
+      "name_ta": "டால்டா",
+      "name_en": "Dalda",
+      "category": "Oil and ghee",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "extra": "600 g on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 23,
+      "name_ta": "நெய்",
+      "name_en": "Ghee",
+      "category": "Oil and ghee",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 24,
+      "name_ta": "சாப்பாட்டு அரிசி",
+      "name_en": "Sappatu rice",
+      "category": "Rice and flour",
+      "sampleQty": 15,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 25,
+      "name_ta": "பொங்கல் அரிசி",
+      "name_en": "Pongal rice",
+      "category": "Rice and flour",
+      "sampleQty": 7,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 26,
+      "name_ta": "பிரியாணி அரிசி",
+      "name_en": "Biryani rice",
+      "category": "Rice and flour",
+      "sampleQty": 3,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 27,
+      "name_ta": "நல்லெண்ணெய்",
+      "name_en": "Sesame oil",
+      "category": "Oil and ghee",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "needsCheck": "unit is probably ml",
+      "orderRule": null
+    },
+    {
+      "no": 28,
+      "name_ta": "சீனி",
+      "name_en": "Sugar",
+      "category": "Sugar and sweets",
+      "sampleQty": 5,
+      "sampleUnit": "kg",
+      "extra": "8 kg on a second line",
+      "orderRule": null
+    },
+    {
+      "no": 29,
+      "name_ta": "புளி",
+      "name_en": "Tamarind",
+      "category": "Spices and masala",
+      "sampleQty": 1,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 30,
+      "name_ta": "அப்பளம்",
+      "name_en": "Appalam",
+      "category": "Snacks and others",
+      "sampleQty": 5,
+      "sampleUnit": "கட்டி?",
+      "needsCheck": "unit unclear",
+      "orderRule": null
+    },
+    {
+      "no": 31,
+      "name_ta": "பச்சைப்பட்டாணி",
+      "name_en": "Green peas",
+      "category": "Dals and pulses",
+      "sampleQty": 0.5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 32,
+      "name_ta": "பெருங்காயத்தூள்",
+      "name_en": "Asafoetida powder",
+      "category": "Spices and masala",
+      "sampleQty": 200,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 33,
+      "name_ta": "பொரிகடலை",
+      "name_en": "Pori kadalai",
+      "category": "Snacks and others",
+      "sampleQty": 5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 34,
+      "name_ta": "எண்ணெய்",
+      "name_en": "Oil (kind not named)",
+      "category": "Oil and ghee",
+      "sampleQty": 2,
+      "sampleUnit": "box",
+      "needsCheck": "which oil? may be the same as Gold Winner",
+      "orderRule": null
+    },
+    {
+      "no": 35,
+      "name_ta": "டீ கப்",
+      "name_en": "Tea cup",
+      "category": "Snacks and others",
+      "sampleQty": 8,
+      "sampleUnit": "dozen?",
+      "needsCheck": "unit unclear",
+      "orderRule": null
+    },
+    {
+      "no": 36,
+      "name_ta": "உளுந்து",
+      "name_en": "Urad dal",
+      "category": "Dals and pulses",
+      "sampleQty": 6,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 37,
+      "name_ta": "பட்டாணிப்பருப்பு",
+      "name_en": "Pattani paruppu",
+      "category": "Dals and pulses",
+      "sampleQty": 5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 38,
+      "name_ta": "அரிசிமாவு",
+      "name_en": "Rice flour",
+      "category": "Rice and flour",
+      "sampleQty": 5,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 39,
+      "name_ta": "மைதா",
+      "name_en": "Maida",
+      "category": "Rice and flour",
+      "sampleQty": 4,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 40,
+      "name_ta": "ஃப்ரூட்",
+      "name_en": "Fruit (maybe tutti frutti)",
+      "category": "Dry fruits",
+      "sampleQty": 250,
+      "sampleUnit": "g",
+      "needsCheck": "what is it exactly?",
+      "orderRule": null
+    },
+    {
+      "no": 41,
+      "name_ta": "மொச்சை",
+      "name_en": "Mochai",
+      "category": "Dals and pulses",
+      "sampleQty": 2,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 42,
+      "name_ta": "கடலைமாவு",
+      "name_en": "Gram flour",
+      "category": "Rice and flour",
+      "sampleQty": 3,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 43,
+      "name_ta": "பச்சைப்பயறு",
+      "name_en": "Green gram",
+      "category": "Dals and pulses",
+      "sampleQty": 750,
+      "sampleUnit": "g",
+      "orderRule": null
+    },
+    {
+      "no": 44,
+      "name_ta": "நாட்டுச் சர்க்கரை",
+      "name_en": "Jaggery",
+      "category": "Sugar and sweets",
+      "sampleQty": 1,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 45,
+      "name_ta": "கோதுமை மாவு",
+      "name_en": "Wheat flour",
+      "category": "Rice and flour",
+      "sampleQty": 7,
+      "sampleUnit": "kg",
+      "orderRule": null
+    },
+    {
+      "no": 46,
+      "name_ta": "உப்பு",
+      "name_en": "Salt",
+      "category": "Snacks and others",
+      "sampleQty": null,
+      "sampleUnit": "kg",
+      "needsCheck": "added by the owner; quantity not given",
+      "orderRule": null
+    }
+  ]
+}
