@@ -4,8 +4,12 @@ import type { Language } from '../features/auth/types'
 
 const OPTIONS: Language[] = ['en', 'ta']
 
-/** A small two-way switch: the chosen language is a filled green pill. */
-export function LanguageSwitch({ compact = false }: { compact?: boolean }) {
+/**
+ * A two-way pill switch. Each side is one letter ("A" and "அ"), so it is exactly the same size in
+ * both languages and nothing around it moves. The chosen side is a filled green circle. The full
+ * language name is the button's accessible label.
+ */
+export function LanguageSwitch() {
   const { t, i18n } = useTranslation()
   const { changeLanguage } = useAuth()
   const current: Language = i18n.language === 'ta' ? 'ta' : 'en'
@@ -14,7 +18,7 @@ export function LanguageSwitch({ compact = false }: { compact?: boolean }) {
     <div
       role="group"
       aria-label={t('common.language')}
-      className="flex gap-0.5 rounded-full bg-page p-1"
+      className="flex h-10 w-[5.5rem] shrink-0 gap-1 rounded-full border border-line bg-paper p-1"
     >
       {OPTIONS.map((lang) => {
         const active = current === lang
@@ -26,11 +30,11 @@ export function LanguageSwitch({ compact = false }: { compact?: boolean }) {
             aria-pressed={active}
             aria-label={lang === 'en' ? t('common.english') : t('common.tamil')}
             className={
-              'min-h-8 rounded-full px-3 text-sm font-semibold ' +
-              (active ? 'bg-brand text-paper' : 'text-ink')
+              'grid h-full flex-1 place-items-center rounded-full text-base font-bold leading-none ' +
+              (active ? 'bg-brand text-paper' : 'text-mute')
             }
           >
-            {lang === 'en' ? (compact ? 'EN' : t('common.english')) : t('common.tamil')}
+            <span aria-hidden="true">{lang === 'en' ? 'A' : 'அ'}</span>
           </button>
         )
       })}

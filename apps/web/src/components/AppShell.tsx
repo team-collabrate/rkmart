@@ -19,11 +19,12 @@ export function AppShell() {
   if (!profile) return null
   // The admin order screens have their own headers (logo, back button, title).
   const ownHeader =
+    pathname === '/shop/order' ||
     pathname === '/admin/more' ||
     ['/admin/orders', '/admin/balances', '/admin/bills', '/admin/rates'].some(
       (p) => pathname === p || pathname.startsWith(p + '/'),
     )
-  const greyPage = profile.role === 'admin'
+  const greyPage = profile.role === 'admin' || pathname === '/shop/order'
   const items = NAV[profile.role]
 
   return (

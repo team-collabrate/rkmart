@@ -25,7 +25,9 @@
     "cartItems_other": "{{count}} items",
     "review": "Review order",
     "all": "All",
-    "ratesFor": "Rates for {{date}}"
+    "ratesFor": "Rates for {{date}}",
+    "heading": "Order",
+    "reviewShort": "Review"
   },
   "review": {
     "title": "Review your order",

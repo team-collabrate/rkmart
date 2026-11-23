@@ -25,7 +25,9 @@
     "cartItems_other": "{{count}} பொருட்கள்",
     "review": "ஆர்டரை பார்",
     "all": "எல்லாம்",
-    "ratesFor": "{{date}} விலை"
+    "ratesFor": "{{date}} விலை",
+    "heading": "ஆர்டர்",
+    "reviewShort": "பார்"
   },
   "review": {
     "title": "ஆர்டரை சரிபாருங்க",

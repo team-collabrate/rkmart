@@ -12,7 +12,7 @@ export function TopBar() {
     <div className="mb-4 flex h-11 items-center justify-between gap-3">
       <BrandLogo size={44} />
       <div className="flex items-center gap-2">
-        <LanguageSwitch compact />
+        <LanguageSwitch />
         <button
           type="button"
           onClick={() => void signOut()}
